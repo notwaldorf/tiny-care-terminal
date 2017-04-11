@@ -1,7 +1,11 @@
 /*
- * Prints the last tweet from @tinycarebot.
+ * Utility function that returns a promise with the last tweet
+ * from a user
  *
- * Usage: `node tinycarebot.js`
+ * Usage:
+ * getTweet().then(function(message) {
+ *   console.log(message)
+ * });
  */
 var Twit = require('twit');
 var env = require('node-env-file');
@@ -29,15 +33,7 @@ function getTweet(who) {
         resolve(data[0].text);
       }
     });
-    // setTimeout(function() {
-    //   resolve('u r real kewt')
-    // }, 500);
-
   });
 }
-
-// getTweet().then(function(message) {
-//   console.log(message)
-// });
 
 module.exports.getTweet = getTweet;

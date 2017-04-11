@@ -14,13 +14,13 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 screen.title = '✨💖 tiny care terminal 💖✨';
 
 twitterbot.getTweet('tinycarebot').then(function(message) {
-  showTweet(message, true);
+  showTweet(message, ' 💖 ', true);
 });
 twitterbot.getTweet('magicRealismbot').then(function(message) {
-  showTweet(message, false);
+  showTweet(message, ' 🐶 ', false);
 });
 
-function showTweet(message, left) {
+function showTweet(message, label, left) {
   var box = blessed.box({
     top: '10px',
     left: left? '0' : '50%',
@@ -28,6 +28,7 @@ function showTweet(message, left) {
     height: '20%',
     content: message,
     tags: true,
+    label: label,
     border: {
       type: 'line'  // or bg
     },
