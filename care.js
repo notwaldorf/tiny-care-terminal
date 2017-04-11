@@ -3,15 +3,15 @@ var twitterbot = require('./twitterbot.js');
 var blessed = require('blessed');
 var screen = blessed.screen(
     {fullUnicode:true, // emoji or bust
-     smartCSR: true
+     smartCSR: true,
+     autoPadding: true,
+     title: '✨💖 tiny care terminal 💖✨'
     });
 
 // Quit on Escape, q, or Control-C.
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
-
-screen.title = '✨💖 tiny care terminal 💖✨';
 
 twitterbot.getTweet('tinycarebot').then(function(message) {
   showTweet(message, ' 💖 ', true);
@@ -21,14 +21,15 @@ twitterbot.getTweet('magicRealismbot').then(function(message) {
 });
 
 function showTweet(message, label, left) {
-  var box = blessed.box({
+  var box = blessed.text({
+    content: '\n' + message,
+    label: label,
     top: '10px',
     left: left? '0' : '50%',
     width: '50%',
     height: '20%',
-    content: message,
     tags: true,
-    label: label,
+    draggable: true,
     border: {
       type: 'line'  // or bg
     },
