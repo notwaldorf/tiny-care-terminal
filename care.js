@@ -2,6 +2,7 @@ var twitterbot = require('./twitterbot.js');
 var spawn = require( 'child_process' ).spawn;
 
 var blessed = require('blessed');
+var chalk = require('chalk');
 var screen = blessed.screen(
     {fullUnicode:true, // emoji or bust
      smartCSR: true,
@@ -21,9 +22,13 @@ twitterbot.getTweet('magicRealismbot').then(function(message) {
   showTweet(message, ' 🐶 ', false);
 });
 
-var standup = spawn('git-standup');
-standup.stdout.on( 'data', data => {
-  showStandup(`${data}`, '.');
+var project = ['~/Code', '~/Code/polymer'];
+var standupBox = showStandup();
+
+var standup = spawn('sh ' + __dirname + '/standup-helper.sh', [project.join(' ')], {shell:true});
+standup.stdout.on('data', data => {
+  standupBox.content += colorizeLog(`${data}`);
+  screen.render();
 });
 
 function showTweet(message, label, left) {
@@ -51,12 +56,11 @@ function showTweet(message, label, left) {
   screen.render();
 }
 
-function showStandup(message, project) {
+function showStandup() {
   var box = blessed.box({
     scrollable: true,
-    label: '💻 👀 ',
-    content: message,
-    top: '25%',
+    label: ' 👀 Week 💻 ',
+    top: '20%',
     left: '0',
     width: '50%',
     height: '40%',
@@ -76,4 +80,23 @@ function showStandup(message, project) {
   });
   screen.append(box);
   screen.render();
+  return box;
+}
+
+function colorizeLog(text) {
+  var lines = text.split('\n');
+  var regex = /(.......) (- .*) (\(.*\)) (<.*>)/i;
+  for (var i = 0; i < lines.length; i++) {
+    // If it's a path
+    if (lines[i][0] === '/' || lines[i][0] === '\\') {
+      lines[i] = '\n' + chalk.red(lines[i]);
+    } else {
+      var matches = lines[i].match(regex);
+      if (matches ) {
+        lines[i] = chalk.red(matches[1]) + ' ' + matches[2] + ' ' +
+            chalk.green(matches[3]) + ' ' + chalk.blue(matches[4]);
+      }
+    }
+  }
+  return lines.join('\n');
 }
