@@ -16,22 +16,28 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 });
 
-var options = { screen_name: 'tinycarebot', exclude_replies:true, count: 1 };
+var options = {exclude_replies:true, count: 1 };
 
-getTweet().then(updateScreen);
-
-function getTweet() {
+function getTweet(who) {
+  options.screen_name = who || 'tinycarebot';
   return new Promise(function (resolve, reject) {
-    T.get('statuses/user_timeline', options , function(err, data) {
+    T.get('statuses/user_timeline',
+    options , function(err, data) {
       if (err) {
         reject(reason);
       } else {
         resolve(data[0].text);
       }
     });
+    // setTimeout(function() {
+    //   resolve('u r real kewt')
+    // }, 500);
+
   });
 }
 
-function updateScreen(message) {
-  console.log(message);
-}
+// getTweet().then(function(message) {
+//   console.log(message)
+// });
+
+module.exports.getTweet = getTweet;
