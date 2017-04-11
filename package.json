@@ -2,13 +2,15 @@
   "name": "tiny-terminal-care",
   "version": "1.0.0",
   "description": "Prints the last motivational tweet from @tinycarebot",
-  "main": "run.js",
+  "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
   "license": "MIT",
   "dependencies": {
     "blessed": "^0.1.81",
-    "blessed-contrib": "^4.7.5",
     "node-env-file": "0.1.8",
     "twit": "^2.2.5"
+  },
+  "scripts": {
+    "start": "node care.js"
   }
 }
