@@ -5,8 +5,10 @@
   "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
   "license": "MIT",
+  "repository": "https://github.com/notwaldorf/tiny-terminal-care.git",
   "dependencies": {
     "blessed": "^0.1.81",
+    "git-standup": "^2.1.8",
     "node-env-file": "0.1.8",
     "twit": "^2.2.5"
   },

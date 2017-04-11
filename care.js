@@ -1,4 +1,5 @@
 var twitterbot = require('./twitterbot.js');
+var spawn = require( 'child_process' ).spawn;
 
 var blessed = require('blessed');
 var screen = blessed.screen(
@@ -20,9 +21,14 @@ twitterbot.getTweet('magicRealismbot').then(function(message) {
   showTweet(message, ' 🐶 ', false);
 });
 
+var standup = spawn('git-standup');
+standup.stdout.on( 'data', data => {
+  showStandup(`${data}`, '.');
+});
+
 function showTweet(message, label, left) {
   var box = blessed.text({
-    content: '\n' + message,
+    content: '\n\t' + message,
     label: label,
     top: '10px',
     left: left? '0' : '50%',
@@ -42,5 +48,32 @@ function showTweet(message, label, left) {
   screen.append(box);
   box.focus();
   // Render the screen.
+  screen.render();
+}
+
+function showStandup(message, project) {
+  var box = blessed.box({
+    scrollable: true,
+    label: '💻 👀 ',
+    content: message,
+    top: '25%',
+    left: '0',
+    width: '50%',
+    height: '40%',
+    border: 'line',
+    scrollbar:{ ch:' ' },
+    style: {
+      hover: { border: { fg: 'green' }, },
+      focus: { border: { fg: 'green' }, },
+      scrollbar: {
+        bg: 'green',
+        fg: 'white'
+      },
+    },
+    keys: true,
+    vi: true,
+    alwaysScroll: true
+  });
+  screen.append(box);
   screen.render();
 }
