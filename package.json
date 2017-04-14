@@ -8,6 +8,7 @@
   "repository": "https://github.com/notwaldorf/tiny-terminal-care.git",
   "dependencies": {
     "blessed": "^0.1.81",
+    "blessed-contrib": "^4.7.5",
     "git-standup": "^2.1.8",
     "node-env-file": "0.1.8",
     "parrotsay-api": "^0.1.1",
