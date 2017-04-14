@@ -8,15 +8,13 @@
  * });
  */
 var Twit = require('twit');
-var env = require('node-env-file');
-
-env(__dirname + '/.env');
+var config = require('./config.js');
 
 var T = new Twit({
-  consumer_key:process.env.CONSUMER_KEY,
-  consumer_secret:process.env.CONSUMER_SECRET,
-  access_token:process.env.ACCESS_TOKEN,
-  access_token_secret:process.env.ACCESS_TOKEN_SECRET,
+  consumer_key:config.twitter.consumer_key,
+  consumer_secret:config.twitter.consumer_secret,
+  access_token:config.twitter.access_token,
+  access_token_secret:config.twitter.access_token_secret,
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 });
 
