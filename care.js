@@ -16,7 +16,7 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
-var options = {
+var config = {
   twitter: ['tinycarebot', 'magicrealismbot', 'aloebud'],
   repos: ['~/Code', '~/Code/polymer']
 }
@@ -26,25 +26,28 @@ var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 // grid.set(row, col, rowSpan, colSpan, obj, opts)
 var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
-var commits = grid.set(0, 6, 4, 2, contrib.bar, {label: 'Commits', barWidth: 6, maxHeight: 10});
+var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 6, maxHeight: 10});
+
 var tweetBoxes = {}
-tweetBoxes[options.twitter[0]] = grid.set(0, 8, 2, 4, blessed.box, makeBox(' 💖 '));
-tweetBoxes[options.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 🐶 '));
-tweetBoxes[options.twitter[2]] = grid.set(4, 8, 2.5, 4, blessed.box, makeBox(' 💧 '));
+tweetBoxes[config.twitter[0]] = grid.set(0, 8, 2, 4, blessed.box, makeBox(' 💖 '));
+tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 🐶 '));
+tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2.5, 4, blessed.box, makeBox(' 💧 '));
 
 tick();
 
+//setInterval(tick, 1000 * 60 * 20); // 20 minutes
+
 function tick() {
   // Do the tweets.
-  for (var which in options.twitter) {
-    twitterbot.getTweet(options.twitter[which]).then(function(tweet) {
+  for (var which in config.twitter) {
+    twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
       tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
       screen.render();
     });
   }
 
   // Do the codes.
-  var repos = options.repos.join(' ');
+  var repos = config.repos.join(' ');
   var todayCommits = 0;
   var weekCommits = 0;
 
@@ -71,6 +74,7 @@ function makeScrollBox(label) {
   options.keys = true;
   options.vi = true;
   options.alwaysScroll = true;
+  options.mouse = true;
   return options;
 }
 
