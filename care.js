@@ -1,10 +1,11 @@
 var twitterbot = require('./twitterbot.js');
 var spawn = require( 'child_process' ).spawn;
-
 var blessed = require('blessed');
+var contrib = require('blessed-contrib');
 var chalk = require('chalk');
+
 var screen = blessed.screen(
-    {fullUnicode:true, // emoji or bust
+    {fullUnicode: true, // emoji or bust
      smartCSR: true,
      autoPadding: true,
      title: '✨💖 tiny care terminal 💖✨'
@@ -15,72 +16,73 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
-twitterbot.getTweet('tinycarebot').then(function(message) {
-  showTweet(message, ' 💖 ', true);
-});
-twitterbot.getTweet('magicRealismbot').then(function(message) {
-  showTweet(message, ' 🐶 ', false);
-});
+var options = {
+  twitter: ['tinycarebot', 'magicrealismbot', 'aloebud'],
+  repos: ['~/Code', '~/Code/polymer'],
+}
 
-var project = ['~/Code', '~/Code/polymer'];
-var standupBox = showStandup();
+var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 
-var standup = spawn('sh ' + __dirname + '/standup-helper.sh', [project.join(' ')], {shell:true});
-standup.stdout.on('data', data => {
-  standupBox.content += colorizeLog(`${data}`);
-  screen.render();
-});
+// grid.set(row, col, rowSpan, colSpan, obj, opts)
+var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' Today '));
+var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' Week '));
 
-function showTweet(message, label, left) {
-  var box = blessed.text({
-    content: '\n\t' + message,
+var tweetBoxes = {}
+tweetBoxes[options.twitter[0]] = grid.set(0, 8, 2, 4, blessed.box, makeBox(' 💖 '));
+tweetBoxes[options.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 🐶 '));
+tweetBoxes[options.twitter[2]] = grid.set(4, 8, 2.5, 4, blessed.box, makeBox(' 💧 '));
+
+tick();
+
+function tick() {
+  // Do the tweets.
+  for (var which in options.twitter) {
+    twitterbot.getTweet(options.twitter[which]).then(function(tweet) {
+      tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
+      screen.render();
+    });
+  }
+
+  // Do the codes.
+  var repos = options.repos.join(' ');
+  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [repos], {shell:true});
+  today.stdout.on('data', data => {
+    todayBox.content += colorizeLog(`${data}`);
+    screen.render();
+  });
+
+  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', repos], {shell:true});
+  week.stdout.on('data', data => {
+    weekBox.content += colorizeLog(`${data}`);
+    screen.render();
+  });
+}
+
+function makeScrollBox(label) {
+  var options = makeBox(label);
+  options.scrollable = true;
+  options.scrollbar = { ch:' ' };
+  options.style.scrollbar = { bg: 'green', fg: 'white' }
+  options.keys = true;
+  options.vi = true;
+  options.alwaysScroll = true;
+  return options;
+}
+
+function makeBox(label) {
+  return {
     label: label,
-    top: '10px',
-    left: left? '0' : '50%',
-    width: '50%',
-    height: '20%',
     tags: true,
-    draggable: true,
+    // draggable: true,
     border: {
       type: 'line'  // or bg
     },
     style: {
       fg: 'white',
-      border: { fg: 'magenta' },
+      border: { fg: 'cyan' },
       hover: { border: { fg: 'green' }, }
     }
-  });
-  screen.append(box);
-  box.focus();
-  // Render the screen.
-  screen.render();
-}
-
-function showStandup() {
-  var box = blessed.box({
-    scrollable: true,
-    label: ' 👀 Week 💻 ',
-    top: '20%',
-    left: '0',
-    width: '50%',
-    height: '40%',
-    border: 'line',
-    scrollbar:{ ch:' ' },
-    style: {
-      hover: { border: { fg: 'green' }, },
-      focus: { border: { fg: 'green' }, },
-      scrollbar: {
-        bg: 'green',
-        fg: 'white'
-      },
-    },
-    keys: true,
-    vi: true,
-    alwaysScroll: true
-  });
-  screen.append(box);
-  screen.render();
-  return box;
+  };
 }
 
 function colorizeLog(text) {
