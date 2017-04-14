@@ -25,12 +25,11 @@ var options = {exclude_replies:true, count: 1 };
 function getTweet(who) {
   options.screen_name = who || 'tinycarebot';
   return new Promise(function (resolve, reject) {
-    T.get('statuses/user_timeline',
-    options , function(err, data) {
+    T.get('statuses/user_timeline', options, function(err, data) {
       if (err) {
         reject(reason);
       } else {
-        resolve(data[0].text);
+        resolve({text:data[0].text, bot: data[0].user.screen_name});
       }
     });
   });
