@@ -3,6 +3,8 @@ var spawn = require( 'child_process' ).spawn;
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
+var parrotSay = require('parrotsay-api');
+var weather = require('weather-js');
 
 var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
@@ -18,32 +20,58 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 
 var config = {
   twitter: ['tinycarebot', 'magicrealismbot', 'aloebud'],
-  repos: ['~/Code', '~/Code/polymer']
+  repos: ['~/Code', '~/Code/polymer'],
+  zipcode: ['94133'],
+  celsius: true
 }
 
 var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 
 // grid.set(row, col, rowSpan, colSpan, obj, opts)
+var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
 var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
 var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 6, maxHeight: 10});
+var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeBox(''));
 
 var tweetBoxes = {}
-tweetBoxes[config.twitter[0]] = grid.set(0, 8, 2, 4, blessed.box, makeBox(' 💖 '));
 tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 🐶 '));
 tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2.5, 4, blessed.box, makeBox(' 💧 '));
 
 tick();
-
 //setInterval(tick, 1000 * 60 * 20); // 20 minutes
 
 function tick() {
+  // Do the weather.
+  weather.find({search: config.zipcode, degreeType: config.celsius ? 'C' : 'F'}, function(err, result) {
+    var json = result[0];
+    var skytext = json.current.skytext.toLowerCase();
+    var currentDay = json.current.day;
+    var forecastString = '';
+    for (var i = 0; i < json.forecast.length; i++) {
+      if (json.forecast[i].day === currentDay) {
+        var skytextforecast = json.forecast[i].skytextday.toLowerCase();
+        forecastString = `Today, it will be ${skytextforecast} with the forecasted high of ${json.forecast[i].high} and a low of ${json.forecast[i].low}.`;
+      }
+    }
+    weatherBox.content = `In ${json.location.name} it's ${json.current.temperature}${json.location.degreetype} and ${skytext} right now. ${forecastString}`;
+  });
+
   // Do the tweets.
   for (var which in config.twitter) {
-    twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
-      tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
-      screen.render();
-    });
+    if (which == 0) {
+      twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
+        parrotSay(tweet.text).then(function(text) {
+            parrotBox.content = text;
+          })
+        screen.render();
+      });
+    } else {
+      twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
+        tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
+        screen.render();
+      });
+    }
   }
 
   // Do the codes.
