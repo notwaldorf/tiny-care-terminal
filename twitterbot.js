@@ -25,7 +25,7 @@ function getTweet(who) {
   return new Promise(function (resolve, reject) {
     T.get('statuses/user_timeline', options, function(err, data) {
       if (err) {
-        reject(reason);
+        reject('This didn\'t work. Maybe you didn\'t set up the twitter API keys?');
       } else {
         resolve({text:data[0].text, bot: data[0].user.screen_name});
       }

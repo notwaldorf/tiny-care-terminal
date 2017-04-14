@@ -66,13 +66,23 @@ function doTheTweets() {
       twitterbot.getTweet(config.settings.twitter[which]).then(function(tweet) {
         parrotSay(tweet.text).then(function(text) {
           parrotBox.content = text;
+          screen.render();
         });
-        screen.render();
+      },function(error) {
+        // Just in case we don't have tweets.
+        parrotSay('Hi! You\'re doing great!!!').then(function(text) {
+          parrotBox.content = text;
+          screen.render();
+        });
       });
     } else {
       twitterbot.getTweet(config.settings.twitter[which]).then(function(tweet) {
         tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
         screen.render();
+      },function(error) {
+        tweetBoxes[config.settings.twitter[1]].content =
+        tweetBoxes[config.settings.twitter[2]].content =
+        'Can\'t read Twitter without some API keys  🐰';
       });
     }
   }
