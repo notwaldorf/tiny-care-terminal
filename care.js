@@ -18,15 +18,15 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 
 var options = {
   twitter: ['tinycarebot', 'magicrealismbot', 'aloebud'],
-  repos: ['~/Code', '~/Code/polymer'],
+  repos: ['~/Code', '~/Code/polymer']
 }
 
 var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 
 // grid.set(row, col, rowSpan, colSpan, obj, opts)
-var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' Today '));
-var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' Week '));
-
+var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
+var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
+var commits = grid.set(0, 6, 4, 2, contrib.bar, {label: 'Commits', barWidth: 6, maxHeight: 10});
 var tweetBoxes = {}
 tweetBoxes[options.twitter[0]] = grid.set(0, 8, 2, 4, blessed.box, makeBox(' 💖 '));
 tweetBoxes[options.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 🐶 '));
@@ -45,15 +45,20 @@ function tick() {
 
   // Do the codes.
   var repos = options.repos.join(' ');
+  var todayCommits = 0;
+  var weekCommits = 0;
+
   var today = spawn('sh ' + __dirname + '/standup-helper.sh', [repos], {shell:true});
   today.stdout.on('data', data => {
-    todayBox.content += colorizeLog(`${data}`);
+    todayCommits = getCommits(`${data}`, todayBox);
+    updateCommitsGraph(todayCommits, weekCommits);
     screen.render();
   });
 
   var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', repos], {shell:true});
   week.stdout.on('data', data => {
-    weekBox.content += colorizeLog(`${data}`);
+    weekCommits = getCommits(`${data}`, weekBox);
+    updateCommitsGraph(todayCommits, weekCommits);
     screen.render();
   });
 }
@@ -85,6 +90,17 @@ function makeBox(label) {
   };
 }
 
+var commitRegex = /(.......) (- .*)/g;
+function getCommits(data, box) {
+  var content = colorizeLog(data);
+  box.content += content;
+  return (box.content.match(commitRegex) || []).length;
+}
+
+function updateCommitsGraph(today, week) {
+  commits.setData({titles: ['today', 'week'], data: [today, week]})
+}
+
 function colorizeLog(text) {
   var lines = text.split('\n');
   var regex = /(.......) (- .*) (\(.*\)) (<.*>)/i;
@@ -93,10 +109,11 @@ function colorizeLog(text) {
     if (lines[i][0] === '/' || lines[i][0] === '\\') {
       lines[i] = '\n' + chalk.red(lines[i]);
     } else {
+      // It's a commit.
       var matches = lines[i].match(regex);
       if (matches ) {
         lines[i] = chalk.red(matches[1]) + ' ' + matches[2] + ' ' +
-            chalk.green(matches[3]) + ' ' + chalk.blue(matches[4]);
+            chalk.green(matches[3])
       }
     }
   }

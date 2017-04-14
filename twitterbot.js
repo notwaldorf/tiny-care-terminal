@@ -20,7 +20,7 @@ var T = new Twit({
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 });
 
-var options = {exclude_replies:true, count: 1 };
+var options = {exclude_replies:true, include_rts:false, count: 1 };
 
 function getTweet(who) {
   options.screen_name = who || 'tinycarebot';
