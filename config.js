@@ -7,7 +7,11 @@ var config = {};
 config.settings = {
   // Accounts to read the last tweet from. The first one in the list will be
   // spoken by the party parrot.
-  twitter: ['tinycarebot', 'magicrealismbot', 'aloebud'],
+  twitter: ['tinycarebot', 'selfcare_bot', 'magicrealismbot'],
+
+  // Set this to false if you want to scrape twitter.com instead of using
+  // API keys. The tweets may include RTs in this case :(
+  apiKeys: true,
 
   // Directories in which to run git-standup on for a list of your recent commits.
   repos: ['~/Code'],

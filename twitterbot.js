@@ -1,14 +1,6 @@
-/*
- * Utility function that returns a promise with the last tweet
- * from a user
- *
- * Usage:
- * getTweet().then(function(message) {
- *   console.log(message)
- * });
- */
-var Twit = require('twit');
-var config = require('./config.js');
+const Twit = require('twit');
+const config = require('./config.js');
+const scraperjs = require('scraperjs');
 
 var T = new Twit({
   consumer_key:config.twitter.consumer_key,
@@ -21,7 +13,12 @@ var T = new Twit({
 var options = {exclude_replies:true, include_rts:false, count: 1 };
 
 function getTweet(who) {
-  options.screen_name = who || 'tinycarebot';
+  who = who || 'tinycarebot'
+  return config.settings.apiKeys ? apiTweet(who) : scrapeTweet(who);
+}
+
+function apiTweet(who) {
+  options.screen_name = who;
   return new Promise(function (resolve, reject) {
     T.get('statuses/user_timeline', options, function(err, data) {
       if (err) {
@@ -30,6 +27,22 @@ function getTweet(who) {
         resolve({text:data[0].text, bot: data[0].user.screen_name});
       }
     });
+  });
+}
+
+function scrapeTweet(who) {
+  return new Promise(function (resolve, reject) {
+    scraperjs.StaticScraper.create('https://twitter.com/' + who)
+        .scrape(function($) {
+            return $(".js-tweet-text.tweet-text").map(function() {
+                return $(this).text();
+            }).get();
+        })
+        .then(function(tweets) {
+          resolve({text:tweets[0], bot: who});
+        },function(error) {
+          reject('Can\t scrape tweets. Maybe the user is private or doesn\'t exist?');
+        });
   });
 }
 

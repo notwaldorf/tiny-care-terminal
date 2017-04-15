@@ -30,8 +30,8 @@ var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 5, 
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeBox(''));
 
 var tweetBoxes = {}
-tweetBoxes[config.settings.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 🐶 '));
-tweetBoxes[config.settings.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💧 '));
+tweetBoxes[config.settings.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💖 '));
+tweetBoxes[config.settings.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
 
 tick();
 setInterval(tick, 1000 * 60 * 20); // 20 minutes
@@ -82,7 +82,7 @@ function doTheTweets() {
       },function(error) {
         tweetBoxes[config.settings.twitter[1]].content =
         tweetBoxes[config.settings.twitter[2]].content =
-        'Can\'t read Twitter without some API keys  🐰';
+        'Can\'t read Twitter without some API keys  🐰. Maybe try the scraping version instead?';
       });
     }
   }
