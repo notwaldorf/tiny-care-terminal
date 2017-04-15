@@ -6,6 +6,8 @@ set -e
 # here we are.
 
 progname=$0
+standup=`which git-standup`
+
 function usage () {
    echo "Usage: "
    echo "  $progname [-d days] [-h] repo1 repo2 etc."
@@ -27,5 +29,5 @@ shift $(($OPTIND - 1))
 # the repo names
 for dir in "$@"
 do
-  (cd $dir; git-standup -d $days)
+  (cd $dir; $standup -d $days)
 done
