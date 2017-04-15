@@ -1,8 +1,8 @@
 # tiny-terminal-care
 This is a little dashboard that tries to take care of you when you're using your terminal.
-It shows you cute, self care things, and tries not to stress you out. It shows:
+It tells you cute, self care things, and tries not to stress you out. It shows:
 - the last tweets from [@tinycarebot](https://twitter.com/tinycarebot),
-[@aloebud](https://twitter.com/aloebud) and
+[@selfcare_bot](https://twitter.com/aloebud) and
 [@magicrealismbot](https://twitter.com/magicrealismbot). The first two tend
 to tweet reminders about taking breaks, drinking water and looking outside, and the latter
 tells you strange, whimsical stories. If you don't like these bots,
@@ -15,7 +15,7 @@ actually done throughout. Hopefully this will help you too <3
 
 It looks like this, and updates every 20 minutes.
 
-<img width="1435" alt="tiny terminal care screenshot" src="https://cloud.githubusercontent.com/assets/1369170/25066240/adc3b1ac-21d5-11e7-9811-508b6bcfcc89.png">
+<img width="1000" alt="tiny terminal care screenshot" src="https://cloud.githubusercontent.com/assets/1369170/25066240/adc3b1ac-21d5-11e7-9811-508b6bcfcc89.png">
 
 ## Make it go
 
