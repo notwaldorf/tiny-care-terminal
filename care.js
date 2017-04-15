@@ -96,6 +96,7 @@ function doTheCodes() {
   var weekCommits = 0;
 
   var today = spawn('sh ' + __dirname + '/standup-helper.sh', [repos], {shell:true});
+  todayBox.content = '';
   today.stdout.on('data', data => {
     todayCommits = getCommits(`${data}`, todayBox);
     updateCommitsGraph(todayCommits, weekCommits);
@@ -103,6 +104,7 @@ function doTheCodes() {
   });
 
   var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', repos], {shell:true});
+  weekBox.content = '';
   week.stdout.on('data', data => {
     weekCommits = getCommits(`${data}`, weekBox);
     updateCommitsGraph(todayCommits, weekCommits);
