@@ -15,7 +15,7 @@ actually done throughout. Hopefully this will help you too <3
 
 It looks like this, and updates every 20 minutes.
 
-<img width="1435" alt="screen shot 2017-04-14 at 4 26 09" src="https://cloud.githubusercontent.com/assets/1369170/25058521/214cf00e-212f-11e7-8c01-3dba3b8d8c14.png">
+<img width="1435" alt="tiny terminal care screenshot" src="https://cloud.githubusercontent.com/assets/1369170/25066240/adc3b1ac-21d5-11e7-9811-508b6bcfcc89.png">
 
 ## Make it go
 
