@@ -21,14 +21,14 @@ It looks like this, and updates every 20 minutes.
 
 The dashboard has two alternatives for reading tweets: using your API keys
 or scraping. API keys is preferred (because lol scraping), but if you're
-really not into that, then just update `config.js` and set `config.apiKeys = false;`
+really not into that, then skip the next section and read the bit about
+setting `TTC_APIKEYS`
 
 ### Set up API keys
 
 You need [Twitter API keys](https://apps.twitter.com/) for the tweets to work.
 It should be pretty easy to create a new app, and get these 4 values.
-After you've set them up, create an `.env` file in the root of this
-folder, and add these variables to it (see the `sample.env` for an
+After you've set them up, set these env variables (see the `sample.env` for an
 example):
 
 ```
@@ -51,6 +51,8 @@ All the settings the dashboard looks at are in `sample.env`:
   - `TTC_CELSIUS` (by default true)
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
+
+Set them through your favourite way of setting env variables.
 
 ### Do the npm dance
 

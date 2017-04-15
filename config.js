@@ -1,5 +1,3 @@
-var env = require('node-env-file');
-
 var config = {};
 // Accounts to read the last tweet from. The first one in the list will be
 // spoken by the party parrot.
@@ -9,6 +7,7 @@ config.twitter = config.twitter.split(',')
 // Set this to false if you want to scrape twitter.com instead of using
 // API keys. The tweets may include RTs in this case :(
 config.apiKeys = process.env.TTC_APIKEYS || true;
+config.apiKeys = config.apiKeys === 'true' ? true : false;
 
 // Directories in which to run git-standup on for a list of your recent commits.
 config.repos = process.env.TTC_REPOS || '~/Code';
@@ -21,23 +20,12 @@ config.weather = process.env.TTC_WEATHER || 'San Francisco';
 
 // Set to false if you're an imperial savage. <3
 config.celsius = process.env.TTC_CELSIUS || true;
+config.celsius = config.celsius === 'true' ? true : false;
 
 config.keys = {};
-try {
-  env(__dirname + '/.env');
-  config.keys.consumer_key = process.env.CONSUMER_KEY;
-  config.keys.consumer_secret = process.env.CONSUMER_SECRET;
-  config.keys.access_token = process.env.ACCESS_TOKEN;
-  config.keys.access_token_secret = process.env.ACCESS_TOKEN_SECRET;
-}
-catch(err) {
-  console.warn('P.S.: You haven\'t created a .env file.');
-  config.apiKeys = false;
-
-  config.keys.consumer_key = 'none';
-  config.keys.consumer_secret = 'none';
-  config.keys.access_token = 'none';
-  config.keys.access_token_secret = 'none';
-}
+config.keys.consumer_key = process.env.CONSUMER_KEY || 'none';
+config.keys.consumer_secret = process.env.CONSUMER_SECRET || 'none';
+config.keys.access_token = process.env.ACCESS_TOKEN || 'none';
+config.keys.access_token_secret = process.env.ACCESS_TOKEN_SECRET || 'none';
 
 module.exports = config;
