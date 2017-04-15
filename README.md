@@ -52,10 +52,8 @@ All the settings the dashboard looks at are in `config.js`:
 ### Do the npm dance
 
 ```
-npm install
-npm start
-# or
-node ~/location-of-this-folder/care.js
+npm install -g tiny-terminal-care
+tiny-terminal-care
 ```
 You can exit the dashboard by pressing `esc` or `q`.
 
