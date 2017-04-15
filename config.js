@@ -1,5 +1,4 @@
 var env = require('node-env-file');
-env(__dirname + '/.env');
 
 var config = {};
 
@@ -27,9 +26,21 @@ config.celsius = true;
 
 // From the .env file.
 config.keys = {};
-config.keys.consumer_key = process.env.CONSUMER_KEY;
-config.keys.consumer_secret = process.env.CONSUMER_SECRET;
-config.keys.access_token = process.env.ACCESS_TOKEN;
-config.keys.access_token_secret = process.env.ACCESS_TOKEN_SECRET;
+try {
+  env(__dirname + '/.env');
+  config.keys.consumer_key = process.env.CONSUMER_KEY;
+  config.keys.consumer_secret = process.env.CONSUMER_SECRET;
+  config.keys.access_token = process.env.ACCESS_TOKEN;
+  config.keys.access_token_secret = process.env.ACCESS_TOKEN_SECRET;
+}
+catch(err) {
+  console.warn('P.S.: You haven\'t created a .env file.');
+  config.apiKeys = false;
+
+  config.keys.consumer_key = 'none';
+  config.keys.consumer_secret = 'none';
+  config.keys.access_token = 'none';
+  config.keys.access_token_secret = 'none';
+}
 
 module.exports = config;

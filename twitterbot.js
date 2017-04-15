@@ -13,7 +13,7 @@ var T = new Twit({
 var options = {exclude_replies:true, include_rts:false, count: 1 };
 
 function getTweet(who) {
-  who = who || 'tinycarebot'
+  who = who || 'tinycarebot';
   return config.apiKeys ? apiTweet(who) : scrapeTweet(who);
 }
 

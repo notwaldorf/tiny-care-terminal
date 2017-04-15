@@ -26,7 +26,7 @@ really not into that, then just update `config.js` and set `config.apiKeys = fal
 ### Set up API keys
 
 You need [Twitter API keys](https://apps.twitter.com/) for the tweets to work.
-It should be pretty easy to create a new app, and get these 4 values
+It should be pretty easy to create a new app, and get these 4 values.
 After you've set them up, create an `.env` file in the root of this
 folder, and add these variables to it (see the `sample.env` for an
 example):
