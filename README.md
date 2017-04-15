@@ -39,15 +39,18 @@ ACCESS_TOKEN_SECRET='...'
 ```
 
 ### Configure the dashboard
-All the settings the dashboard looks at are in `config.js`:
-  - `config.twitter` are the 3 twitter bots to check. The first entry
-  in this list will be displayed in the party parrot. The other two will be
-  displayed in little boxes, with the `config.twitter[i].label` title.
-  - `config.repos`, a list of repos to look at for `git` commits.
+All the settings the dashboard looks at are in `sample.env`:
+  - `TTC_BOTS` are the 3 twitter bots to check, comma separated. The first entry
+  in this list will be displayed in the party parrot.
+  - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
   This is using [`git-standup`](https://github.com/kamranahmedse/git-standup) under
   the hood, and looks one subdirectory deep (so if you have all your code
   directories in a `~/Code`, you only need to list that one)
-  - `config.zipcode` and `config.celsius` for weather reporting
+  - `TTC_WEATHER`, the location or zip code to check the weather for (so both
+    `90210` and `Paris` should work)
+  - `TTC_CELSIUS` (by default true)
+  - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
+  keys and want to scrape the tweets instead.
 
 ### Do the npm dance
 

@@ -31,10 +31,8 @@ var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 5, 
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeBox(''));
 
 var tweetBoxes = {}
-tweetBoxes[config.twitter[1].user] =
-    grid.set(2, 8, 2, 4, blessed.box, makeBox(config.twitter[1].label));
-tweetBoxes[config.twitter[2].user] =
-    grid.set(4, 8, 2, 4, blessed.box, makeBox(config.twitter[2].label));
+tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💬 '));
+tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💖 '));
 
 tick();
 setInterval(tick, 1000 * 60 * 20); // 20 minutes
@@ -70,7 +68,7 @@ function doTheTweets() {
   for (var which in config.twitter) {
     // Gigantor hack: first twitter account gets spoken by the party parrot.
     if (which == 0) {
-      twitterbot.getTweet(config.twitter[which].user).then(function(tweet) {
+      twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
         parrotSay(tweet.text).then(function(text) {
           parrotBox.content = text;
           screen.render();
@@ -83,12 +81,12 @@ function doTheTweets() {
         });
       });
     } else {
-      twitterbot.getTweet(config.twitter[which].user).then(function(tweet) {
+      twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
         tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
         screen.render();
       },function(error) {
-        tweetBoxes[config.twitter[1].user].content =
-        tweetBoxes[config.twitter[2].user].content =
+        tweetBoxes[config.twitter[1]].content =
+        tweetBoxes[config.twitter[2]].content =
         'Can\'t read Twitter without some API keys  🐰. Maybe try the scraping version instead?';
       });
     }
@@ -96,11 +94,10 @@ function doTheTweets() {
 }
 
 function doTheCodes() {
-  var repos = config.repos.join(' ');
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [repos], {shell:true});
+  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [config.repos], {shell:true});
   todayBox.content = '';
   today.stdout.on('data', data => {
     todayCommits = getCommits(`${data}`, todayBox);
@@ -108,7 +105,7 @@ function doTheCodes() {
     screen.render();
   });
 
-  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', repos], {shell:true});
+  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', config.repos], {shell:true});
   weekBox.content = '';
   week.stdout.on('data', data => {
     weekCommits = getCommits(`${data}`, weekBox);
