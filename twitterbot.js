@@ -3,10 +3,10 @@ const config = require('./config.js');
 const scraperjs = require('scraperjs');
 
 var T = new Twit({
-  consumer_key:config.twitter.consumer_key,
-  consumer_secret:config.twitter.consumer_secret,
-  access_token:config.twitter.access_token,
-  access_token_secret:config.twitter.access_token_secret,
+  consumer_key:config.keys.consumer_key,
+  consumer_secret:config.keys.consumer_secret,
+  access_token:config.keys.access_token,
+  access_token_secret:config.keys.access_token_secret,
   timeout_ms:           60*1000,  // optional HTTP request timeout to apply to all requests.
 });
 
@@ -14,7 +14,7 @@ var options = {exclude_replies:true, include_rts:false, count: 1 };
 
 function getTweet(who) {
   who = who || 'tinycarebot'
-  return config.settings.apiKeys ? apiTweet(who) : scrapeTweet(who);
+  return config.apiKeys ? apiTweet(who) : scrapeTweet(who);
 }
 
 function apiTweet(who) {

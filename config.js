@@ -3,31 +3,33 @@ env(__dirname + '/.env');
 
 var config = {};
 
-// What you want to see
-config.settings = {
-  // Accounts to read the last tweet from. The first one in the list will be
-  // spoken by the party parrot.
-  twitter: ['tinycarebot', 'selfcare_bot', 'magicrealismbot'],
+// Accounts to read the last tweet from. The first one in the list will be
+// spoken by the party parrot. The label is be used to label the tweet box.
+config.twitter = [
+    {user: 'tinycarebot', 'label': ' 💧 '},
+    {user: 'selfcare_bot', 'label': ' 💖 '},
+    {user: 'magicrealismbot', 'label': ' 💬 '}
+  ];
 
-  // Set this to false if you want to scrape twitter.com instead of using
-  // API keys. The tweets may include RTs in this case :(
-  apiKeys: true,
+// Set this to false if you want to scrape twitter.com instead of using
+// API keys. The tweets may include RTs in this case :(
+config.apiKeys = true;
 
-  // Directories in which to run git-standup on for a list of your recent commits.
-  repos: ['~/Code'],
+// Directories in which to run git-standup on for a list of your recent commits.
+config.repos = ['~/Code'];
 
-  // Zip code to check the weather for.
-  zipcode: ['94133'],
+// Zip code to check the weather for.
+config.zipcode = ['94133'];
 
-  // Set to false if you're an imperial savage. <3
-  celsius: true
-}
+// Set to false if you're an imperial savage. <3
+config.celsius = true;
+
 
 // From the .env file
-config.twitter = {};
-config.twitter.consumer_key = process.env.CONSUMER_KEY;
-config.twitter.consumer_secret = process.env.CONSUMER_SECRET;
-config.twitter.access_token = process.env.ACCESS_TOKEN;
-config.twitter.access_token_secret = process.env.ACCESS_TOKEN_SECRET;
+config.keys = {};
+config.keys.consumer_key = process.env.CONSUMER_KEY;
+config.keys.consumer_secret = process.env.CONSUMER_SECRET;
+config.keys.access_token = process.env.ACCESS_TOKEN;
+config.keys.access_token_secret = process.env.ACCESS_TOKEN_SECRET;
 
 module.exports = config;

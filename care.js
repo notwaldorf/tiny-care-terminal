@@ -30,8 +30,10 @@ var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 5, 
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeBox(''));
 
 var tweetBoxes = {}
-tweetBoxes[config.settings.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💖 '));
-tweetBoxes[config.settings.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
+tweetBoxes[config.twitter[1].user] =
+    grid.set(2, 8, 2, 4, blessed.box, makeBox(config.twitter[1].label));
+tweetBoxes[config.twitter[2].user] =
+    grid.set(4, 8, 2, 4, blessed.box, makeBox(config.twitter[2].label));
 
 tick();
 setInterval(tick, 1000 * 60 * 20); // 20 minutes
@@ -43,7 +45,7 @@ function tick() {
 }
 
 function doTheWeather() {
-  weather.find({search: config.settings.zipcode, degreeType: config.settings.celsius ? 'C' : 'F'}, function(err, result) {
+  weather.find({search: config.zipcode, degreeType: config.celsius ? 'C' : 'F'}, function(err, result) {
     var json = result[0];
     // TODO: add emoji for this thing.
     var skytext = json.current.skytext.toLowerCase();
@@ -60,10 +62,10 @@ function doTheWeather() {
 }
 
 function doTheTweets() {
-  for (var which in config.settings.twitter) {
+  for (var which in config.twitter) {
     // Gigantor hack: first twitter account gets spoken by the party parrot.
     if (which == 0) {
-      twitterbot.getTweet(config.settings.twitter[which]).then(function(tweet) {
+      twitterbot.getTweet(config.twitter[which].user).then(function(tweet) {
         parrotSay(tweet.text).then(function(text) {
           parrotBox.content = text;
           screen.render();
@@ -76,12 +78,12 @@ function doTheTweets() {
         });
       });
     } else {
-      twitterbot.getTweet(config.settings.twitter[which]).then(function(tweet) {
+      twitterbot.getTweet(config.twitter[which].user).then(function(tweet) {
         tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
         screen.render();
       },function(error) {
-        tweetBoxes[config.settings.twitter[1]].content =
-        tweetBoxes[config.settings.twitter[2]].content =
+        tweetBoxes[config.twitter[1].user].content =
+        tweetBoxes[config.twitter[2].user].content =
         'Can\'t read Twitter without some API keys  🐰. Maybe try the scraping version instead?';
       });
     }
@@ -89,7 +91,7 @@ function doTheTweets() {
 }
 
 function doTheCodes() {
-  var repos = config.settings.repos.join(' ');
+  var repos = config.repos.join(' ');
   var todayCommits = 0;
   var weekCommits = 0;
 
