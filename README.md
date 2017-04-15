@@ -19,6 +19,10 @@ It looks like this, and updates every 20 minutes.
 
 ## Make it go
 
+The dashboard has two alternatives for reading tweets: using your API keys
+or scraping. API keys is preferred (because lol scraping), but if you're
+really not into that, then just update `config.js` and set `config.apiKeys = false;`
+
 ### Set up API keys
 
 You need [Twitter API keys](https://apps.twitter.com/) for the tweets to work.
@@ -36,13 +40,14 @@ ACCESS_TOKEN_SECRET='...'
 
 ### Configure the dashboard
 All the settings the dashboard looks at are in `config.js`:
-  - `config.settings.twitter` are the 3 twitter bots to check. The first entry
-  in this list will be displayed in the party parrot.
-  - `config.settings.twitter`, a list of repos to look at for `git` commits.
+  - `config.twitter` are the 3 twitter bots to check. The first entry
+  in this list will be displayed in the party parrot. The other two will be
+  displayed in little boxes, with the `config.twitter[i].label` title.
+  - `config.repos`, a list of repos to look at for `git` commits.
   This is using [`git-standup`](https://github.com/kamranahmedse/git-standup) under
   the hood, and looks one subdirectory deep (so if you have all your code
   directories in a `~/Code`, you only need to list that one)
-  - `config.settings.zipcode` and `config.settings.celsius` for weather reporting
+  - `config.zipcode` and `config.celsius` for weather reporting
 
 ### Do the npm dance
 

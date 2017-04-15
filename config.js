@@ -25,7 +25,7 @@ config.zipcode = ['94133'];
 config.celsius = true;
 
 
-// From the .env file
+// From the .env file.
 config.keys = {};
 config.keys.consumer_key = process.env.CONSUMER_KEY;
 config.keys.consumer_secret = process.env.CONSUMER_SECRET;
