@@ -1,6 +1,6 @@
-const Twit = require('twit');
-const config = require(__dirname + '/config.js');
-const scraperjs = require('scraperjs');
+var Twit = require('twit');
+var config = require(__dirname + '/config.js');
+var scraperjs = require('scraperjs');
 
 var T = new Twit({
   consumer_key:config.keys.consumer_key,

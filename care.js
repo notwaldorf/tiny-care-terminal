@@ -1,14 +1,14 @@
-const config = require(__dirname + '/config.js');
-const twitterbot = require(__dirname + '/twitterbot.js');
+var config = require(__dirname + '/config.js');
+var twitterbot = require(__dirname + '/twitterbot.js');
 
-const spawn = require( 'child_process' ).spawn;
-const blessed = require('blessed');
-const contrib = require('blessed-contrib');
-const chalk = require('chalk');
-const parrotSay = require('parrotsay-api');
-const weather = require('weather-js');
+var spawn = require( 'child_process' ).spawn;
+var blessed = require('blessed');
+var contrib = require('blessed-contrib');
+var chalk = require('chalk');
+var parrotSay = require('parrotsay-api');
+var weather = require('weather-js');
 
-const screen = blessed.screen(
+var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
      smartCSR: true,
      autoPadding: true,
