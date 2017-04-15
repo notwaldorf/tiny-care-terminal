@@ -1,5 +1,5 @@
-const config = require('./config.js');
-const twitterbot = require('./twitterbot.js');
+const config = require(__dirname + '/config.js');
+const twitterbot = require(__dirname + '/twitterbot.js');
 
 const spawn = require( 'child_process' ).spawn;
 const blessed = require('blessed');

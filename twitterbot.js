@@ -1,5 +1,5 @@
 const Twit = require('twit');
-const config = require('./config.js');
+const config = require(__dirname + '/config.js');
 const scraperjs = require('scraperjs');
 
 var T = new Twit({
