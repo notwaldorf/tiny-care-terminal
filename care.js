@@ -45,19 +45,23 @@ function tick() {
 }
 
 function doTheWeather() {
-  weather.find({search: config.zipcode, degreeType: config.celsius ? 'C' : 'F'}, function(err, result) {
-    var json = result[0];
-    // TODO: add emoji for this thing.
-    var skytext = json.current.skytext.toLowerCase();
-    var currentDay = json.current.day;
-    var forecastString = '';
-    for (var i = 0; i < json.forecast.length; i++) {
-      if (json.forecast[i].day === currentDay) {
-        var skytextforecast = json.forecast[i].skytextday.toLowerCase();
-        forecastString = `Today, it will be ${skytextforecast} with the forecasted high of ${json.forecast[i].high} and a low of ${json.forecast[i].low}.`;
+  weather.find({search: config.weather, degreeType: config.celsius ? 'C' : 'F'}, function(err, result) {
+    if (result && result[0] && result[0].current) {
+      var json = result[0];
+      // TODO: add emoji for this thing.
+      var skytext = json.current.skytext.toLowerCase();
+      var currentDay = json.current.day;
+      var forecastString = '';
+      for (var i = 0; i < json.forecast.length; i++) {
+        if (json.forecast[i].day === currentDay) {
+          var skytextforecast = json.forecast[i].skytextday.toLowerCase();
+          forecastString = `Today, it will be ${skytextforecast} with the forecasted high of ${json.forecast[i].high} and a low of ${json.forecast[i].low}.`;
+        }
       }
+      weatherBox.content = `In ${json.location.name} it's ${json.current.temperature}${json.location.degreetype} and ${skytext} right now. ${forecastString}`;
+    } else {
+      weatherBox.content = 'Having trouble fetching the weather for you :(';
     }
-    weatherBox.content = `In ${json.location.name} it's ${json.current.temperature}${json.location.degreetype} and ${skytext} right now. ${forecastString}`;
   });
 }
 

@@ -17,8 +17,10 @@ config.apiKeys = true;
 // Directories in which to run git-standup on for a list of your recent commits.
 config.repos = ['~/Code'];
 
-// Zip code to check the weather for.
-config.zipcode = ['94133'];
+// Where to check the weather for. This can be a zip code or a location name
+// So both 90210 and "San Francisco, CA" should be ok.
+// It's using weather.service.msn.com behind the curtains.
+config.weather = 'San Francisco';
 
 // Set to false if you're an imperial savage. <3
 config.celsius = true;
