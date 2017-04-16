@@ -6,7 +6,7 @@ config.twitter = config.twitter.split(',')
 
 // Set this to false if you want to scrape twitter.com instead of using
 // API keys. The tweets may include RTs in this case :(
-config.apiKeys = process.env.TTC_APIKEYS || true;
+config.apiKeys = process.env.TTC_APIKEYS || 'true';
 config.apiKeys = config.apiKeys === 'true' ? true : false;
 
 // Directories in which to run git-standup on for a list of your recent commits.
@@ -19,7 +19,7 @@ config.repos = config.repos.split(',').join(' ');
 config.weather = process.env.TTC_WEATHER || 'San Francisco';
 
 // Set to false if you're an imperial savage. <3
-config.celsius = process.env.TTC_CELSIUS || true;
+config.celsius = process.env.TTC_CELSIUS || 'true';
 config.celsius = config.celsius === 'true' ? true : false;
 
 config.keys = {};
