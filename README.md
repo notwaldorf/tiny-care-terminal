@@ -1,4 +1,4 @@
-# tiny-terminal-care
+# tiny-care-terminal
 This is a little dashboard that tries to take care of you when you're using your terminal.
 It tells you cute, self care things, and tries not to stress you out. It shows:
 - the last tweets from [@tinycarebot](https://twitter.com/tinycarebot),
@@ -57,8 +57,8 @@ Set them through your favourite way of setting env variables.
 ### Do the npm dance
 
 ```
-npm install -g tiny-terminal-care
-tiny-terminal-care
+npm install -g tiny-care-terminal
+tiny-care-terminal
 ```
 You can exit the dashboard by pressing `esc` or `q`.
 

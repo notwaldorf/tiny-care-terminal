@@ -1,14 +1,14 @@
 {
-  "name": "tiny-terminal-care",
-  "version": "1.0.8",
+  "name": "tiny-care-terminal",
+  "version": "1.0.0",
   "description": "A terminal that tries to take care of you 💖",
   "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
   "license": "MIT",
   "bin": {
-    "tiny-terminal-care": "care.js"
+    "tiny-care-terminal": "care.js"
   },
-  "repository": "https://github.com/notwaldorf/tiny-terminal-care.git",
+  "repository": "https://github.com/notwaldorf/tiny-care-terminal.git",
   "dependencies": {
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.7.5",
