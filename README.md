@@ -2,7 +2,7 @@
 This is a little dashboard that tries to take care of you when you're using your terminal.
 It tells you cute, self care things, and tries not to stress you out. It shows:
 - the last tweets from [@tinycarebot](https://twitter.com/tinycarebot),
-[@selfcare_bot](https://twitter.com/aloebud) and
+[@selfcare_bot](https://twitter.com/selfcare_bot) and
 [@magicrealismbot](https://twitter.com/magicrealismbot). The first two tend
 to tweet reminders about taking breaks, drinking water and looking outside, and the latter
 tells you strange, whimsical stories. If you don't like these bots,
