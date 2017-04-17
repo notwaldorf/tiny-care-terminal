@@ -56,6 +56,8 @@ Set them through your favourite way of setting env variables.
 
 ### Do the npm dance
 
+(Note: this currently doesn't work with `yarn` because of path shenanigans I wrote, so while I'm fixing that, pls use `npm` 🙏)
+
 ```
 npm install -g tiny-care-terminal
 tiny-care-terminal
