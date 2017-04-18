@@ -51,7 +51,7 @@ All the settings the dashboard looks at are in `sample.env`:
   - `TTC_CELSIUS` (by default true)
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
-  - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minute. 
+  - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
 
 Set them through your favourite way of setting env variables.
 
@@ -63,6 +63,7 @@ Set them through your favourite way of setting env variables.
 npm install -g tiny-care-terminal
 tiny-care-terminal
 ```
-You can exit the dashboard by pressing `esc` or `q`.
+You can exit the dashboard by pressing `esc` or `q`. You can refresh it
+manually by pressing `r`.
 
 ## Take care of yourself, ok? 💖
