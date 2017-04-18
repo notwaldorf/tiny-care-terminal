@@ -40,7 +40,7 @@ tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💖
 tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
 
 tick();
-setInterval(tick, 1000 * 60 * 20); // 20 minutes
+setInterval(tick, 1000 * 60 * config.updateInterval);
 
 function tick() {
   doTheWeather();
