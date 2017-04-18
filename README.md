@@ -51,6 +51,7 @@ All the settings the dashboard looks at are in `sample.env`:
   - `TTC_CELSIUS` (by default true)
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
+  - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minute. 
 
 Set them through your favourite way of setting env variables.
 

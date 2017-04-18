@@ -22,6 +22,8 @@ config.weather = process.env.TTC_WEATHER || 'San Francisco';
 config.celsius = process.env.TTC_CELSIUS || 'true';
 config.celsius = config.celsius === 'true' ? true : false;
 
+config.updateInterval = parseFloat(process.env.TTC_UPDATE_INTERVAL) || 20;
+
 config.keys = {};
 config.keys.consumer_key = process.env.CONSUMER_KEY || 'none';
 config.keys.consumer_secret = process.env.CONSUMER_SECRET || 'none';
