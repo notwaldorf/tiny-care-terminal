@@ -21,6 +21,11 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
   return process.exit(0);
 });
 
+// Refresh on r, or Control-R.
+screen.key(['r', 'C-r'], function(ch, key) {
+  tick();
+});
+
 var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 
 // grid.set(row, col, rowSpan, colSpan, obj, opts)
