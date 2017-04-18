@@ -8,6 +8,9 @@ var contrib = require('blessed-contrib');
 var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
 var weather = require('weather-js');
+var gitUsername = require('git-user-name')();
+var gitlog = require('gitlog');
+var async = require("async");
 
 var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
@@ -102,20 +105,35 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [config.repos], {shell:true});
-  todayBox.content = '';
-  today.stdout.on('data', data => {
+  getGitCommits(config.repos, 1, data => {
     todayCommits = getCommits(`${data}`, todayBox);
     updateCommitsGraph(todayCommits, weekCommits);
     screen.render();
   });
 
-  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', config.repos], {shell:true});
-  weekBox.content = '';
-  week.stdout.on('data', data => {
+  getGitCommits(config.repos, 7, data => {
     weekCommits = getCommits(`${data}`, weekBox);
     updateCommitsGraph(todayCommits, weekCommits);
     screen.render();
+  });
+}
+
+function getGitCommits(repos, days, callback) {
+  var cmts = [];
+  async.each(repos, (repo, done) => {
+    gitlog({
+      repo: repo,
+      since: `${days} days ago`,
+      fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
+      author: gitUsername
+    }, (err, logs) => {
+      logs.forEach(c => {
+        cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName}>`);
+      });
+      done();
+    });
+  }, err => {
+    callback(cmts.join('\n'));
   });
 }
 

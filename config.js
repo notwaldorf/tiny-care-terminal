@@ -11,7 +11,7 @@ config.apiKeys = config.apiKeys === 'true' ? true : false;
 
 // Directories in which to run git-standup on for a list of your recent commits.
 config.repos = process.env.TTC_REPOS || '~/Code';
-config.repos = config.repos.split(',').join(' ');
+config.repos = config.repos.split(',');
 
 // Where to check the weather for. This can be a zip code or a location name
 // So both 90210 and "San Francisco, CA" should be ok.
