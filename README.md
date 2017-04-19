@@ -53,7 +53,7 @@ All the settings the dashboard looks at are in `sample.env`:
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
 
-Set them through your favourite way of setting env variables.
+Create a copy the `sample.env` as `.env` and make changes you desire. The values will be automagically loaded via [dotenv](https://www.npmjs.com/package/dotenv).
 
 ### Do the npm dance
 
