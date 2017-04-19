@@ -19,27 +19,10 @@ It looks like this, and updates every 20 minutes.
 
 ## Make it go
 
-The dashboard has two alternatives for reading tweets: using your API keys
-or scraping. API keys is preferred (because lol scraping), but if you're
-really not into that, then skip the next section and read the bit about
-setting `TTC_APIKEYS`
-
-### Set up API keys
-
-You need [Twitter API keys](https://apps.twitter.com/) for the tweets to work.
-It should be pretty easy to create a new app, and get these 4 values.
-After you've set them up, set these env variables (see the `sample.env` for an
-example):
-
-```
-CONSUMER_KEY='...'
-CONSUMER_SECRET='...'
-ACCESS_TOKEN='...'
-ACCESS_TOKEN_SECRET='...'
-```
-
 ### Configure the dashboard
-All the settings the dashboard looks at are in `sample.env`:
+
+All the settings the dashboard looks at are in the sample file `sample.env`. This file isn't used by the dashboard, it just
+lists the environment variables that you can copy in your `rc` files:
   - `TTC_BOTS` are the 3 twitter bots to check, comma separated. The first entry
   in this list will be displayed in the party parrot.
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
@@ -53,7 +36,34 @@ All the settings the dashboard looks at are in `sample.env`:
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
 
-Set them through your favourite way of setting env variables.
+### Settings the environment variables
+
+Every OS and shell is different so I probably won't hit all of them, but the bottom line is that
+you should copy those environment variables wherever the rest of your system's variables live:
+- if you're using `zsh`, that's probably in your home directory's `.zshrc` file
+- if you're using `bash`, that could be your `bash_profile` file
+
+Note that the `export` bit is pretty key, to make sure that they are globally available. To check that the
+variables have been set correctly, you can print them in the terminal -- for example, `echo $TTC_WEATHER`.
+
+### Set up Twitter API keys
+
+The dashboard has two alternatives for reading tweets: using your API keys
+or scraping. API keys is preferred (because lol scraping), but if you're
+really not into that, then skip the next section and read the bit about
+setting `TTC_APIKEYS`
+
+You need [Twitter API keys](https://apps.twitter.com/) for the tweets to work.
+It should be pretty easy to create a new app, and get these 4 values.
+After you've set them up, set these env variables (see the `sample.env` for an
+example):
+
+```
+CONSUMER_KEY='...'
+CONSUMER_SECRET='...'
+ACCESS_TOKEN='...'
+ACCESS_TOKEN_SECRET='...'
+```
 
 ### Do the npm dance
 
