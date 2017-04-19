@@ -6,10 +6,7 @@ set -e
 # here we are.
 
 progname=$0
-
-# I love 2 shell.
-DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-standup=$DIR"/node_modules/git-standup/git-standup"
+standup=$(npm bin)"/git-standup"
 
 function usage () {
    echo "Usage: "
