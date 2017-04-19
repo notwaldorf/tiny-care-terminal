@@ -71,6 +71,7 @@ ACCESS_TOKEN_SECRET='...'
 
 ```
 npm install -g tiny-care-terminal
+npm install -g git-standup
 tiny-care-terminal
 ```
 You can exit the dashboard by pressing `esc` or `q`. You can refresh it
