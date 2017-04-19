@@ -102,17 +102,15 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [config.repos], {shell:true});
   todayBox.content = '';
-  today.stdout.on('data', data => {
+  collectRepositoryLogs(config.repos, ['-d 1'], (data) => {
     todayCommits = getCommits(`${data}`, todayBox);
     updateCommitsGraph(todayCommits, weekCommits);
     screen.render();
   });
 
-  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', config.repos], {shell:true});
   weekBox.content = '';
-  week.stdout.on('data', data => {
+  collectRepositoryLogs(config.repos, ['-d 7'], (data) => {
     weekCommits = getCommits(`${data}`, weekBox);
     updateCommitsGraph(todayCommits, weekCommits);
     screen.render();
@@ -145,6 +143,23 @@ function makeScrollBox(label) {
   options.alwaysScroll = true;
   options.mouse = true;
   return options;
+}
+
+function collectRepositoryLogs(search_paths, args, handler) {
+  var n = search_paths.length;
+  var output = '';
+  for (var search_path of search_paths) {
+    var proc = spawn(__dirname + '/node_modules/git-standup/git-standup', args, {shell: true, cwd: search_path});
+    proc.stdout.on('data', (data) => {
+      output += data;
+    });
+    proc.once('exit', () => {
+      --n;
+      if (n == 0) {
+        handler(output);
+      }
+    });
+  }
 }
 
 var commitRegex = /(.......) (- .*)/g;
