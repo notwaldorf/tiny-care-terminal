@@ -9,6 +9,8 @@ var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
 var weather = require('weather-js');
 var gitUsername = require('git-user-name')();
+var subdirs = require('subdirs');
+var isGit = require('is-git');
 var gitlog = require('gitlog');
 var async = require("async");
 
@@ -105,22 +107,55 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  getGitCommits(config.repos, 1, data => {
-    todayCommits = getCommits(`${data}`, todayBox);
-    updateCommitsGraph(todayCommits, weekCommits);
-    screen.render();
-  });
+  getGitRepos(config.repos, config.reposDepth, allRepos => {
+    getGitCommits(allRepos, 1, data => {
+      todayCommits = getCommits(`${data}`, todayBox);
+      updateCommitsGraph(todayCommits, weekCommits);
+      screen.render();
+    });
 
-  getGitCommits(config.repos, 7, data => {
-    weekCommits = getCommits(`${data}`, weekBox);
-    updateCommitsGraph(todayCommits, weekCommits);
-    screen.render();
+    getGitCommits(allRepos, 7, data => {
+      weekCommits = getCommits(`${data}`, weekBox);
+      updateCommitsGraph(todayCommits, weekCommits);
+      screen.render();
+    });
   });
 }
 
+/**
+ * Go through all `repos` and look for subdirectories up to a given `depth`
+ * and look for repositories.
+ * Calls `callback` with array of repositories.
+ */
+function getGitRepos(repos, depth, callback) {
+  var allRepos = [];
+  async.each(repos, (repo, repoDone) => {
+    subdirs(repo, depth, (err, dirs) => {
+      if (err) return callback([
+        `😥 Error "${err.code}" doing "${err.syscall}" on directory: ${err.path}`
+      ]);
+      if (dirs) dirs.push(repo);
+      async.each(dirs, (dir, dirDone) => {
+        isGit(dir, (err, isGit) => {
+          if (!dir.includes('.git') && isGit) {
+            allRepos.push(dir);
+          }
+          dirDone();
+        });
+      }, repoDone);
+    });
+  }, err => {
+    callback(allRepos.sort());
+  });
+}
+
+/**
+ * returns all commits of the last given `days`.
+ * Calls `callback` with line-seperated-strings of the formatted commits.
+ */
 function getGitCommits(repos, days, callback) {
   var cmts = [];
-  async.each(repos, (repo, done) => {
+  async.each(repos, (repo, repoDone) => {
     gitlog({
       repo: repo,
       since: `${days} days ago`,
@@ -130,10 +165,10 @@ function getGitCommits(repos, days, callback) {
       logs.forEach(c => {
         cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName}>`);
       });
-      done();
+      repoDone();
     });
   }, err => {
-    callback(cmts.join('\n'));
+    callback(cmts.length > 0 ? cmts.join('\n') : "Nothing yet. Start small!");
   });
 }
 

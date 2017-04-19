@@ -13,6 +13,9 @@ config.apiKeys = config.apiKeys === 'true' ? true : false;
 config.repos = process.env.TTC_REPOS || '~/Code';
 config.repos = config.repos.split(',');
 
+// The directory-depth on how to look for git-repos. Use with care!
+config.reposDepth = process.env.TTC_REPOS_DEPTH || 0;
+
 // Where to check the weather for. This can be a zip code or a location name
 // So both 90210 and "San Francisco, CA" should be ok.
 // It's using weather.service.msn.com behind the curtains.
