@@ -6,7 +6,7 @@ set -e
 # here we are.
 
 progname=$0
-standup=$(npm bin)"/git-standup"
+standup=$(npm bin -g)"/git-standup"
 
 function usage () {
    echo "Usage: "
