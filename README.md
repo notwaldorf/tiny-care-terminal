@@ -36,7 +36,7 @@ lists the environment variables that you can copy in your `rc` files:
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
 
-### Settings the environment variables
+### Setting the environment variables
 
 Every OS and shell is different so I probably won't hit all of them, but the bottom line is that
 you should copy those environment variables wherever the rest of your system's variables live:
