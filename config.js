@@ -1,7 +1,7 @@
 var config = {};
 // Accounts to read the last tweet from. The first one in the list will be
 // spoken by the party parrot.
-config.twitter = process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot';
+config.twitter = process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot,5minselfcare';
 config.twitter = config.twitter.split(',')
 
 // Set this to false if you want to scrape twitter.com instead of using
