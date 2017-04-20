@@ -8,7 +8,7 @@ set -e
 progname=$0
 standup=$(npm bin -g)"/git-standup"
 
-function usage () {
+usage () {
    echo "Usage: "
    echo "  $progname [-d days] [-h] repo1 repo2 etc."
    echo "  -d \t - Specify the number of days back to include"
