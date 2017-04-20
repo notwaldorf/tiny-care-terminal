@@ -77,4 +77,12 @@ tiny-care-terminal
 You can exit the dashboard by pressing `esc` or `q`. You can refresh it
 manually by pressing `r`.
 
+## 🆘 Halp I don't see my commits
+
+There's a couple of reasons why this might happen:
+- did you run `npm install -g git-standup` after installing `tiny-care-terminal`? If you didn't, that's the most likely culprit
+- did you forget to export your `TTC_REPOS` environment variable? Open a new tab, and type `echo $TTC_REPOS` to make sure it's not empty. Note that spaces inside the repo names are not supported right now :(
+- are you on Windows? Not super sure it works on Windows because of the `bash` scripts, but working on it
+- did you use `yarn`? I know `yarn` is cool, and I've seen it work with this, but can you double check that it still doesn't work with a basic `npm` installation instead?
+
 ## Take care of yourself, ok? 💖
