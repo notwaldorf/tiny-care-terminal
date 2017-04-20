@@ -61,10 +61,10 @@ After you've set them up, set these env variables (see the `sample.env` for an
 example):
 
 ```
-CONSUMER_KEY='...'
-CONSUMER_SECRET='...'
-ACCESS_TOKEN='...'
-ACCESS_TOKEN_SECRET='...'
+TTC_CONSUMER_KEY='...'
+TTC_CONSUMER_SECRET='...'
+TTC_ACCESS_TOKEN='...'
+TTC_ACCESS_TOKEN_SECRET='...'
 ```
 
 ### Do the npm dance
