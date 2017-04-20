@@ -40,7 +40,8 @@ lists the environment variables that you can copy in your `rc` files:
 ### Setting the environment variables
 
 Every OS and shell is different so I probably won't hit all of them, but the bottom line is that
-you should copy those environment variables wherever the rest of your system's variables live:
+you should copy those environment variables wherever the rest of your system's variables live.
+For example,
 - if you're using `zsh`, that's probably in your home directory's `.zshrc` file
 - if you're using `bash`, that could be your `bash_profile` file
 
