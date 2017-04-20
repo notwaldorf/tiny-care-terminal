@@ -44,7 +44,7 @@ you should copy those environment variables wherever the rest of your system's v
 For example,
 - if you're using `zsh`, that's probably in your home directory's `.zshrc` file
 - if you're using `bash`, that could be your `bash_profile` file
-- if you're using `fish`, use `set -g key value` in your `~/.config/fish/config.fish` file
+- if you're using `fish`, use `set -gx key value` in your `~/.config/fish/config.fish` file
 
 Note that the `export` bit is pretty key, to make sure that they are globally available. To check that the
 variables have been set correctly, you can print them in the terminal -- for example, `echo $TTC_WEATHER`.
