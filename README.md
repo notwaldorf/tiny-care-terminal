@@ -29,8 +29,9 @@ lists the environment variables that you can copy in your `rc` files:
   This is using [`git-standup`](https://github.com/kamranahmedse/git-standup) under
   the hood, and looks one subdirectory deep (so if you have all your code
   directories in a `~/Code`, you only need to list that one)
-  - `TTC_WEATHER`, the location or zip code to check the weather for (so both
-    `90210` and `Paris` should work)
+  - `TTC_WEATHER`, the location to check the weather for. A zipcode doesn't
+    always work, so if you can, use a location first (so prefer `Paris` over
+    `90210`)
   - `TTC_CELSIUS` (by default true)
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
