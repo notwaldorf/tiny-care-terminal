@@ -107,7 +107,7 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  getGitRepos(config.repos, config.reposDepth, allRepos => {
+  getGitRepos(config.repos, config.reposDepth-1, allRepos => {
     getGitCommits(allRepos, 1, data => {
       todayCommits = getCommits(`${data}`, todayBox);
       updateCommitsGraph(todayCommits, weekCommits);
