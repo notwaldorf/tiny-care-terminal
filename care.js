@@ -67,11 +67,11 @@ function doTheTweets () {
     // Gigantor hack: first twitter account gets spoken by the party parrot.
     if (which == 0) {
       twitterbot.getTweet(config.twitter[which]).then((tweet) => {
-        parrotSay(tweet.text).then(function (text) {
+        parrotSay(tweet.text).then((text) => {
           parrotBox.content = text
           screen.render()
         })
-      }, function (error) {
+      }, (error) => {
         // Just in case we don't have tweets.
         parrotSay('Hi! You\'re doing great!!!').then((text) => {
           parrotBox.content = text
