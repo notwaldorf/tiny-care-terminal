@@ -104,7 +104,7 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [config.repos], {shell:true});
+  var today = spawn('sh', [__dirname + '/standup-helper.sh', config.repos], {shell:true});
   todayBox.content = '';
   today.stdout.on('data', data => {
     todayCommits = getCommits(`${data}`, todayBox);
