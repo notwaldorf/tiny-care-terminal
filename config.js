@@ -1,7 +1,7 @@
 var config = {
   // Accounts to read the last tweet from. The first one in the list will be
   // spoken by the party parrot.
-  twitter: (process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot').split(','),
+  twitter: (process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot').split(',').slice(0, 3),
 
   // Set this to false if you want to scrape twitter.com instead of using
   // API keys. The tweets may include RTs in this case :(
