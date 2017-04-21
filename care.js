@@ -1,4 +1,4 @@
-#! /usr/bin/env node
+#!/usr/bin/env node
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
 
@@ -38,7 +38,7 @@ var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
 var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
 var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 5, xOffset: 4, maxHeight: 10});
-var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeBox(''));
+var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
 
 var tweetBoxes = {}
 tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💖 '));
@@ -60,14 +60,16 @@ function doTheWeather() {
       // TODO: add emoji for this thing.
       var skytext = json.current.skytext.toLowerCase();
       var currentDay = json.current.day;
+      var degreetype = json.location.degreetype;
       var forecastString = '';
       for (var i = 0; i < json.forecast.length; i++) {
-        if (json.forecast[i].day === currentDay) {
-          var skytextforecast = json.forecast[i].skytextday.toLowerCase();
-          forecastString = `Today, it will be ${skytextforecast} with the forecasted high of ${json.forecast[i].high} and a low of ${json.forecast[i].low}.`;
+        var forecast = json.forecast[i];
+        if (forecast.day === currentDay) {
+          var skytextforecast = forecast.skytextday.toLowerCase();
+          forecastString = `Today, it will be ${skytextforecast} with the forecasted high of ${forecast.high}°${degreetype} and a low of ${forecast.low}°${degreetype}.`;
         }
       }
-      weatherBox.content = `In ${json.location.name} it's ${json.current.temperature}${json.location.degreetype} and ${skytext} right now. ${forecastString}`;
+      weatherBox.content = `In ${json.location.name} it's ${json.current.temperature}°${degreetype} and ${skytext} right now. ${forecastString}`;
     } else {
       weatherBox.content = 'Having trouble fetching the weather for you :(';
     }
@@ -174,7 +176,7 @@ function getGitCommits(repos, days, callback) {
       }, (err, logs) => {
         if (err) callback(err, null);
         logs.forEach(c => {
-          cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName}>`);
+          cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
         });
         repoDone();
       });
@@ -235,7 +237,7 @@ function colorizeLog(text) {
     } else {
       // It's a commit.
       var matches = lines[i].match(regex);
-      if (matches ) {
+      if (matches) {
         lines[i] = chalk.red(matches[1]) + ' ' + matches[2] + ' ' +
             chalk.green(matches[3])
       }
