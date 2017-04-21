@@ -61,7 +61,7 @@ function doTheWeather() {
         var forecast = json.forecast[i];
         if (forecast.day === currentDay) {
           var skytextforecast = forecast.skytextday.toLowerCase();
-          forecastString = `Today, it will be ${skytextforecast} with the forecasted high of ${forecast.high}°${degreetype} and a low of ${forecast.low}°${degreetype}.`;
+          forecastString = `Today, it will be ${skytextforecast} with the forecast high of ${forecast.high}°${degreetype} and a low of ${forecast.low}°${degreetype}.`;
         }
       }
       weatherBox.content = `In ${json.location.name} it's ${json.current.temperature}°${degreetype} and ${skytext} right now. ${forecastString}`;
