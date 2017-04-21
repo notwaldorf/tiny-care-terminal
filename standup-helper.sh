@@ -12,7 +12,7 @@ usage () {
    echo "Usage: "
    echo "  $progname [-d days] [-h] repo1 repo2 etc."
    echo "  -d \t - Specify the number of days back to include"
-   echo "  -d \t - Display this help screen"
+   echo "  -h \t - Display this help screen"
 }
 
 # get the optional days
