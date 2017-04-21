@@ -41,7 +41,7 @@ For example,
 Note that the `export` bit is pretty key, to make sure that they are globally available. To check that the
 variables have been set correctly, you can print them in the terminal -- for example, `echo $TTC_WEATHER`.
 
-#### 3. Configure the dashboard
+#### Configure the dashboard
 
 All the settings the dashboard looks at are in the sample file `sample.env`. This file isn't used by the dashboard, it just
 lists the environment variables that you can copy in your `rc` files:
@@ -59,7 +59,7 @@ lists the environment variables that you can copy in your `rc` files:
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
 
-#### 4. Set up Twitter API keys
+#### Set up Twitter API keys
 
 The dashboard has two alternatives for reading tweets: using your API keys
 or scraping. API keys is preferred (because lol scraping), but if you're
@@ -78,7 +78,7 @@ TTC_ACCESS_TOKEN='...'
 TTC_ACCESS_TOKEN_SECRET='...'
 ```
 
-## 5. Start!
+## 3. Start!
 ```
 tiny-care-terminal
 ```
