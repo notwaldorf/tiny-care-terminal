@@ -53,8 +53,8 @@ function doTheWeather() {
       const skytext         = json.current.skytext.toLowerCase();
       const currentDay      = json.current.day;
       const skytextForecast = json.find((forecast) => forecast.day === currentDay).skytextday.toLowerCase();
-      const forecastString  = `Today, it will be ${skytextForecast} with the forecasted high of ${forecast.high}°${degreetype} and a low of ${forecast.low}°${degreetype}.`;
       const degreetype      = json.location.degreetype;
+      const forecastString  = `Today, it will be ${skytextForecast} with the forecasted high of ${skytextForecast.high}°${degreetype} and a low of ${skytextForecast.low}°${degreetype}.`;
       weatherBox.content    = `In ${json.location.name} it's ${json.current.temperature}°${degreetype} and ${skytext} right now. ${forecastString}`;
     } else {
       weatherBox.content = 'Having trouble fetching the weather for you :(';

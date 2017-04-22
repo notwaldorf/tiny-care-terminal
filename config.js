@@ -17,7 +17,6 @@ let config = {
   // Set to false if you're an imperial savage. <3
   celsius:        (process.env.TTC_CELSIUS || 'true') === 'true',
   updateInterval: parseFloat(process.env.TTC_UPDATE_INTERVAL) || 20,
-  // Set to false if you're an imperial savage. <3
 
   keys: {
     consumer_key:        process.env.TTC_CONSUMER_KEY || process.env.CONSUMER_KEY || 'none',
