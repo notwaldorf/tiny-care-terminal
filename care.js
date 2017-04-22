@@ -2,7 +2,7 @@
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
 
-var spawn = require( 'child_process' ).spawn;
+var spawn = require( 'child_process' ).exec;
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
@@ -104,21 +104,31 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [config.repos], {shell:true});
-  todayBox.content = '';
-  today.stdout.on('data', data => {
-    todayCommits = getCommits(`${data}`, todayBox);
-    updateCommitsGraph(todayCommits, weekCommits);
-    screen.render();
+  config.repos.forEach(function (repoPath) {
+    
+    var today = spawn('git-standup -d 1 -m 2', {
+      'cwd': repoPath
+    });
+
+    todayBox.content = '';
+    today.stdout.on('data', data => {
+      todayCommits = getCommits(`${data}`, todayBox);
+      updateCommitsGraph(todayCommits, weekCommits);
+      screen.render();
+    });
+
+    var week = spawn('git-standup -d 7 -m 2', {
+      'cwd': repoPath
+    });
+
+    weekBox.content = '';
+    week.stdout.on('data', data => {
+      weekCommits = getCommits(`${data}`, weekBox);
+      updateCommitsGraph(todayCommits, weekCommits);
+      screen.render();
+    });
   });
 
-  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', config.repos], {shell:true});
-  weekBox.content = '';
-  week.stdout.on('data', data => {
-    weekCommits = getCommits(`${data}`, weekBox);
-    updateCommitsGraph(todayCommits, weekCommits);
-    screen.render();
-  });
 }
 
 function makeBox(label) {

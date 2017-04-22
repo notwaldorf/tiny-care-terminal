@@ -8,7 +8,7 @@ var config = {
   apiKeys: (process.env.TTC_APIKEYS || 'true') === 'true',
 
   // Directories in which to run git-standup on for a list of your recent commits.
-  repos: (process.env.TTC_REPOS || '~/Code').replace(/,/g, ' '),
+  repos: (process.env.TTC_REPOS || '~/Code').split(','),
 
   // Where to check the weather for.
   // It's using weather.service.msn.com behind the curtains.
