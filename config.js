@@ -1,4 +1,4 @@
-var config = {
+let config = {
   // Accounts to read the last tweet from. The first one in the list will be
   // spoken by the party parrot.
   twitter: (process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot').split(','),
@@ -15,8 +15,7 @@ var config = {
   weather: process.env.TTC_WEATHER || 'San Francisco',
 
   // Set to false if you're an imperial savage. <3
-  celsius: (process.env.TTC_CELSIUS || 'true') === 'true',
-
+  celsius:        (process.env.TTC_CELSIUS || 'true') === 'true',
   updateInterval: parseFloat(process.env.TTC_UPDATE_INTERVAL) || 20,
 
   keys: {
