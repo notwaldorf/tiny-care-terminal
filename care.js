@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
+var Pomodoro = require(__dirname + '/pomodoro.js');
 
 var spawn = require( 'child_process' ).spawn;
 var blessed = require('blessed');
@@ -24,6 +25,20 @@ screen.key(['escape', 'q', 'C-c'], function(ch, key) {
 // Refresh on r, or Control-R.
 screen.key(['r', 'C-r'], function(ch, key) {
   tick();
+});
+
+screen.key(['s', 'C-s'], function(ch, key) {
+  pomodoro.start();
+});
+screen.key(['e', 'C-e'], function(ch, key) {
+  pomodoro.stop();
+  onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
+});
+
+screen.key(['u', 'C-u'], function(ch, key) {
+  pomodoro.updateDuration();
+  if (pomodoro.isRunning()) screen.render();
+  else onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
 });
 
 var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
@@ -178,3 +193,19 @@ function colorizeLog(text) {
   }
   return lines.join('\n');
 }
+
+
+function onPomodoroTick(remainingTime) {
+  var content = `In Pomodoro Mode: ${remainingTime}`;
+  var commands = 'commands: s - start, e - stop, u - change duration.';
+  parrotSay(content).then(function(text) {
+    parrotBox.content = text + commands;
+    screen.render();
+  });
+}
+
+function onPomodoroComplete() {
+
+}
+
+var pomodoro = Pomodoro({onTick: onPomodoroTick, onComplete: onPomodoroComplete});
