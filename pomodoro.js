@@ -17,7 +17,10 @@ var Pomodoro = function(options) {
       return options.onComplete && options.onComplete();
     }
     _durationRemaining -=  1;
-    if (options.onTick) options.onTick(_durationRemaining);
+    if (options.onTick) {
+      var remainingTime = ('0' + Math.floor(_durationRemaining/60)).slice(-2) + ':' + ('0' + _durationRemaining % 60).slice(-2);
+      options.onTick(remainingTime);
+    }
   }
 
   var exports = {
