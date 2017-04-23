@@ -37,6 +37,10 @@ var Pomodoro = function(options) {
       if (_defaultDuration === 60) _defaultDuration = 5;
       else _defaultDuration += 5;
     },
+
+    getDefaultDuration() {
+      return _defaultDuration;
+    },
   }
 
   return exports;
@@ -44,4 +48,4 @@ var Pomodoro = function(options) {
 
 
 
-module.export = Pomodoro;
+module.exports = Pomodoro;
