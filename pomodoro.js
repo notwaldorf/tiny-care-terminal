@@ -37,12 +37,17 @@ var Pomodoro = function(options) {
     },
 
     updateDuration() {
+      if (_setIntervalId) return; // Don't update duration when pomodoro is running
       if (_defaultDuration === 60) _defaultDuration = 5;
       else _defaultDuration += 5;
     },
 
     getDefaultDuration() {
       return _defaultDuration;
+    },
+
+    isRunning() {
+      return Boolean(_setIntervalId)
     },
   }
 
