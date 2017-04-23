@@ -19,6 +19,13 @@ var config = {
 
   updateInterval: parseFloat(process.env.TTC_UPDATE_INTERVAL) || 20,
 
+  // Set to false if you don't want to use Pomodoro
+  pomodoro: {
+    is_active: (process.env.TTC_POMODORO || 'true') === 'true',
+    default_focus_time: process.env.TCC_POMODORO_TIMER || '25:00',
+    default_break_time: process.env.TCC_POMODORO_BREAK || '5:00'
+  },
+
   keys: {
     consumer_key:        process.env.TTC_CONSUMER_KEY || process.env.CONSUMER_KEY || 'none',
     consumer_secret:     process.env.TTC_CONSUMER_SECRET || process.env.CONSUMER_SECRET || 'none',
