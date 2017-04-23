@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
+var notifier = require('node-notifier');
 var Pomodoro = require(__dirname + '/pomodoro.js');
 
 var spawn = require( 'child_process' ).spawn;
@@ -224,7 +225,12 @@ function onPomodoroTick(remainingTime) {
 
 function onPomodoroComplete() {
   if (!inPomodoroMode) return;
-  // TODO - implement notification
+  notifier.notify({
+    title: 'Pomodoro Alert',
+    message: 'Break Time!',
+    sound: true,
+    timeout: 30,
+  });
 }
 
 var pomodoro = Pomodoro({onTick: onPomodoroTick, onComplete: onPomodoroComplete});
