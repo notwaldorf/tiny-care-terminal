@@ -10,6 +10,8 @@ var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
 var weather = require('weather-js');
 
+var inPomodoroMode = false;
+
 var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
      smartCSR: true,
@@ -28,17 +30,31 @@ screen.key(['r', 'C-r'], function(ch, key) {
 });
 
 screen.key(['s', 'C-s'], function(ch, key) {
+  if (!inPomodoroMode) return;
   pomodoro.start();
 });
 screen.key(['e', 'C-e'], function(ch, key) {
+  if (!inPomodoroMode) return;
   pomodoro.stop();
   onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
 });
 
 screen.key(['u', 'C-u'], function(ch, key) {
+  if (!inPomodoroMode) return;
   pomodoro.updateDuration();
   if (pomodoro.isRunning()) screen.render();
   else onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
+});
+
+screen.key(['p', 'C-p'], function(ch, key) {
+  if (inPomodoroMode) {
+    pomodoro.stop();
+    inPomodoroMode = false;
+    doTheTweets();
+  } else {
+    inPomodoroMode = true;
+    onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
+  }
 });
 
 var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
@@ -90,6 +106,7 @@ function doTheTweets() {
   for (var which in config.twitter) {
     // Gigantor hack: first twitter account gets spoken by the party parrot.
     if (which == 0) {
+      if (inPomodoroMode) return;
       twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
         parrotSay(tweet.text).then(function(text) {
           parrotBox.content = text;
@@ -196,6 +213,7 @@ function colorizeLog(text) {
 
 
 function onPomodoroTick(remainingTime) {
+  if (!inPomodoroMode) return;
   var content = `In Pomodoro Mode: ${remainingTime}`;
   var commands = 'commands: s - start, e - stop, u - change duration.';
   parrotSay(content).then(function(text) {
@@ -205,7 +223,8 @@ function onPomodoroTick(remainingTime) {
 }
 
 function onPomodoroComplete() {
-
+  if (!inPomodoroMode) return;
+  // TODO - implement notification
 }
 
 var pomodoro = Pomodoro({onTick: onPomodoroTick, onComplete: onPomodoroComplete});
