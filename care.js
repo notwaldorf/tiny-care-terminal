@@ -173,8 +173,10 @@ function colorizeLog(text) {
   var regex = /(.......) (- .*) (\(.*\)) (<.*>)/i;
   for (var i = 0; i < lines.length; i++) {
     // If it's a path
-    if (lines[i][0] === '/' || lines[i][0] === '\\') {
-      lines[i] = '\n' + chalk.red(lines[i]);
+    if (lines[i][0] === '/') {
+      lines[i] = formatRepoName(lines[i], '/')
+    } else if(lines[i][0] === '\\') {
+      lines[i] = formatRepoName(lines[i], '\\')
     } else {
       // It's a commit.
       var matches = lines[i].match(regex);
@@ -185,4 +187,9 @@ function colorizeLog(text) {
     }
   }
   return lines.join('\n');
+}
+
+function formatRepoName(line, divider) {
+  var path = line.split(divider);
+  return '\n' + chalk.yellow(path[path.length - 1]);
 }
