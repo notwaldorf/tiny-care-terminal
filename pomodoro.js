@@ -61,7 +61,7 @@ function init(box, screen, statsBox) {
     const today = getToday();
     statsBox.setData({
       titles: ['today', 'week'],
-      data: [store.get(today), getWeekPomodoros()]
+      data: [store.get(today) || 0, getWeekPomodoros()]
     });
     screen.render();
   }
