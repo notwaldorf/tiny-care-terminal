@@ -32,7 +32,7 @@ var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
 var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
-var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 5, xOffset: 4, maxHeight: 10});
+var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
 
 var tweetBoxes = {}
@@ -146,6 +146,14 @@ function makeScrollBox(label) {
   options.vi = true;
   options.alwaysScroll = true;
   options.mouse = true;
+  return options;
+}
+
+function makeGraphBox(label) {
+  var options = makeBox(label);
+  options.barWidth= 5;
+  options.xOffset= 4;
+  options.maxHeight= 10;
   return options;
 }
 
