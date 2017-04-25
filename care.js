@@ -36,7 +36,7 @@ var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
 var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
 
-var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
+var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits', 10));
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
 
 var tweetBoxes = {}
@@ -45,7 +45,7 @@ tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬
 
 if (pomodoro_is_active) {
   var pomodoroBox = grid.set(6, 10, 2, 2, blessed.box, makeScrollBox(' 🍅 '));
-  var pomodoroStatsBox = grid.set(8, 10, 4, 2, contrib.bar, {label: 'Pomodoros', barWidth: 5, xOffset: 3, maxHeight: 4});
+  var pomodoroStatsBox = grid.set(8, 10, 4, 2, contrib.bar, makeGraphBox('Pomodoros', 4));
 
   var parrotBox = grid.set(6, 6, 6, 4, blessed.box, makeScrollBox(''));
 } else {
@@ -175,11 +175,11 @@ function makeScrollBox(label) {
   return options;
 }
 
-function makeGraphBox(label) {
+function makeGraphBox(label, height) {
   var options = makeBox(label);
   options.barWidth= 5;
   options.xOffset= 4;
-  options.maxHeight= 10;
+  options.maxHeight= height;
   return options;
 }
 
