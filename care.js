@@ -1,18 +1,16 @@
 #!/usr/bin/env node
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
+var gitbot = require(__dirname + '/gitbot.js');
 
-var spawn = require( 'child_process' ).spawn;
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
 var weather = require('weather-js');
-var gitUsername = require('git-user-name')();
-var subdirs = require('subdirs');
-var isGit = require('is-git');
-var gitlog = require('gitlog');
-var async = require("async");
+
+console.dir(gitbot);
+debugger;
 
 var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
@@ -111,80 +109,32 @@ function doTheCodes() {
   todayBox.content = '';
   weekBox.content = '';
 
-  var showError = function(err) {
-    getCommits("ERROR: "+err, todayBox);
+  function getCommits(data, box) {
+    var commitRegex = /(.......) (- .*)/g;
+    var content = colorizeLog(data);
+    box.content += content;
+    return (box.content.match(commitRegex) || []).length;
+  }
+
+  function showError(err, box) {
+    getCommits(`😥  ${err}`, box);
     screen.render();
   }
 
-  getGitRepos(config.repos, config.reposDepth-1, (err, allRepos) => {
+  gitbot.findGitRepos(config.repos, config.reposDepth-1, (err, allRepos) => {
     if (err) return showError(err);
-    getGitCommits(allRepos, 1, (err, data) => {
-      if (err) return showError(err);
+    gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
+      if (err) return showError(err, todayBox);
       todayCommits = getCommits(`${data}`, todayBox);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
     });
-    getGitCommits(allRepos, 7, (err, data) => {
-      if (err) return showError(err);
+    gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
+      if (err) return showError(err, weekBox);
       weekCommits = getCommits(`${data}`, weekBox);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
     });
-  });
-}
-
-/**
- * Go through all `repos` and look for subdirectories up to a given `depth`
- * and look for repositories.
- * Calls `callback` with array of repositories.
- */
-function getGitRepos(repos, depth, callback) {
-  var allRepos = [];
-  async.each(repos, (repo, repoDone) => {
-    subdirs(repo, depth, (err, dirs) => {
-      if (err) return callback(
-        `😥 Error "${err.code}" doing "${err.syscall}" on directory: ${err.path}`, null);
-      if (dirs) dirs.push(repo);
-      async.each(dirs, (dir, dirDone) => {
-        isGit(dir, (err, isGit) => {
-          if (err) callback(err, null);
-          if (!dir.includes('.git') && isGit) {
-            allRepos.push(dir);
-          }
-          dirDone();
-        });
-      }, repoDone);
-    });
-  }, err => {
-    callback(err, allRepos.sort());
-  });
-}
-
-/**
- * returns all commits of the last given `days`.
- * Calls `callback` with line-seperated-strings of the formatted commits.
- */
-function getGitCommits(repos, days, callback) {
-  var cmts = [];
-  async.each(repos, (repo, repoDone) => {
-    try {
-      gitlog({
-        repo: repo,
-        since: `${days} days ago`,
-        fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
-        author: gitUsername
-      }, (err, logs) => {
-        if (err) callback(err, null);
-        logs.forEach(c => {
-          cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
-        });
-        repoDone();
-      });
-    } catch(err) {
-      callback(err, null);
-    }
-  }, err => {
-    callback(err, cmts.length > 0 ? cmts.join('\n') : "Nothing yet. Start small!");
   });
 }
 
@@ -222,13 +172,6 @@ function makeGraphBox(label) {
   options.xOffset= 4;
   options.maxHeight= 10;
   return options;
-}
-
-var commitRegex = /(.......) (- .*)/g;
-function getCommits(data, box) {
-  var content = colorizeLog(data);
-  box.content += content;
-  return (box.content.match(commitRegex) || []).length;
 }
 
 function updateCommitsGraph(today, week) {

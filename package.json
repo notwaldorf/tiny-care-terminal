@@ -17,6 +17,7 @@
     "gitlog": "^2.4.0",
     "is-git": "0.0.1",
     "parrotsay-api": "^0.1.1",
+    "resolve-dir": "^1.0.0",
     "scraperjs": "^1.2.0",
     "subdirs": "^1.0.1",
     "twit": "^2.2.5",
