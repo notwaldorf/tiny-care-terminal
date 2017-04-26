@@ -29,7 +29,9 @@ function findGitRepos(repos, depth, callback) {
       if (dirs) dirs.push(repo);
       async.each(dirs, (dir, dirDone) => {
         isGit(dir, (err, isGit) => {
-          if (err) callback(err, null);
+          if (err) {
+            return callback(err, null);
+          }
           if (!dir.includes('.git') && isGit) {
             allRepos.push(dir);
           }
@@ -56,7 +58,8 @@ function getCommitsFromRepos(repos, days, callback) {
         fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
         author: gitUsername
       }, (err, logs) => {
-        if (err) callback(err, null);
+        if (err)
+          return callback(err, null);
         logs.forEach(c => {
           cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
         });

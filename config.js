@@ -13,9 +13,6 @@ var config = {
   // Directories in which to run git-standup on for a list of your recent commits.
   repos: (process.env.TTC_REPOS || '~/Code').split(','),
 
-  // The directory-depth on how to look for git-repos. Use with care!
-  reposDepth: process.env.TTC_REPOS_DEPTH || 1,
-
   // Directory-depth to look for git repositories.
   depth: (process.env.TTC_REPOS_DEPTH || 1),
 

@@ -125,21 +125,19 @@ function doTheCodes() {
     return (box && box.content) ? (box.content.match(commitRegex) || []).length : '0';
   }
 
-  function showError(err, box) {
-    getCommits(`😥  ${err}`, box);
-    screen.render();
-  }
-
-  gitbot.findGitRepos(config.repos, config.reposDepth-1, (err, allRepos) => {
-    if (err) return showError(err);
+  gitbot.findGitRepos(config.repos, config.depth-1, (err, allRepos) => {
+    if (err)
+      return showError(err);
     gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
-      if (err) return showError(err, todayBox);
+      if (err)
+        return todayBox.content = err;
       todayCommits = getCommits(todayBox, `${data}`);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
     });
     gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
-      if (err) return showError(err, weekBox);
+      if (err)
+        return weekBox.content = err;
       weekCommits = getCommits(weekBox, `${data}`);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
