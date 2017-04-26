@@ -63,6 +63,8 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
+  - `TTC_POMODORO` -- set this to true if you want to use the pomodoro timer
+  - `TCC_POMODORO_TIMER` and `TCC_POMODORO_BREAK` can be use to set up the preferred times for the pomodoro sessions.
 
 #### Set up Twitter API keys
 

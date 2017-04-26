@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
+var pomodorolib = require(__dirname + '/pomodoro.js');
 
 var spawn = require('child_process').spawn;
 var blessed = require('blessed');
@@ -9,6 +10,8 @@ var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
 var bunnySay = require('sign-bunny');
 var weather = require('weather-js');
+
+var pomodoro_is_active = config.pomodoro.is_active;
 
 var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
@@ -33,12 +36,22 @@ var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
 var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
-var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
+
+var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits', 10));
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
 
 var tweetBoxes = {}
 tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💖 '));
 tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
+
+if (pomodoro_is_active) {
+  var pomodoroBox = grid.set(6, 10, 2, 2, blessed.box, makeScrollBox(' 🍅 '));
+  var pomodoroStatsBox = grid.set(8, 10, 4, 2, contrib.bar, makeGraphBox('Pomodoros', 4));
+
+  var parrotBox = grid.set(6, 6, 6, 4, blessed.box, makeScrollBox(''));
+} else {
+  var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
+}
 
 tick();
 setInterval(tick, 1000 * 60 * config.updateInterval);
@@ -47,6 +60,19 @@ function tick() {
   doTheWeather();
   doTheTweets();
   doTheCodes();
+}
+
+if (pomodoro_is_active) {
+  pomodoro = pomodorolib.init(pomodoroBox, screen, pomodoroStatsBox);
+
+  // Start and stop pomodoro on s
+  screen.key(['s'], function(ch, key) {
+    if (pomodoro.isRunning()) {
+      pomodoro.stop();
+    } else {
+      pomodoro.start();
+    }
+  });
 }
 
 function doTheWeather() {
@@ -161,11 +187,11 @@ function makeScrollBox(label) {
   return options;
 }
 
-function makeGraphBox(label) {
+function makeGraphBox(label, height) {
   var options = makeBox(label);
   options.barWidth= 5;
   options.xOffset= 4;
-  options.maxHeight= 10;
+  options.maxHeight= height;
   return options;
 }
 
