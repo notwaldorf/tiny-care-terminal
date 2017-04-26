@@ -51,6 +51,9 @@ lists the environment variables that you can copy in your `rc` files:
   This is using [`git-standup`](https://github.com/kamranahmedse/git-standup) under
   the hood, and looks one subdirectory deep (so if you have all your code
   directories in a `~/Code`, you only need to list that one)
+  - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
+  the directories defined with `TTC_REPOS` (by default 1). Note that the deeper
+  the directory depth, the slower the results will be fetched.
   - `TTC_WEATHER`, the location to check the weather for. A zipcode doesn't
     always work, so if you can, use a location first (so prefer `Paris` over
     `90210`)

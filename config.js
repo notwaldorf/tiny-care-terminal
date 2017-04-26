@@ -10,6 +10,8 @@ var config = {
   // Directories in which to run git-standup on for a list of your recent commits.
   repos: (process.env.TTC_REPOS || '~/Code').replace(/,/g, ' '),
 
+  depth: (process.env.TTC_REPOS_DEPTH || 1),
+
   // Where to check the weather for.
   // It's using weather.service.msn.com behind the curtains.
   weather: process.env.TTC_WEATHER || 'San Francisco',
