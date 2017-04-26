@@ -108,15 +108,24 @@ function doTheTweets() {
 function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
+  todayBox.content = '';
+  weekBox.content = '';
 
-  getGitRepos(config.repos, config.reposDepth-1, allRepos => {
-    getGitCommits(allRepos, 1, data => {
+  var showError = function(err) {
+    getCommits("ERROR: "+err, todayBox);
+    screen.render();
+  }
+
+  getGitRepos(config.repos, config.reposDepth-1, (err, allRepos) => {
+    if (err) return showError(err);
+    getGitCommits(allRepos, 1, (err, data) => {
+      if (err) return showError(err);
       todayCommits = getCommits(`${data}`, todayBox);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
     });
-
-    getGitCommits(allRepos, 7, data => {
+    getGitCommits(allRepos, 7, (err, data) => {
+      if (err) return showError(err);
       weekCommits = getCommits(`${data}`, weekBox);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
@@ -133,12 +142,12 @@ function getGitRepos(repos, depth, callback) {
   var allRepos = [];
   async.each(repos, (repo, repoDone) => {
     subdirs(repo, depth, (err, dirs) => {
-      if (err) return callback([
-        `😥 Error "${err.code}" doing "${err.syscall}" on directory: ${err.path}`
-      ]);
+      if (err) return callback(
+        `😥 Error "${err.code}" doing "${err.syscall}" on directory: ${err.path}`, null);
       if (dirs) dirs.push(repo);
       async.each(dirs, (dir, dirDone) => {
         isGit(dir, (err, isGit) => {
+          if (err) callback(err, null);
           if (!dir.includes('.git') && isGit) {
             allRepos.push(dir);
           }
@@ -147,7 +156,7 @@ function getGitRepos(repos, depth, callback) {
       }, repoDone);
     });
   }, err => {
-    callback(allRepos.sort());
+    callback(err, allRepos.sort());
   });
 }
 
@@ -158,19 +167,24 @@ function getGitRepos(repos, depth, callback) {
 function getGitCommits(repos, days, callback) {
   var cmts = [];
   async.each(repos, (repo, repoDone) => {
-    gitlog({
-      repo: repo,
-      since: `${days} days ago`,
-      fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
-      author: gitUsername
-    }, (err, logs) => {
-      logs.forEach(c => {
-        cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName}>`);
+    try {
+      gitlog({
+        repo: repo,
+        since: `${days} days ago`,
+        fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
+        author: gitUsername
+      }, (err, logs) => {
+        if (err) callback(err, null);
+        logs.forEach(c => {
+          cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
+        });
+        repoDone();
       });
-      repoDone();
-    });
+    } catch(err) {
+      callback(err, null);
+    }
   }, err => {
-    callback(cmts.length > 0 ? cmts.join('\n') : "Nothing yet. Start small!");
+    callback(err, cmts.length > 0 ? cmts.join('\n') : "Nothing yet. Start small!");
   });
 }
 

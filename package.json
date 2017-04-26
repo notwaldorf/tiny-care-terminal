@@ -18,7 +18,7 @@
     "is-git": "0.0.1",
     "parrotsay-api": "^0.1.1",
     "scraperjs": "^1.2.0",
-    "subdirs": "github:mojoaxel/subdirs",
+    "subdirs": "^1.0.1",
     "twit": "^2.2.5",
     "weather-js": "^2.0.0"
   },
