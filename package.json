@@ -1,6 +1,6 @@
 {
   "name": "tiny-care-terminal",
-  "version": "1.0.8",
+  "version": "1.1.1",
   "description": "A terminal that tries to take care of you 💖",
   "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
@@ -18,6 +18,7 @@
     "is-git": "0.0.1",
     "parrotsay-api": "^0.1.1",
     "resolve-dir": "^1.0.0",
+    "sign-bunny": "^1.0.0",
     "scraperjs": "^1.2.0",
     "subdirs": "^1.0.1",
     "twit": "^2.2.5",
