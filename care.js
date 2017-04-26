@@ -10,9 +10,6 @@ var parrotSay = require('parrotsay-api');
 var bunnySay = require('sign-bunny');
 var weather = require('weather-js');
 
-console.dir(gitbot);
-debugger;
-
 var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
      smartCSR: true,
@@ -121,11 +118,11 @@ function doTheCodes() {
   todayBox.content = '';
   weekBox.content = '';
 
-  function getCommits(data, box) {
-    var commitRegex = /(.......) (- .*)/g;
-    var content = colorizeLog(data);
+  function getCommits(box, data) {
+    var content = colorizeLog(data || '');
     box.content += content;
-    return (box.content.match(commitRegex) || []).length;
+    var commitRegex = /(.......) (- .*)/g;
+    return (box && box.content) ? (box.content.match(commitRegex) || []).length : '0';
   }
 
   function showError(err, box) {
@@ -137,13 +134,13 @@ function doTheCodes() {
     if (err) return showError(err);
     gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
       if (err) return showError(err, todayBox);
-      todayCommits = getCommits(`${data}`, todayBox);
+      todayCommits = getCommits(todayBox, `${data}`);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
     });
     gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
       if (err) return showError(err, weekBox);
-      weekCommits = getCommits(`${data}`, weekBox);
+      weekCommits = getCommits(weekBox, `${data}`);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
     });
