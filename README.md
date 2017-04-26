@@ -46,7 +46,9 @@ variables have been set correctly, you can print them in the terminal -- for exa
 All the settings the dashboard looks at are in the sample file `sample.env`. This file isn't used by the dashboard, it just
 lists the environment variables that you can copy in your `rc` files:
   - `TTC_BOTS` are the 3 twitter bots to check, comma separated. The first entry
-  in this list will be displayed in the party parrot.
+  in this list will be displayed in the big party parrot box.
+  - `TTC_SAY_BOX = parrot | bunny | llama | cat`, to party with a different parrot (or,
+    more specifically: to have a different animal say a message in the big box)
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
   This is using [`git-standup`](https://github.com/kamranahmedse/git-standup) under
   the hood, and looks one subdirectory deep (so if you have all your code

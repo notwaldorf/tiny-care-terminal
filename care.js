@@ -7,6 +7,7 @@ var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
+var bunnySay = require('sign-bunny');
 var weather = require('weather-js');
 
 var screen = blessed.screen(
@@ -76,10 +77,21 @@ function doTheTweets() {
     // Gigantor hack: first twitter account gets spoken by the party parrot.
     if (which == 0) {
       twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
-        parrotSay(tweet.text).then(function(text) {
-          parrotBox.content = text;
+        if (config.say === 'bunny') {
+          parrotBox.content = bunnySay(tweet.text);
           screen.render();
-        });
+        } else if (config.say === 'llama') {
+          parrotBox.content = llamaSay(tweet.text);
+          screen.render();
+        } else if (config.say === 'cat') {
+          parrotBox.content = catSay(tweet.text);
+          screen.render();
+        } else {
+          parrotSay(tweet.text).then(function(text) {
+            parrotBox.content = text;
+            screen.render();
+          });
+        }
       },function(error) {
         // Just in case we don't have tweets.
         parrotSay('Hi! You\'re doing great!!!').then(function(text) {
@@ -200,4 +212,29 @@ function colorizeLog(text) {
 function formatRepoName(line, divider) {
   var path = line.split(divider);
   return '\n' + chalk.yellow(path[path.length - 1]);
+}
+
+function llamaSay(text) {
+  return `
+    ${text}
+    ∩∩
+　（･ω･）
+　　│ │
+　　│ └─┐○
+　  ヽ　　　丿
+　　 　∥￣∥`;
+}
+
+function catSay(text) {
+  return `
+      ${text}
+
+      ♪ ガンバレ! ♪
+  ミ ゛ミ ∧＿∧ ミ゛ミ
+  ミ ミ ( ・∀・ )ミ゛ミ
+   ゛゛ ＼　　　／゛゛
+   　　 　i⌒ヽ ｜
+  　　 　 (＿) ノ
+   　　　　　 ∪`
+    ;
 }
