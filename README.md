@@ -19,7 +19,29 @@ It looks like this, and updates every 20 minutes.
 
 ## Make it go
 
-### Configure the dashboard
+### 1. Do the npm dance
+
+```
+npm install -g tiny-care-terminal
+npm install -g git-standup
+```
+(Note: this currently doesn't work with `yarn` because of path shenanigans I wrote, so while I'm fixing that, pls use `npm` 🙏)
+
+### 2. Setting the environment variables
+
+After installing the npm package, you need to set up the configuration in your Terminal.
+
+Every OS and shell is different so I probably won't hit all of them, but the bottom line is that
+you should copy those environment variables wherever the rest of your system's variables live.
+For example,
+- if you're using `zsh`, that's probably in your home directory's `.zshrc` file
+- if you're using `bash`, that could be your `bash_profile` file
+- if you're using `fish`, use `set -gx key value` in your `~/.config/fish/config.fish` file
+
+Note that the `export` bit is pretty key, to make sure that they are globally available. To check that the
+variables have been set correctly, you can print them in the terminal -- for example, `echo $TTC_WEATHER`.
+
+#### Configure the dashboard
 
 All the settings the dashboard looks at are in the sample file `sample.env`. This file isn't used by the dashboard, it just
 lists the environment variables that you can copy in your `rc` files:
@@ -27,24 +49,15 @@ lists the environment variables that you can copy in your `rc` files:
   in this list will be displayed in the party parrot.
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in the directories defined with `TTC_REPOS` (by default 1)
-  - `TTC_WEATHER`, the location or zip code to check the weather for (so both
-    `90210` and `Paris` should work)
+  - `TTC_WEATHER`, the location to check the weather for. A zipcode doesn't
+    always work, so if you can, use a location first (so prefer `Paris` over
+    `90210`)
   - `TTC_CELSIUS` (by default true)
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
 
-### Setting the environment variables
-
-Every OS and shell is different so I probably won't hit all of them, but the bottom line is that
-you should copy those environment variables wherever the rest of your system's variables live:
-- if you're using `zsh`, that's probably in your home directory's `.zshrc` file
-- if you're using `bash`, that could be your `bash_profile` file
-
-Note that the `export` bit is pretty key, to make sure that they are globally available. To check that the
-variables have been set correctly, you can print them in the terminal -- for example, `echo $TTC_WEATHER`.
-
-### Set up Twitter API keys
+#### Set up Twitter API keys
 
 The dashboard has two alternatives for reading tweets: using your API keys
 or scraping. API keys is preferred (because lol scraping), but if you're
@@ -57,22 +70,25 @@ After you've set them up, set these env variables (see the `sample.env` for an
 example):
 
 ```
-CONSUMER_KEY='...'
-CONSUMER_SECRET='...'
-ACCESS_TOKEN='...'
-ACCESS_TOKEN_SECRET='...'
+TTC_CONSUMER_KEY='...'
+TTC_CONSUMER_SECRET='...'
+TTC_ACCESS_TOKEN='...'
+TTC_ACCESS_TOKEN_SECRET='...'
 ```
 
-### Do the npm dance
-
-(Note: this currently doesn't work with `yarn` because of path shenanigans I wrote, so while I'm fixing that, pls use `npm` 🙏)
-
+## 3. Start!
 ```
-npm install -g tiny-care-terminal
-npm install -g git-standup
 tiny-care-terminal
 ```
 You can exit the dashboard by pressing `esc` or `q`. You can refresh it
 manually by pressing `r`.
 
-## Take care of yourself, ok? 💖
+## 🆘 Halp I don't see my commits
+
+There's a couple of reasons why this might happen:
+- did you run `npm install -g git-standup` after installing `tiny-care-terminal`? If you didn't, that's the most likely culprit
+- did you forget to export your `TTC_REPOS` environment variable? Open a new tab, and type `echo $TTC_REPOS` to make sure it's not empty. Note that spaces inside the repo names are not supported right now :(
+- are you on Windows? Not super sure it works on Windows because of the `bash` scripts, but working on it
+- did you use `yarn`? I know `yarn` is cool, and I've seen it work with this, but can you double check that it still doesn't work with a basic `npm` installation instead?
+
+**Take care of yourself, ok? 💖**
