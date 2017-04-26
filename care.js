@@ -171,6 +171,7 @@ function updateCommitsGraph(today, week) {
 function colorizeLog(text) {
   var lines = text.split('\n');
   var regex = /(.......) (- .*) (\(.*\)) (<.*>)/i;
+  var nothingRegex = /Seems like .* did nothing/i;
   for (var i = 0; i < lines.length; i++) {
     // If it's a path
     if (lines[i][0] === '/') {
@@ -178,6 +179,13 @@ function colorizeLog(text) {
     } else if(lines[i][0] === '\\') {
       lines[i] = formatRepoName(lines[i], '\\')
     } else {
+      // It may be a mean "seems like .. did nothing!" message. Skip it
+      var nothing = lines[i].match(nothingRegex);
+      if (nothing) {
+        lines[i] = '';
+        continue;
+      }
+
       // It's a commit.
       var matches = lines[i].match(regex);
       if (matches) {
