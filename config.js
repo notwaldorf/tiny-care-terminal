@@ -16,6 +16,8 @@ var config = {
 
   // Set to false if you're an imperial savage. <3
   celsius: (process.env.TTC_CELSIUS || 'true') === 'true',
+  
+  joke: (process.env.TTC_JOKE === 'true'),
 
   updateInterval: parseFloat(process.env.TTC_UPDATE_INTERVAL) || 20,
 

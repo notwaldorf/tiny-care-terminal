@@ -8,6 +8,7 @@ var contrib = require('blessed-contrib');
 var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
 var weather = require('weather-js');
+var request = require('request');
 
 var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
@@ -46,6 +47,7 @@ function tick() {
   doTheWeather();
   doTheTweets();
   doTheCodes();
+  doTheJokes();
 }
 
 function doTheWeather() {
@@ -119,6 +121,30 @@ function doTheCodes() {
     updateCommitsGraph(todayCommits, weekCommits);
     screen.render();
   });
+}
+
+function doTheJokes() {
+  
+  request.get({url: 'http://tambal.azurewebsites.net/joke/random', json: true}, function (err, res, body) {
+    
+    if(err) {
+      
+      parrotSay('Knock, Knock! Ops ERROR!').then(function(text) {
+        parrotBox.content = text;
+        screen.render();
+      });
+      
+    } else {
+      
+      parrotSay(body.joke).then(function(text) {
+        parrotBox.content = text;
+        screen.render();
+      });
+      
+    }
+    
+  });
+  
 }
 
 function makeBox(label) {
