@@ -1,53 +1,137 @@
 
 // options (object)
 // options.onTick (function) -  Runs on every tick
-// options.onComplete (function) - Runs when pomodoro completed
+// options.onBreakStarts (function) - Runs when break starts
+// options.onBreakEnds (function) - Runs when break ends
+
+
+var States = {
+  RUNNING: 'running',
+  STOPPED: 'stopped',
+  IN_BREAK: 'in_break',
+  PAUSED: 'paused',
+};
+
 
 var Pomodoro = function(options) {
   var _setIntervalId = null;
-  var _defaultDuration = 20; // Default duration: 20 Min
-  var _durationRemaining = 0; // In seconds
+  var _runningDuration = 20;   // Default duration: 20 Min
+  var _breakDuration = 20;     // Default duration: 20 Min
+  var _runningDurationRemaining = 0; // In seconds
+  var _breakDurationRemaining = 0;   // In seconds
+  var _currentState = States.STOPPED;
 
 
   var _onTick = function() {
-    if (_durationRemaining < 1) {
-      clearInterval(_setIntervalId);
-      _durationRemaining = 0;
-      _setIntervalId = null;
-      return options.onComplete && options.onComplete();
-    }
-    _durationRemaining -=  1;
-    if (options.onTick) {
-      var remainingTime = ('0' + Math.floor(_durationRemaining/60)).slice(-2) + ':' + ('0' + _durationRemaining % 60).slice(-2);
-      options.onTick(remainingTime);
+    switch (_currentState) {
+      case States.RUNNING: _handleTickOnRunning(); break;
+      case States.IN_BREAK: _handleTickOnBreak(); break;
+      case States.STOPPED: _handleTickOnStopped(); break;
+      case States.PAUSED: return;
     }
   }
+
+
+  var _handleTickOnRunning = function() {
+    if (_runningDurationRemaining < 1) {
+      _runningDurationRemaining = 0;
+      _breakDurationRemaining = _breakDuration * 60;
+      _currentState = States.IN_BREAK
+      options.onBreakStarts && options.onBreakStarts();
+    } else {
+      _runningDurationRemaining -= 1;
+      if (options.onTick) options.onTick()
+    }
+  };
+
+
+
+  var _handleTickOnBreak = function() {
+    if (_breakDurationRemaining < 1) {
+      _breakDurationRemaining = 0;
+      _runningDurationRemaining = _runningDuration * 60;
+      _currentState = States.RUNNING
+      options.onBreakEnds && options.onBreakEnds();
+    } else {
+      _breakDurationRemaining -= 1;
+      if (options.onTick) options.onTick()
+    }
+  };
+
+
+
+  var _handleTickOnStopped = function() {
+    clearInterval(_setIntervalId)
+    _runningDurationRemaining = 0;
+    _breakDurationRemaining = 0;
+    _setIntervalId = null;
+  };
+
+
 
   var exports = {
     start: function() {
       if (_setIntervalId !== null) clearInterval(_setIntervalId);
-      _durationRemaining = _defaultDuration * 60 ;
-      _setIntervalId = setInterval(_onTick, 1000)
+      _runningDurationRemaining = _runningDuration * 60;
+      _setIntervalId = setInterval(_onTick, 1000);
+      _currentState = States.RUNNING;
     },
 
     stop: function() {
-      clearInterval(_setIntervalId)
-      _durationRemaining = 0;
-      _setIntervalId = null;
+      _currentState = States.STOPPED;
     },
 
-    updateDuration() {
-      if (_setIntervalId) return; // Don't update duration when pomodoro is running
-      if (_defaultDuration === 60) _defaultDuration = 5;
-      else _defaultDuration += 5;
+    pause: function() {
+      _currentState = States.PAUSED;
     },
 
-    getDefaultDuration() {
-      return _defaultDuration;
+    resume: function() {
+      _currentState = States.RUNNING;
+    },
+
+    updateRunningDuration() {
+      if (_runningDuration === 60) _runningDuration = 5;
+      else _runningDuration += 5;
+    },
+
+    updateBreakDuration() {
+      if (_breakDuration === 60) _breakDuration = 5;
+      else _breakDuration += 5;
+    },
+
+    getRunningDuration() {
+      return _runningDuration;
+    },
+
+    getBreakDuration() {
+      return _breakDuration;
+    },
+
+    getRemainingTime() {
+      var remainingTime;
+      switch (_currentState) {
+        case States.RUNNING: remainingTime =  _runningDurationRemaining; break;
+        case States.IN_BREAK: remainingTime = _breakDurationRemaining; break;
+        case States.STOPPED: remainingTime = _runningDuration * 60; break;
+        case States.PAUSED: remainingTime = _runningDurationRemaining || _breakDurationRemaining;
+      }
+      return ('0' + Math.floor(remainingTime/60)).slice(-2) + ':' + ('0' + remainingTime % 60).slice(-2);
     },
 
     isRunning() {
-      return Boolean(_setIntervalId)
+      return _currentState === States.RUNNING;
+    },
+
+    isInBreak() {
+      return _currentState === States.IN_BREAK;
+    },
+
+    isPaused() {
+      return _currentState === States.PAUSED;
+    },
+
+    isStopped() {
+      return _currentState === States.STOPPED;
     },
   }
 
