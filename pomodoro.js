@@ -1,10 +1,4 @@
 
-// options (object)
-// options.onTick (function) -  Runs on every tick
-// options.onBreakStarts (function) - Runs when break starts
-// options.onBreakEnds (function) - Runs when break ends
-
-
 var States = {
   RUNNING: 'running',
   STOPPED: 'stopped',
@@ -13,10 +7,14 @@ var States = {
 };
 
 
+// options (object)
+// options.onTick (function) -  Runs on every tick
+// options.onBreakStarts (function) - Runs when break starts
+// options.onBreakEnds (function) - Runs when break ends
 var Pomodoro = function(options) {
   var _setIntervalId = null;
-  var _runningDuration = 20;   // Default pomodoro duration: 20 Min
-  var _breakDuration = 5;     // Default break duration: 5 Min
+  var _runningDuration = 20; // Default pomodoro duration: 20 Min
+  var _breakDuration = 5;    // Default break duration: 5 Min
   var _runningDurationRemaining = 0; // In seconds
   var _breakDurationRemaining = 0;   // In seconds
   var _currentState = States.STOPPED;
