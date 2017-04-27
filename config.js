@@ -16,6 +16,9 @@ var config = {
   // Directory-depth to look for git repositories.
   depth: (process.env.TTC_REPOS_DEPTH || 1),
 
+  // Which method is to be used to read the git commits ('gitstandup' | 'gitlog').
+  gitbot: (process.env.TTC_GITBOT || 'gitstandup'),
+
   // Where to check the weather for.
   // It's using weather.service.msn.com behind the curtains.
   weather: process.env.TTC_WEATHER || 'San Francisco',

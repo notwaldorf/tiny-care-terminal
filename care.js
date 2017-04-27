@@ -3,6 +3,7 @@ var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
 var gitbot = require(__dirname + '/gitbot.js');
 
+var spawn = require('child_process').spawn;
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
@@ -123,26 +124,47 @@ function doTheCodes() {
     return (box && box.content) ? (box.content.match(commitRegex) || []).length : '0';
   }
 
-  gitbot.findGitRepos(config.repos, config.depth-1, (err, allRepos) => {
-    if (err)
-      return showError(err);
-    gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
+  if (config.gitbot.toLowerCase() === 'gitstandup') {
+    todayBox.content = '';
+    config.repos.forEach(repo => {
+      var today = spawn(`cd ${repo} && git-standup`, [`-m ${config.depth}`, '-d 1'], {shell:true});
+      today.stdout.on('data', data => {
+        todayCommits = getCommits(todayBox, `${data}`);
+        updateCommitsGraph(todayCommits, weekCommits);
+        screen.render();
+      });
+    });
+    weekBox.content = '';
+    config.repos.forEach(repo => {
+      var today = spawn(`cd ${repo} && git-standup`, [`-m ${config.depth}`, '-d 7'], {shell:true});
+      today.stdout.on('data', data => {
+        weekCommits = getCommits(weekBox, `${data}`);
+        updateCommitsGraph(todayCommits, weekCommits);
+        screen.render();
+      });
+    });
+  } else {
+    gitbot.findGitRepos(config.repos, config.depth-1, (err, allRepos) => {
       if (err)
         return todayBox.content = err;
-      todayBox.content = '';
-      todayCommits = getCommits(todayBox, `${data}`);
-      updateCommitsGraph(todayCommits, weekCommits);
-      screen.render();
+      gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
+        if (err)
+          return todayBox.content = err;
+        todayBox.content = '';
+        todayCommits = getCommits(todayBox, `${data}`);
+        updateCommitsGraph(todayCommits, weekCommits);
+        screen.render();
+      });
+      gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
+        if (err)
+          return weekBox.content = err;
+        weekBox.content = '';
+        weekCommits = getCommits(weekBox, `${data}`);
+        updateCommitsGraph(todayCommits, weekCommits);
+        screen.render();
+      });
     });
-    gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
-      if (err)
-        return weekBox.content = err;
-      weekBox.content = '';
-      weekCommits = getCommits(weekBox, `${data}`);
-      updateCommitsGraph(todayCommits, weekCommits);
-      screen.render();
-    });
-  });
+  }
 }
 
 function makeBox(label) {
