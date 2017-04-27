@@ -40,7 +40,7 @@ function findGitRepos(repos, depth, callback) {
       }, repoDone);
     });
   }, err => {
-    callback(err, allRepos.sort());
+    callback(err, allRepos.sort().reverse());
   });
 }
 
@@ -54,6 +54,7 @@ function getCommitsFromRepos(repos, days, callback) {
     try {
       gitlog({
         repo: repo,
+        number: 100, //max commit count
         since: `${days} days ago`,
         fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
         author: gitUsername
@@ -68,7 +69,8 @@ function getCommitsFromRepos(repos, days, callback) {
 
         // Commit
         logs.forEach(c => {
-          cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
+          if (c.status && c.status.length)
+            cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
         });
         repoDone();
       });
