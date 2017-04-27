@@ -61,7 +61,9 @@ screen.key(['p', 'C-p'], function(ch, key) {
     pomodoro.stop();
     inPomodoroMode = false;
     doTheTweets();
+    parrotBox.removeLabel('');
   } else {
+    parrotBox.setLabel(' 🍅 ');
     inPomodoroMode = true;
     pomodoroHandlers.onTick()
   }
