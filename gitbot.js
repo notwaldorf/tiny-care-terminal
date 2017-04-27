@@ -60,6 +60,8 @@ function getCommitsFromRepos(repos, days, callback) {
       }, (err, logs) => {
         if (err)
           return callback(err, null);
+        if (logs.length >= 1)
+          cmts.push(`${repo}`);
         logs.forEach(c => {
           cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
         });
