@@ -15,8 +15,8 @@ var States = {
 
 var Pomodoro = function(options) {
   var _setIntervalId = null;
-  var _runningDuration = 20;   // Default duration: 20 Min
-  var _breakDuration = 20;     // Default duration: 20 Min
+  var _runningDuration = 20;   // Default pomodoro duration: 20 Min
+  var _breakDuration = 5;     // Default break duration: 5 Min
   var _runningDurationRemaining = 0; // In seconds
   var _breakDurationRemaining = 0;   // In seconds
   var _currentState = States.STOPPED;
@@ -86,17 +86,17 @@ var Pomodoro = function(options) {
     },
 
     resume: function() {
-      _currentState = States.RUNNING;
+      _currentState = _breakDurationRemaining ? States.IN_BREAK : States.RUNNING;
     },
 
     updateRunningDuration() {
-      if (_runningDuration === 60) _runningDuration = 5;
-      else _runningDuration += 5;
+      if (_runningDuration > 60) _runningDuration = 1;
+      else _runningDuration += 1;
     },
 
     updateBreakDuration() {
-      if (_breakDuration === 60) _breakDuration = 5;
-      else _breakDuration += 5;
+      if (_breakDuration > 60) _breakDuration = 1;
+      else _breakDuration += 1;
     },
 
     getRunningDuration() {
