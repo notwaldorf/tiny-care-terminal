@@ -33,19 +33,27 @@ screen.key(['r', 'C-r'], function(ch, key) {
 
 screen.key(['s', 'C-s'], function(ch, key) {
   if (!inPomodoroMode) return;
-  pomodoro.start();
+  if (pomodoro.isStopped()) return pomodoro.start();
+  if (pomodoro.isPaused()) return pomodoro.resume();
+  pomodoro.pause();
+  pomodoroHandlers.onTick()
 });
 screen.key(['e', 'C-e'], function(ch, key) {
   if (!inPomodoroMode) return;
   pomodoro.stop();
-  onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
+  pomodoroHandlers.onTick()
 });
 
 screen.key(['u', 'C-u'], function(ch, key) {
   if (!inPomodoroMode) return;
-  pomodoro.updateDuration();
-  if (pomodoro.isRunning()) screen.render();
-  else onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
+  pomodoro.updateRunningDuration();
+  pomodoroHandlers.onTick()
+});
+
+screen.key(['b', 'C-b'], function(ch, key) {
+  if (!inPomodoroMode) return;
+  pomodoro.updateBreakDuration();
+  pomodoroHandlers.onTick()
 });
 
 screen.key(['p', 'C-p'], function(ch, key) {
@@ -55,7 +63,7 @@ screen.key(['p', 'C-p'], function(ch, key) {
     doTheTweets();
   } else {
     inPomodoroMode = true;
-    onPomodoroTick(pomodoro.getDefaultDuration() + ':00');
+    pomodoroHandlers.onTick()
   }
 });
 
@@ -272,24 +280,46 @@ function catSay(text) {
     ;
 }
 
-function onPomodoroTick(remainingTime) {
-  if (!inPomodoroMode) return;
-  var content = `In Pomodoro Mode: ${remainingTime}`;
-  var commands = 'commands: s - start, e - stop, u - change duration.';
-  parrotSay(content).then(function(text) {
-    parrotBox.content = text + commands;
-    screen.render();
-  });
+
+var pomodoroHandlers = {
+  onTick: function() {
+    if (!inPomodoroMode) return;
+    var remainingTime = pomodoro.getRemainingTime();
+    var statusText = ''
+    if (pomodoro.isInBreak()) statusText = ' (Break Started) ';
+    if (pomodoro.isStopped()) statusText = ' (Press "s" to start) ';
+    if (pomodoro.isRunning()) statusText = '';
+    if (pomodoro.isPaused())  statusText = ' (Press "s" to resume) ';
+
+    var content = `In Pomodoro Mode: ${remainingTime} ${statusText}`;
+    var metaData = `Duration: ${pomodoro.getRunningDuration()} Minutes,  Break Time: ${pomodoro.getBreakDuration()} Minutes\n`;
+    metaData += 'commands: \n s - start/pause/resume \n e - stop \n u - update duration \n b - update break time';
+
+    parrotSay(content).then(function(text) {
+      parrotBox.content = text + metaData;
+      screen.render();
+    });
+  },
+
+  onBreakStarts: function() {
+    if (!inPomodoroMode) return;
+    notifier.notify({
+      title: 'Pomodoro Alert',
+      message: 'Break Time!',
+      sound: true,
+      timeout: 30,
+    });
+  },
+
+  onBreakEnds: function() {
+    if (!inPomodoroMode) return;
+    notifier.notify({
+      title: 'Pomodoro Alert',
+      message: 'Break Time Ends!',
+      sound: true,
+      timeout: 30,
+    });
+  },
 }
 
-function onPomodoroComplete() {
-  if (!inPomodoroMode) return;
-  notifier.notify({
-    title: 'Pomodoro Alert',
-    message: 'Break Time!',
-    sound: true,
-    timeout: 30,
-  });
-}
-
-var pomodoro = Pomodoro({onTick: onPomodoroTick, onComplete: onPomodoroComplete});
+var pomodoro = Pomodoro(pomodoroHandlers);

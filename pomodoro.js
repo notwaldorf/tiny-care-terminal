@@ -90,12 +90,12 @@ var Pomodoro = function(options) {
     },
 
     updateRunningDuration() {
-      if (_runningDuration > 60) _runningDuration = 1;
+      if (_runningDuration >= 60) _runningDuration = 1;
       else _runningDuration += 1;
     },
 
     updateBreakDuration() {
-      if (_breakDuration > 60) _breakDuration = 1;
+      if (_breakDuration >= 60) _breakDuration = 1;
       else _breakDuration += 1;
     },
 
