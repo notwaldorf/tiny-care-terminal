@@ -90,6 +90,22 @@ tiny-care-terminal
 You can exit the dashboard by pressing `esc` or `q`. You can refresh it
 manually by pressing `r`.
 
+
+## 🍅 Pomodoro Mode
+
+You can press 'p' to switch parrot box to pomodoro mode.
+
+Other commands while in pomodoro mode:
+
+```
+ s - start/pause/resume pomodoro
+ e - stop pomodoro
+ u - update pomodoro duration
+ b - update break time
+
+```
+
+
 ## 🆘 Halp I don't see my commits
 
 There's a couple of reasons why this might happen:
