@@ -58,10 +58,15 @@ function getCommitsFromRepos(repos, days, callback) {
         fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
         author: gitUsername
       }, (err, logs) => {
+        // Error
         if (err)
           return callback(err, null);
+
+        // Repo path
         if (logs.length >= 1)
-          cmts.push(`${repo}`);
+          cmts.push(repo);
+
+        // Commit
         logs.forEach(c => {
           cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
         });

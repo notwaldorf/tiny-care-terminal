@@ -115,8 +115,6 @@ function doTheTweets() {
 function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
-  todayBox.content = '';
-  weekBox.content = '';
 
   function getCommits(box, data) {
     var content = colorizeLog(data || '');
@@ -131,6 +129,7 @@ function doTheCodes() {
     gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
       if (err)
         return todayBox.content = err;
+      todayBox.content = '';
       todayCommits = getCommits(todayBox, `${data}`);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
@@ -138,6 +137,7 @@ function doTheCodes() {
     gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
       if (err)
         return weekBox.content = err;
+      weekBox.content = '';
       weekCommits = getCommits(weekBox, `${data}`);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
