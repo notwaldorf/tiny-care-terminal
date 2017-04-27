@@ -12,14 +12,17 @@ usage () {
    echo "Usage: "
    echo "  $progname [-d days] [-h] repo1 repo2 etc."
    echo "  -d \t - Specify the number of days back to include"
+   echo "  -m \t - Specify the depth of recursive repository search"
    echo "  -h \t - Display this help screen"
 }
 
 # get the optional days
 days=1
-while getopts "d:h" opt; do
+depth=1
+while getopts "d:m:h" opt; do
    case $opt in
    d ) days=$OPTARG;;
+   m ) depth=$OPTARG;;
    h )  usage ;;
    \?)  usage ;;
    esac
@@ -29,5 +32,5 @@ shift $(($OPTIND - 1))
 # the repo names
 for dir in "$@"
 do
-  (cd $dir; $standup -d $days)
+  (cd $dir; $standup -d $days -m $depth)
 done

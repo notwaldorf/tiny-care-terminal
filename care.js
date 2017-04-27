@@ -4,11 +4,12 @@ var twitterbot = require(__dirname + '/twitterbot.js');
 var notifier = require('node-notifier');
 var Pomodoro = require(__dirname + '/pomodoro.js');
 
-var spawn = require( 'child_process' ).spawn;
+var spawn = require('child_process').spawn;
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
+var bunnySay = require('sign-bunny');
 var weather = require('weather-js');
 
 var inPomodoroMode = false;
@@ -64,7 +65,7 @@ var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
 var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
-var commits = grid.set(0, 6, 6, 2, contrib.bar, {label: 'Commits', barWidth: 5, xOffset: 4, maxHeight: 10});
+var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
 
 var tweetBoxes = {}
@@ -109,10 +110,21 @@ function doTheTweets() {
     if (which == 0) {
       if (inPomodoroMode) return;
       twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
-        parrotSay(tweet.text).then(function(text) {
-          parrotBox.content = text;
+        if (config.say === 'bunny') {
+          parrotBox.content = bunnySay(tweet.text);
           screen.render();
-        });
+        } else if (config.say === 'llama') {
+          parrotBox.content = llamaSay(tweet.text);
+          screen.render();
+        } else if (config.say === 'cat') {
+          parrotBox.content = catSay(tweet.text);
+          screen.render();
+        } else {
+          parrotSay(tweet.text).then(function(text) {
+            parrotBox.content = text;
+            screen.render();
+          });
+        }
       },function(error) {
         // Just in case we don't have tweets.
         parrotSay('Hi! You\'re doing great!!!').then(function(text) {
@@ -137,7 +149,7 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', [config.repos], {shell:true});
+  var today = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth, config.repos], {shell:true});
   todayBox.content = '';
   today.stdout.on('data', data => {
     todayCommits = getCommits(`${data}`, todayBox);
@@ -145,7 +157,7 @@ function doTheCodes() {
     screen.render();
   });
 
-  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-d 7', config.repos], {shell:true});
+  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth + ' -d 7', config.repos], {shell:true});
   weekBox.content = '';
   week.stdout.on('data', data => {
     weekCommits = getCommits(`${data}`, weekBox);
@@ -182,6 +194,14 @@ function makeScrollBox(label) {
   return options;
 }
 
+function makeGraphBox(label) {
+  var options = makeBox(label);
+  options.barWidth= 5;
+  options.xOffset= 4;
+  options.maxHeight= 10;
+  return options;
+}
+
 var commitRegex = /(.......) (- .*)/g;
 function getCommits(data, box) {
   var content = colorizeLog(data);
@@ -196,11 +216,21 @@ function updateCommitsGraph(today, week) {
 function colorizeLog(text) {
   var lines = text.split('\n');
   var regex = /(.......) (- .*) (\(.*\)) (<.*>)/i;
+  var nothingRegex = /Seems like .* did nothing/i;
   for (var i = 0; i < lines.length; i++) {
     // If it's a path
-    if (lines[i][0] === '/' || lines[i][0] === '\\') {
-      lines[i] = '\n' + chalk.red(lines[i]);
+    if (lines[i][0] === '/') {
+      lines[i] = formatRepoName(lines[i], '/')
+    } else if(lines[i][0] === '\\') {
+      lines[i] = formatRepoName(lines[i], '\\')
     } else {
+      // It may be a mean "seems like .. did nothing!" message. Skip it
+      var nothing = lines[i].match(nothingRegex);
+      if (nothing) {
+        lines[i] = '';
+        continue;
+      }
+
       // It's a commit.
       var matches = lines[i].match(regex);
       if (matches) {
@@ -212,6 +242,35 @@ function colorizeLog(text) {
   return lines.join('\n');
 }
 
+function formatRepoName(line, divider) {
+  var path = line.split(divider);
+  return '\n' + chalk.yellow(path[path.length - 1]);
+}
+
+function llamaSay(text) {
+  return `
+    ${text}
+    ∩∩
+　（･ω･）
+　　│ │
+　　│ └─┐○
+　  ヽ　　　丿
+　　 　∥￣∥`;
+}
+
+function catSay(text) {
+  return `
+      ${text}
+
+      ♪ ガンバレ! ♪
+  ミ ゛ミ ∧＿∧ ミ゛ミ
+  ミ ミ ( ・∀・ )ミ゛ミ
+   ゛゛ ＼　　　／゛゛
+   　　 　i⌒ヽ ｜
+  　　 　 (＿) ノ
+   　　　　　 ∪`
+    ;
+}
 
 function onPomodoroTick(remainingTime) {
   if (!inPomodoroMode) return;
