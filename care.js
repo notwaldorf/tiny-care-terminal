@@ -2,7 +2,7 @@
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
 var notifier = require('node-notifier');
-var Pomodoro = require(__dirname + '/pomodoro.js');
+var pomodoro = require(__dirname + '/pomodoro.js');
 
 var spawn = require('child_process').spawn;
 var blessed = require('blessed');
@@ -34,40 +34,40 @@ screen.key(['r', 'C-r'], function(ch, key) {
 screen.key(['s', 'C-s'], function(ch, key) {
   if (!inPomodoroMode) {
     return;
-  } else if (pomodoro.isStopped()) {
-    pomodoro.start();
-  } else if (pomodoro.isPaused()) {
-    pomodoro.resume();
+  } else if (pomodoroObject.isStopped()) {
+    pomodoroObject.start();
+  } else if (pomodoroObject.isPaused()) {
+    pomodoroObject.resume();
   } else {
-    pomodoro.pause();
+    pomodoroObject.pause();
     pomodoroHandlers.onTick();
   }
 });
 
 screen.key(['e', 'C-e'], function(ch, key) {
   if (inPomodoroMode) {
-    pomodoro.stop();
+    pomodoroObject.stop();
     pomodoroHandlers.onTick();
   }
 });
 
 screen.key(['u', 'C-u'], function(ch, key) {
   if (inPomodoroMode) {
-    pomodoro.updateRunningDuration();
+    pomodoroObject.updateRunningDuration();
     pomodoroHandlers.onTick();
   }
 });
 
 screen.key(['b', 'C-b'], function(ch, key) {
   if (inPomodoroMode) {
-    pomodoro.updateBreakDuration();
+    pomodoroObject.updateBreakDuration();
     pomodoroHandlers.onTick()
   }
 });
 
 screen.key(['p', 'C-p'], function(ch, key) {
   if (inPomodoroMode) {
-    pomodoro.stop();
+    pomodoroObject.stop();
     inPomodoroMode = false;
     doTheTweets();
     parrotBox.removeLabel('');
@@ -297,19 +297,19 @@ function catSay(text) {
 var pomodoroHandlers = {
   onTick: function() {
     if (!inPomodoroMode) return;
-    var remainingTime = pomodoro.getRemainingTime();
+    var remainingTime = pomodoroObject.getRemainingTime();
 
     var statusText = '';
-    if (pomodoro.isInBreak()) {
+    if (pomodoroObject.isInBreak()) {
       statusText = ' (Break Started) ';
-    } else if (pomodoro.isStopped()) {
+    } else if (pomodoroObject.isStopped()) {
       statusText = ' (Press "s" to start) ';
-    } else if (pomodoro.isPaused()) {
+    } else if (pomodoroObject.isPaused()) {
       statusText = ' (Press "s" to resume) ';
     }
 
     var content = `In Pomodoro Mode: ${remainingTime} ${statusText}`;
-    var metaData = `Duration: ${pomodoro.getRunningDuration()} Minutes,  Break Time: ${pomodoro.getBreakDuration()} Minutes\n`;
+    var metaData = `Duration: ${pomodoroObject.getRunningDuration()} Minutes,  Break Time: ${pomodoroObject.getBreakDuration()} Minutes\n`;
     metaData += 'commands: \n s - start/pause/resume \n e - stop \n u - update duration \n b - update break time';
 
     parrotSay(content).then(function(text) {
@@ -341,4 +341,4 @@ var pomodoroHandlers = {
   },
 }
 
-var pomodoro = Pomodoro(pomodoroHandlers);
+var pomodoroObject = pomodoro(pomodoroHandlers);
