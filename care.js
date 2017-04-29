@@ -32,28 +32,37 @@ screen.key(['r', 'C-r'], function(ch, key) {
 });
 
 screen.key(['s', 'C-s'], function(ch, key) {
-  if (!inPomodoroMode) return;
-  if (pomodoro.isStopped()) return pomodoro.start();
-  if (pomodoro.isPaused()) return pomodoro.resume();
-  pomodoro.pause();
-  pomodoroHandlers.onTick()
+  if (!inPomodoroMode) {
+    return;
+  } else if (pomodoro.isStopped()) {
+    pomodoro.start();
+  } else if (pomodoro.isPaused()) {
+    pomodoro.resume();
+  } else {
+    pomodoro.pause();
+    pomodoroHandlers.onTick();
+  }
 });
+
 screen.key(['e', 'C-e'], function(ch, key) {
-  if (!inPomodoroMode) return;
-  pomodoro.stop();
-  pomodoroHandlers.onTick()
+  if (inPomodoroMode) {
+    pomodoro.stop();
+    pomodoroHandlers.onTick();
+  }
 });
 
 screen.key(['u', 'C-u'], function(ch, key) {
-  if (!inPomodoroMode) return;
-  pomodoro.updateRunningDuration();
-  pomodoroHandlers.onTick()
+  if (inPomodoroMode) {
+    pomodoro.updateRunningDuration();
+    pomodoroHandlers.onTick();
+  }
 });
 
 screen.key(['b', 'C-b'], function(ch, key) {
-  if (!inPomodoroMode) return;
-  pomodoro.updateBreakDuration();
-  pomodoroHandlers.onTick()
+  if (inPomodoroMode) {
+    pomodoro.updateBreakDuration();
+    pomodoroHandlers.onTick()
+  }
 });
 
 screen.key(['p', 'C-p'], function(ch, key) {
@@ -118,7 +127,9 @@ function doTheTweets() {
   for (var which in config.twitter) {
     // Gigantor hack: first twitter account gets spoken by the party parrot.
     if (which == 0) {
-      if (inPomodoroMode) return;
+      if (inPomodoroMode) {
+        return;
+      }
       twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
         if (config.say === 'bunny') {
           parrotBox.content = bunnySay(tweet.text);
@@ -287,11 +298,15 @@ var pomodoroHandlers = {
   onTick: function() {
     if (!inPomodoroMode) return;
     var remainingTime = pomodoro.getRemainingTime();
-    var statusText = ''
-    if (pomodoro.isInBreak()) statusText = ' (Break Started) ';
-    if (pomodoro.isStopped()) statusText = ' (Press "s" to start) ';
-    if (pomodoro.isRunning()) statusText = '';
-    if (pomodoro.isPaused())  statusText = ' (Press "s" to resume) ';
+
+    var statusText = '';
+    if (pomodoro.isInBreak()) {
+      statusText = ' (Break Started) ';
+    } else if (pomodoro.isStopped()) {
+      statusText = ' (Press "s" to start) ';
+    } else if (pomodoro.isPaused()) {
+      statusText = ' (Press "s" to resume) ';
+    }
 
     var content = `In Pomodoro Mode: ${remainingTime} ${statusText}`;
     var metaData = `Duration: ${pomodoro.getRunningDuration()} Minutes,  Break Time: ${pomodoro.getBreakDuration()} Minutes\n`;
@@ -304,23 +319,25 @@ var pomodoroHandlers = {
   },
 
   onBreakStarts: function() {
-    if (!inPomodoroMode) return;
-    notifier.notify({
-      title: 'Pomodoro Alert',
-      message: 'Break Time!',
-      sound: true,
-      timeout: 30,
-    });
+    if (inPomodoroMode) {
+      notifier.notify({
+        title: 'Pomodoro Alert',
+        message: 'Break Time!',
+        sound: true,
+        timeout: 30,
+      });
+    }
   },
 
   onBreakEnds: function() {
-    if (!inPomodoroMode) return;
-    notifier.notify({
-      title: 'Pomodoro Alert',
-      message: 'Break Time Ends!',
-      sound: true,
-      timeout: 30,
-    });
+    if (inPomodoroMode) {
+      notifier.notify({
+        title: 'Pomodoro Alert',
+        message: 'Break Time Ends!',
+        sound: true,
+        timeout: 30,
+      });
+    }
   },
 }
 

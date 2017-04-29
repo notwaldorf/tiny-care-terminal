@@ -11,14 +11,13 @@ var States = {
 // options.onTick (function) -  Runs on every tick
 // options.onBreakStarts (function) - Runs when break starts
 // options.onBreakEnds (function) - Runs when break ends
-var Pomodoro = function(options) {
+var pomodoro = function(options) {
   var _setIntervalId = null;
   var _runningDuration = 20; // Default pomodoro duration: 20 Min
   var _breakDuration = 5;    // Default break duration: 5 Min
   var _runningDurationRemaining = 0; // In seconds
   var _breakDurationRemaining = 0;   // In seconds
   var _currentState = States.STOPPED;
-
 
   var _onTick = function() {
     switch (_currentState) {
@@ -28,7 +27,6 @@ var Pomodoro = function(options) {
       case States.PAUSED: return;
     }
   }
-
 
   var _handleTickOnRunning = function() {
     if (_runningDurationRemaining < 1) {
@@ -42,8 +40,6 @@ var Pomodoro = function(options) {
     }
   };
 
-
-
   var _handleTickOnBreak = function() {
     if (_breakDurationRemaining < 1) {
       _breakDurationRemaining = 0;
@@ -56,16 +52,12 @@ var Pomodoro = function(options) {
     }
   };
 
-
-
   var _handleTickOnStopped = function() {
     clearInterval(_setIntervalId)
     _runningDurationRemaining = 0;
     _breakDurationRemaining = 0;
     _setIntervalId = null;
   };
-
-
 
   var exports = {
     start: function() {
@@ -137,5 +129,4 @@ var Pomodoro = function(options) {
 }
 
 
-
-module.exports = Pomodoro;
+module.exports = pomodoro;
