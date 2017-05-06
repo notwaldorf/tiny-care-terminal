@@ -170,7 +170,7 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth, config.repos], {shell:true});
+  var today = spawn(__dirname + '/standup-helper.sh', ['-m ' + config.depth, config.repos], {shell:true});
   todayBox.content = '';
   today.stdout.on('data', data => {
     todayCommits = getCommits(`${data}`, todayBox);
@@ -178,7 +178,7 @@ function doTheCodes() {
     screen.render();
   });
 
-  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth + ' -d 7', config.repos], {shell:true});
+  var week = spawn(__dirname + '/standup-helper.sh', ['-m ' + config.depth + ' -d 7', config.repos], {shell:true});
   weekBox.content = '';
   week.stdout.on('data', data => {
     weekCommits = getCommits(`${data}`, weekBox);
