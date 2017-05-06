@@ -92,7 +92,7 @@ function doTheTweets() {
             screen.render();
           });
         }
-      }.catch(function(error) {
+      }).catch(function(error) {
         // Just in case we don't have tweets.
         parrotSay('Hi! You\'re doing great!!!').then(function(text) {
           parrotBox.content = text;
@@ -104,7 +104,6 @@ function doTheTweets() {
         tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
         screen.render();
       }).catch(function(error) {
-        tweetBoxes[config.twitter[1]].content =
         tweetBoxes[config.twitter[2]].content =
         'Can\'t read Twitter without some API keys  🐰. Maybe try the scraping version instead?';
       });
