@@ -17,6 +17,7 @@
     "git-user-name": "^1.2.0",
     "gitlog": "^2.4.0",
     "is-git": "0.0.1",
+    "node-notifier": "^5.1.2",
     "parrotsay-api": "^0.1.1",
     "resolve-dir": "^1.0.0",
     "scraperjs": "^1.2.0",
