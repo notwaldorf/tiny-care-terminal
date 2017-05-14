@@ -11,10 +11,13 @@ var config = {
   apiKeys: (process.env.TTC_APIKEYS || 'true') === 'true',
 
   // Directories in which to run git-standup on for a list of your recent commits.
-  repos: (process.env.TTC_REPOS || '~/Code').replace(/,/g, ' '),
+  repos: (process.env.TTC_REPOS || '~/Code').split(','),
 
   // Directory-depth to look for git repositories.
   depth: (process.env.TTC_REPOS_DEPTH || 1),
+
+  // Which method is to be used to read the git commits ('gitstandup' | 'gitlog').
+  gitbot: (process.env.TTC_GITBOT || 'gitstandup'),
 
   // Where to check the weather for.
   // It's using weather.service.msn.com behind the curtains.

@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
-var notifier = require('node-notifier');
+var gitbot = require(__dirname + '/gitbot.js');
 var pomodoro = require(__dirname + '/pomodoro.js');
 
+var notifier = require('node-notifier');
 var spawn = require('child_process').spawn;
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
@@ -170,21 +171,57 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  var today = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth, config.repos], {shell:true});
-  todayBox.content = '';
-  today.stdout.on('data', data => {
-    todayCommits = getCommits(`${data}`, todayBox);
-    updateCommitsGraph(todayCommits, weekCommits);
-    screen.render();
-  });
+  function getCommits(data, box) {
+    var content = colorizeLog(data || '');
+    box.content += content;
+    var commitRegex = /(.......) (- .*)/g;
+    return (box && box.content) ? (box.content.match(commitRegex) || []).length : '0';
+  }
 
-  var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth + ' -d 7', config.repos], {shell:true});
-  weekBox.content = '';
-  week.stdout.on('data', data => {
-    weekCommits = getCommits(`${data}`, weekBox);
-    updateCommitsGraph(todayCommits, weekCommits);
-    screen.render();
-  });
+  if (config.gitbot.toLowerCase() === 'gitstandup') {
+    var today = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth, config.repos], {shell:true});
+    todayBox.content = '';
+    today.stdout.on('data', data => {
+      todayCommits = getCommits(`${data}`, todayBox);
+      updateCommitsGraph(todayCommits, weekCommits);
+      screen.render();
+    });
+
+    var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth + ' -d 7', config.repos], {shell:true});
+    weekBox.content = '';
+    week.stdout.on('data', data => {
+      weekCommits = getCommits(`${data}`, weekBox);
+      updateCommitsGraph(todayCommits, weekCommits);
+      screen.render();
+    });
+  } else {
+    gitbot.findGitRepos(config.repos, config.depth-1, (err, allRepos) => {
+      if (err) {
+        return todayBox.content = err;
+        screen.render();
+      }
+      gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
+        if (err) {
+          return todayBox.content = err;
+          screen.render();
+        }
+        todayBox.content = '';
+        todayCommits = getCommits(`${data}`, todayBox);
+        updateCommitsGraph(todayCommits, weekCommits);
+        screen.render();
+      });
+      gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
+        if (err) {
+          return weekBox.content = err;
+          screen.render();
+        }
+        weekBox.content = '';
+        weekCommits = getCommits(`${data}`, weekBox);
+        updateCommitsGraph(todayCommits, weekCommits);
+        screen.render();
+      });
+    });
+  }
 }
 
 function makeBox(label) {
@@ -221,13 +258,6 @@ function makeGraphBox(label) {
   options.xOffset= 4;
   options.maxHeight= 10;
   return options;
-}
-
-var commitRegex = /(.......) (- .*)/g;
-function getCommits(data, box) {
-  var content = colorizeLog(data);
-  box.content += content;
-  return (box.content.match(commitRegex) || []).length;
 }
 
 function updateCommitsGraph(today, week) {

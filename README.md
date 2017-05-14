@@ -50,9 +50,6 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_SAY_BOX = parrot | bunny | llama | cat`, to party with a different parrot (or,
     more specifically: to have a different animal say a message in the big box)
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
-  This is using [`git-standup`](https://github.com/kamranahmedse/git-standup) under
-  the hood, and looks one subdirectory deep (so if you have all your code
-  directories in a `~/Code`, you only need to list that one)
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
   the directories defined with `TTC_REPOS` (by default 1). Note that the deeper
   the directory depth, the slower the results will be fetched.
