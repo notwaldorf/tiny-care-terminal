@@ -70,7 +70,7 @@ setting `TTC_APIKEYS`
 
 You need [Twitter API keys](https://apps.twitter.com/) for the tweets to work.
 It should be pretty easy to create a new app, and get these 4 values.
-After you've set them up, set these env variables (see the `sample.env` for an
+After you've set them up, set these env variables (see the [`sample.env`](sample.env) for an
 example):
 
 ```
