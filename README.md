@@ -106,7 +106,7 @@ Other commands while in pomodoro mode:
 
 
 ## 🆘 Halp I don't see my commits
-As of version `1.2.1`, there's a new way to
+As of version `1.2.0`, there's a new way to
 see your commits that doesn't use the old bash script. To use that approach, set your
 `TTC_GITBOT` environment variable to `gitlog`:
 
