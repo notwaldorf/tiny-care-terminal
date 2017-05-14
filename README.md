@@ -60,6 +60,8 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
+  - `TTC_GITBOT` -- how to read your git commits. If you're having problems
+  seeing your commits in `tiny-terminal-care`, set this to `gitlog`
 
 #### Set up Twitter API keys
 
@@ -104,8 +106,20 @@ Other commands while in pomodoro mode:
 
 
 ## 🆘 Halp I don't see my commits
+As of version `1.2.1`, there's a new way to
+see your commits that doesn't use the old bash script. To use that approach, set your
+`TTC_GITBOT` environment variable to `gitlog`:
 
-There's a couple of reasons why this might happen:
+```
+export TTC_GITBOT='gitlog'
+```
+
+This will become the default version soon,
+so let me know if there's any problems with it. <3
+
+---
+
+If you really want to still be using the `git-standup` way, then here's a couple of reasons why this might be broken:
 - did you run `npm install -g git-standup` after installing `tiny-care-terminal`? If you didn't, that's the most likely culprit
 - did you forget to export your `TTC_REPOS` environment variable? Open a new tab, and type `echo $TTC_REPOS` to make sure it's not empty. Note that spaces inside the repo names are not supported right now :(
 - are you on Windows? Not super sure it works on Windows because of the `bash` scripts, but working on it
