@@ -5,6 +5,9 @@
   "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
   "license": "MIT",
+  "engines" : {
+    "node" : ">=6.10.3" 
+  },
   "bin": {
     "tiny-care-terminal": "care.js"
   },
