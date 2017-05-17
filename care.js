@@ -11,6 +11,7 @@ var contrib = require('blessed-contrib');
 var chalk = require('chalk');
 var parrotSay = require('parrotsay-api');
 var bunnySay = require('sign-bunny');
+var yosay = require('yosay');
 var weather = require('weather-js');
 
 var inPomodoroMode = false;
@@ -140,6 +141,9 @@ function doTheTweets() {
           screen.render();
         } else if (config.say === 'cat') {
           parrotBox.content = catSay(tweet.text);
+          screen.render();
+        } else if (config.say === 'yeoman') {
+          parrotBox.content = yosay(tweet.text);
           screen.render();
         } else {
           parrotSay(tweet.text).then(function(text) {

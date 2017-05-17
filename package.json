@@ -5,8 +5,8 @@
   "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
   "license": "MIT",
-  "engines" : {
-    "node" : ">=6.10.3" 
+  "engines": {
+    "node": ">=6.10.3"
   },
   "bin": {
     "tiny-care-terminal": "care.js"
@@ -27,7 +27,8 @@
     "sign-bunny": "^1.0.0",
     "subdirs": "^1.0.1",
     "twit": "^2.2.5",
-    "weather-js": "^2.0.0"
+    "weather-js": "^2.0.0",
+    "yosay": "^2.0.0"
   },
   "peerDependencies": {
     "git-standup": "^2.1.8"
