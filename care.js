@@ -87,10 +87,17 @@ var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '))
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
 var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
+var commandBox = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
 
-var tweetBoxes = {}
+var tweetBoxes = {};
 tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💖 '));
-tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
+
+if (config.command) {
+  doTheCommand();
+  setInterval(doTheCommand, 1000 * 5);
+} else {
+  tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
+}
 
 tick();
 setInterval(tick, 1000 * 60 * config.updateInterval);
@@ -124,6 +131,15 @@ function doTheWeather() {
   });
 }
 
+function doTheCommand() {
+  var userCommand = spawn(config.command, [], {shell:true});
+  commandBox.content = '';
+  userCommand.stdout.on('data', data => {
+    commandBox.content = `${data}`;
+    screen.render();
+  });
+}
+
 function doTheTweets() {
   for (var which in config.twitter) {
     // Gigantor hack: first twitter account gets spoken by the party parrot.
@@ -154,14 +170,21 @@ function doTheTweets() {
           screen.render();
         });
       });
+    } else if (which == 2) { 
+      // Another hack. If the command is present don't do anything.
+      if (config.command) {
+        return;
+      }
     } else {
       twitterbot.getTweet(config.twitter[which]).then(function(tweet) {
         tweetBoxes[tweet.bot.toLowerCase()].content = tweet.text;
         screen.render();
       },function(error) {
-        tweetBoxes[config.twitter[1]].content =
-        tweetBoxes[config.twitter[2]].content =
-        'Can\'t read Twitter without some API keys  🐰. Maybe try the scraping version instead?';
+        tweetBoxes[config.twitter[1]].content = 'Can\'t read Twitter without some API keys  🐰. Maybe try the scraping version instead?';
+        
+        if (!config.command) {
+          tweetBoxes[config.twitter[2]].content = 'Can\'t read Twitter without some API keys  🐰. Maybe try the scraping version instead?';
+        }
       });
     }
   }

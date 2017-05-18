@@ -3,6 +3,8 @@ var config = {
   // spoken by the party parrot.
   twitter: (process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot').toLowerCase().split(','),
 
+  command: process.env.TTC_COMMAND,
+
   // Use this to have a different animal say a message in the big box.
   say: (process.env.TTC_SAY_BOX || 'parrot').toLowerCase(),
 
