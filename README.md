@@ -47,6 +47,9 @@ All the settings the dashboard looks at are in the sample file `sample.env`. Thi
 lists the environment variables that you can copy in your `rc` files:
   - `TTC_BOTS` are the 3 twitter bots to check, comma separated. The first entry
   in this list will be displayed in the big party parrot box.
+  - `TTC_COMMAND` is a command that will be execuded every five seconds. The output
+  of the command will be visible in the third Twitter box. For example, if you would like
+  to see uptime there, you would set your enviroment variable to `uptime`.
   - `TTC_SAY_BOX = parrot | bunny | llama | cat`, to party with a different parrot (or,
     more specifically: to have a different animal say a message in the big box)
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
