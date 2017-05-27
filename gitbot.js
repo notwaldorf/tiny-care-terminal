@@ -61,7 +61,7 @@ function getCommitsFromRepos(repos, days, callback) {
       }, (err, logs) => {
         // Error
         if (err)
-          return callback(err, null);
+          return callback(`Oh Noes😱\nThe repo ${repo} has failed:\n${err}`, null);
 
         // Repo path
         if (logs.length >= 1)
