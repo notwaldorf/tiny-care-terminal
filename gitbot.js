@@ -60,9 +60,9 @@ function getCommitsFromRepos(repos, days, callback) {
         author: gitUsername
       }, (err, logs) => {
         // Error
-        if (err)
-          return callback(`Oh Noes😱\nThe repo ${repo} has failed:\n${err}`, null);
-
+        if (err) {
+          callback(`Oh noes😱\nThe repo ${repo} has failed:\n${err}`, null);
+        }
         // Find user commits
         let commits = [];
         logs.forEach(c => {
