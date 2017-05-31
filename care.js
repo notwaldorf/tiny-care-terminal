@@ -11,6 +11,7 @@ var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
 var bunnySay = require('sign-bunny');
+var yosay = require('yosay');
 var weather = require('weather-js');
 
 var inPomodoroMode = false;
@@ -320,6 +321,7 @@ function getAnsiArt(textToSay) {
     case 'bunny' : return bunnySay(textToSay);
     case 'llama' : return llamaSay(textToSay);
     case 'cat'   : return catSay(textToSay);
+    case 'yeoman': return yosay(textToSay);
     default : return ansiArt.get({ artName: config.say, speechText: textToSay });
   }
 }
