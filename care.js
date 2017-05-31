@@ -20,7 +20,7 @@ var screen = blessed.screen(
     {fullUnicode: true, // emoji or bust
      smartCSR: true,
      autoPadding: true,
-     title: '✨💖 tiny care terminal 💖✨'
+     title: config.terminal_title
     });
 
 // Quit on Escape, q, or Control-C.

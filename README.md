@@ -62,6 +62,8 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
   - `TTC_GITBOT` -- how to read your git commits. If you're having problems
   seeing your commits in `tiny-terminal-care`, set this to `gitlog`
+  - `TTC_TERMINAL_TITLE` -- set this to false if you don't want the terminal title
+  to be changed on startup.
 
 #### Set up Twitter API keys
 

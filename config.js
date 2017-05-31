@@ -26,6 +26,8 @@ var config = {
   // Set to false if you're an imperial savage. <3
   celsius: (process.env.TTC_CELSIUS || 'true') === 'true',
 
+  terminal_title: (process.env.TTC_TERMINAL_TITLE === 'false' ? null : '✨💖 tiny care terminal 💖✨'),
+
   updateInterval: parseFloat(process.env.TTC_UPDATE_INTERVAL) || 20,
 
   keys: {
