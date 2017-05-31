@@ -60,18 +60,24 @@ function getCommitsFromRepos(repos, days, callback) {
         author: gitUsername
       }, (err, logs) => {
         // Error
-        if (err)
-          return callback(err, null);
-
-        // Repo path
-        if (logs.length >= 1)
-          cmts.push(repo);
-
-        // Commit
+        if (err) {
+          callback(`Oh noes😱\nThe repo ${repo} has failed:\n${err}`, null);
+        }
+        // Find user commits
+        let commits = [];
         logs.forEach(c => {
+          // filter simple merge commits
           if (c.status && c.status.length)
-            cmts.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
+            commits.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
         });
+
+        // Add repo name and commits
+        if (commits.length >= 1) {
+          // Repo name
+          cmts.push(repo);
+          cmts.push(...commits);
+        }
+
         repoDone();
       });
     } catch(err) {
