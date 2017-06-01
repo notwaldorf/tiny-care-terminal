@@ -53,6 +53,8 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
   the directories defined with `TTC_REPOS` (by default 1). Note that the deeper
   the directory depth, the slower the results will be fetched.
+  - `TTC_GITBOT` -- how to read your git commits. If you're having problems
+  seeing your commits in `tiny-terminal-care`, set this to `gitlog`
   - `TTC_WEATHER`, the location to check the weather for. A zipcode doesn't
     always work, so if you can, use a location first (so prefer `Paris` over
     `90210`)
@@ -60,8 +62,6 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API
   keys and want to scrape the tweets instead.
   - `TTC_UPDATE_INTERVAL`, set this to change the update frequency in minutes, default is 20 minutes.
-  - `TTC_GITBOT` -- how to read your git commits. If you're having problems
-  seeing your commits in `tiny-terminal-care`, set this to `gitlog`
   - `TTC_TERMINAL_TITLE` -- set this to false if you don't want the terminal title
   to be changed on startup.
 
