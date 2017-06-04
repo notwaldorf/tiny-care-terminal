@@ -1,10 +1,19 @@
-const gitUsername = require('git-user-name')();
 const resolve = require('resolve-dir');
 const subdirs = require('subdirs');
 const isGit = require('is-git');
 const gitlog = require('gitlog');
 const path = require('path');
 const async = require("async");
+
+try {
+  const gitUsername = require('git-user-name')();
+} catch(err) {
+  console.error(`ERROR reading git-config.
+    Use e.g. 'git config --global user.name "Mona Lisa"'.
+    See 'man git config' for further information.
+  `);
+  return process.exit(0);
+}
 
 /**
  * Go through all `repos` and look for subdirectories up to a given `depth`
