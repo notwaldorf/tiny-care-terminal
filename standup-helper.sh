@@ -5,6 +5,14 @@ set -e
 # and run git-standup there directly from node (cwd did nothing), so
 # here we are.
 
+if ! type "git-standup" > /dev/null; then
+  echo "Seems like you haven't installed git-standup yet."
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    echo "Installing git-standup with homebrew..."
+    brew install git-standup
+  fi
+fi
+
 progname=$0
 standup=$(npm bin -g)"/git-standup"
 
