@@ -57,7 +57,8 @@ function getCommitsFromRepos(repos, days, callback) {
         number: 100, //max commit count
         since: `${days} days ago`,
         fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
-        author: gitUsername
+        author: gitUsername,
+        all: true
       }, (err, logs) => {
         // Error
         if (err) {
