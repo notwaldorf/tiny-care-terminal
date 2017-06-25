@@ -14,6 +14,9 @@ var bunnySay = require('sign-bunny');
 var yosay = require('yosay');
 var weather = require('weather-js');
 
+var TODAY_BOX_LABEL = ' 📝  Today ';
+var WEEK_BOX_LABEL = ' 📝  Week ';
+
 var inPomodoroMode = false;
 
 var screen = blessed.screen(
@@ -81,17 +84,13 @@ screen.key(['p', 'C-p'], function(ch, key) {
 });
 
 var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
-
-// grid.set(row, col, rowSpan, colSpan, obj, opts)
-var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
-var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
-var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
-var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
-var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
-
-var tweetBoxes = {}
-tweetBoxes[config.twitter[1]] = grid.set(2, 8, 2, 4, blessed.box, makeBox(' 💖 '));
-tweetBoxes[config.twitter[2]] = grid.set(4, 8, 2, 4, blessed.box, makeBox(' 💬 '));
+var boxes = buildBoxes(config.commitsGraph);
+var weatherBox =  boxes.weather;
+var todayBox = boxes.today;
+var weekBox = boxes.week;
+var commits = boxes.commits;
+var parrotBox = boxes.parrot;
+var tweetBoxes = boxes.tweets;
 
 tick();
 setInterval(tick, 1000 * 60 * config.updateInterval);
@@ -100,6 +99,62 @@ function tick() {
   doTheWeather();
   doTheTweets();
   doTheCodes();
+}
+
+function buildBoxes(showCommitsGraph) {
+  var firstQuadrant = buildFirstQuadrantBoxes(showCommitsGraph);
+
+  return {
+    today: buildTodayBox(),
+    week: buildWeekBox(),
+    tweets: firstQuadrant.tweets,
+    weather: firstQuadrant.weather,
+    commits: firstQuadrant.commits,
+    parrot: buildParrotBox()
+  };
+}
+
+function buildFirstQuadrantBoxes(showCommitsGraph) {
+  var col = 6, colSpan = 6;
+
+  if (showCommitsGraph) {
+    col += 2;
+    colSpan -= 2;
+  }
+
+  return {
+    tweets: buildTweetBoxes(col, colSpan),
+    weather: buildWeatherBox(col, colSpan),
+    commits: (showCommitsGraph) ? buildCommitsGraphBox() : null
+  };
+}
+
+// grid.set(row, col, rowSpan, colSpan, obj, opts)
+function buildTweetBoxes(col, colSpan) {
+  var boxes = {};
+  boxes[config.twitter[1]] = grid.set(2, col, 2, colSpan, blessed.box, makeBox(' 💖 '));
+  boxes[config.twitter[2]] = grid.set(4, col, 2, colSpan, blessed.box, makeBox(' 💬 '));
+  return boxes;
+}
+
+function buildWeatherBox(col, colSpan) {
+  return grid.set(0, col, 2, colSpan, blessed.box, makeScrollBox(' 🌤 '));
+}
+
+function buildCommitsGraphBox() {
+  return grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
+}
+
+function buildTodayBox() {
+  return grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(TODAY_BOX_LABEL));
+}
+
+function buildWeekBox() {
+  return grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(WEEK_BOX_LABEL));
+}
+
+function buildParrotBox() {
+  return grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
 }
 
 function doTheWeather() {
@@ -157,29 +212,49 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  function getCommits(data, box) {
-    var content = colorizeLog(data || '');
-    box.content += content;
+  function getNumCommits(commits) {
     var commitRegex = /(.......) (- .*)/g;
-    return (box && box.content) ? (box.content.match(commitRegex) || []).length : '0';
+    return (commits) ? (commits.match(commitRegex) || []).length : '0';
+  }
+
+  function updateBoxContent(box, content, numCommits) {
+    var colorContent = colorizeLog(content || '');
+    box.content += colorContent;
+
+    if (!config.commitsGraph) {
+      var label = (box === todayBox) ? TODAY_BOX_LABEL : WEEK_BOX_LABEL;
+      box.setLabel(`${label} (${numCommits})`);
+    }
+
+    return box;
+  }
+
+  function updateWeekCommits(commits) {
+    weekCommits += getNumCommits(commits);
+
+    updateBoxContent(weekBox, commits, weekCommits);
+    updateCommitsGraph(todayCommits, weekCommits);
+
+    screen.render();
+  }
+
+  function updateTodayCommits(commits) {
+    todayCommits += getNumCommits(commits);
+
+    updateBoxContent(todayBox, commits, todayCommits);
+    updateCommitsGraph(todayCommits, weekCommits);
+
+    screen.render();
   }
 
   if (config.gitbot.toLowerCase() === 'gitstandup') {
     var today = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth, config.repos], {shell:true});
     todayBox.content = '';
-    today.stdout.on('data', data => {
-      todayCommits = getCommits(`${data}`, todayBox);
-      updateCommitsGraph(todayCommits, weekCommits);
-      screen.render();
-    });
+    today.stdout.on('data', data => { updateTodayCommits(`${data}`); });
 
     var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth + ' -d 7', config.repos], {shell:true});
     weekBox.content = '';
-    week.stdout.on('data', data => {
-      weekCommits = getCommits(`${data}`, weekBox);
-      updateCommitsGraph(todayCommits, weekCommits);
-      screen.render();
-    });
+    week.stdout.on('data', data => { updateWeekCommits(`${data}`); });
   } else {
     gitbot.findGitRepos(config.repos, config.depth-1, (err, allRepos) => {
       if (err) {
@@ -192,9 +267,7 @@ function doTheCodes() {
           screen.render();
         }
         todayBox.content = '';
-        todayCommits = getCommits(`${data}`, todayBox);
-        updateCommitsGraph(todayCommits, weekCommits);
-        screen.render();
+        updateTodayCommits(`${data}`);
       });
       gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
         if (err) {
@@ -202,9 +275,7 @@ function doTheCodes() {
           screen.render();
         }
         weekBox.content = '';
-        weekCommits = getCommits(`${data}`, weekBox);
-        updateCommitsGraph(todayCommits, weekCommits);
-        screen.render();
+        updateWeekCommits(`${data}`);
       });
     });
   }
@@ -247,7 +318,9 @@ function makeGraphBox(label) {
 }
 
 function updateCommitsGraph(today, week) {
-  commits.setData({titles: ['today', 'week'], data: [today, week]})
+  if (commits) {
+    commits.setData({titles: ['today', 'week'], data: [today, week]})
+  }
 }
 
 function colorizeLog(text) {
