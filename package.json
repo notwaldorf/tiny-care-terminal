@@ -1,6 +1,6 @@
 {
   "name": "tiny-care-terminal",
-  "version": "1.3.1",
+  "version": "1.3.2",
   "description": "A terminal that tries to take care of you 💖",
   "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
