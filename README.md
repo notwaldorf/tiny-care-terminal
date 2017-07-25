@@ -47,8 +47,8 @@ All the settings the dashboard looks at are in the sample file `sample.env`. Thi
 lists the environment variables that you can copy in your `rc` files:
   - `TTC_BOTS` are the 3 twitter bots to check, comma separated. The first entry
   in this list will be displayed in the big party parrot box.
-  - `TTC_SAY_BOX = parrot | bunny | llama | cat | yeoman | mario | ironman | minions | panda`, to party with a different parrot (or,
-    more specifically: to have a different animal say a message in the big box). You can create your own custom art(.ansi file) [here](https://gauravchl.github.io/ansi-art/webapp/) and download and supply it's absolute path to render it within box. (eg: `TTC_SAY_BOX='/Users/om/desktop/cat.ansi'`)
+  - `TTC_SAY_BOX = random | parrot | bunny | llama | cat | yeoman | mario | ironman | minions | panda`, to party with a different parrot (or,
+    more specifically: to have a different animal say a message in the big box). You can create your own custom art(.ansi file) [here](https://gauravchl.github.io/ansi-art/webapp/) and download and supply it's absolute path to render it within box. (eg: `TTC_SAY_BOX='/Users/om/desktop/cat.ansi'`). `random` value will randomly choose parrot each time new message is printed.
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
   the directories defined with `TTC_REPOS` (by default 1). Note that the deeper

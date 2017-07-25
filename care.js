@@ -312,6 +312,12 @@ function catSay(text) {
 function getAnsiArt(textToSay) {
   var artFileRegex = /.ansi$/;
 
+  // Choose random parrot every time
+  if (config.say === 'random') {
+    var available = ['parrot', 'bunny', 'llama', 'cat', 'yeoman', 'mario', 'ironman', 'minions', 'panda'];
+    config.say = available[Math.floor(Math.random()*available.length)];
+  }
+
   // If config.say is custom art file path, then return custom art
   if (artFileRegex.test(config.say)) {
     return ansiArt.get({ filePath: config.say, speechText: textToSay });
