@@ -313,15 +313,15 @@ function getAnsiArt(textToSay) {
   var artFileRegex = /.ansi$/;
   var say = config.say;
 
+  // If config.say is custom art file path, then return custom art
+  if (artFileRegex.test(say)) {
+    return ansiArt.get({ filePath: say, speechText: textToSay });
+  }
+
   // Choose random parrot every time
   if (say === 'random') {
     var available = ['parrot', 'bunny', 'llama', 'cat', 'yeoman', 'mario', 'ironman', 'minions', 'panda'];
     say = available[Math.floor(Math.random()*available.length)];
-  }
-
-  // If config.say is custom art file path, then return custom art
-  if (artFileRegex.test(say)) {
-    return ansiArt.get({ filePath: say, speechText: textToSay });
   }
 
   switch (say) {

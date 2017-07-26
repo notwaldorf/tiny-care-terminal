@@ -4,7 +4,7 @@ var config = {
   twitter: (process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot').toLowerCase().split(','),
 
   // Use this to have a different animal say a message in the big box.
-  say: (process.env.TTC_SAY_BOX || 'random').toLowerCase(),
+  say: (process.env.TTC_SAY_BOX || 'parrot').toLowerCase(),
 
   // Set this to false if you want to scrape twitter.com instead of using
   // API keys. The tweets may include RTs in this case :(
