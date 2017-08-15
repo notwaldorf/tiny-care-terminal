@@ -368,6 +368,10 @@ var pomodoroHandlers = {
       });
     }
   },
+
+  runningDuration: parseInt(config.runningDuration),
+
+  breakDuration: parseInt(config.breakDuration),
 }
 
 var pomodoroObject = pomodoro(pomodoroHandlers);

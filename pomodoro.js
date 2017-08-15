@@ -13,8 +13,8 @@ var States = {
 // options.onBreakEnds (function) - Runs when break ends
 var pomodoro = function(options) {
   var _setIntervalId = null;
-  var _runningDuration = 20; // Default pomodoro duration: 20 Min
-  var _breakDuration = 5;    // Default break duration: 5 Min
+  var _runningDuration = options.runningDuration; // Default pomodoro duration: 20 Min
+  var _breakDuration = options.breakDuration;    // Default break duration: 5 Min
   var _runningDurationRemaining = 0; // In seconds
   var _breakDurationRemaining = 0;   // In seconds
   var _currentState = States.STOPPED;
