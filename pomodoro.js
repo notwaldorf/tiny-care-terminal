@@ -1,6 +1,6 @@
 var Storage = require('node-storage');
 var moment = require('moment');
-var store = new Storage(__dirname + '/storage/pomodoro');
+var store = new Storage(__dirname + '/storage/pomodoro.json');
 
 var States = {
   RUNNING: 'running',
@@ -113,8 +113,8 @@ var pomodoro = function(options) {
       return ('0' + Math.floor(remainingTime/60)).slice(-2) + ':' + ('0' + remainingTime % 60).slice(-2);
     },
 
-    getTotalPomodoroCount(type) {
-      return pomodoroStorage.getTotalPomodoroCount(type);
+    getHistory(type) {
+      return pomodoroStorage.getHistory(type);
     },
 
     isRunning() {
@@ -148,10 +148,17 @@ var pomodoroStorage = {
     store.put('pomodoros', pomodoros);
   },
 
-  // type= day/week/month/year
-  getTotalPomodoroCount(type) {
+  // type = day/week/month/year
+  getHistory(type) {
     var pomodoros = store.get('pomodoros') || [];
-    if (!type) return pomodoros.length;
-    return pomodoros.filter(item => moment().isSame(item.endDate, type)).length
+    if (type) {
+      pomodoros = pomodoros.filter(item => moment().isSame(item.endDate, type));
+    }
+    var duration = pomodoros.reduce((total, p) => total + moment(p.endDate).diff(p.startDate), 0);
+    duration = moment.duration(duration);
+    return {
+      count: pomodoros.length,
+      duration: `${Math.floor(duration.asHours())}h:${duration.minutes()}m`,
+    };
   }
 }

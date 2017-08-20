@@ -341,15 +341,19 @@ var pomodoroHandlers = {
     }
 
     var content = `In Pomodoro Mode: ${remainingTime} ${statusText}`;
+    var pomodoroHistory = {
+      today: pomodoroObject.getHistory('day'),
+      week: pomodoroObject.getHistory('week'),
+      month: pomodoroObject.getHistory('month'),
+    }
 
     var metaData = `
       Duration: ${pomodoroObject.getRunningDuration()}m, Break Time: ${pomodoroObject.getBreakDuration()}m,
 
-      Pomodoro Stats:
-        Total run today: ${pomodoroObject.getTotalPomodoroCount('day')}
-        Total run this Week: ${pomodoroObject.getTotalPomodoroCount('week')}
-        Total run this Month: ${pomodoroObject.getTotalPomodoroCount('month')}
-
+      Total Pomodoros Run:
+        Today      : ${pomodoroHistory.today.count} [${pomodoroHistory.today.duration}]
+        This Week  : ${pomodoroHistory.week.count} [${pomodoroHistory.week.duration}]
+        This Month : ${pomodoroHistory.month.count} [${pomodoroHistory.month.duration}]
 
       commands:
         s - start/pause/resume
