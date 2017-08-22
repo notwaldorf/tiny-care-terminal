@@ -106,7 +106,7 @@ Other commands while in pomodoro mode:
 
 ```
 
-To change default pomodoro and break durations set following variables (these should be numbers):
+To change default pomodoro and break durations set following variables in minutes (these should be numbers):
 
 ```
 TTC_POMODORO=...
