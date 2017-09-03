@@ -24,6 +24,7 @@
     "node-notifier": "^5.1.2",
     "resolve-dir": "^1.0.0",
     "scraperjs": "^1.2.0",
+    "shell-escape": "^0.2.0",
     "sign-bunny": "^1.0.0",
     "subdirs": "^1.0.1",
     "twit": "^2.2.5",
