@@ -5,6 +5,7 @@ const isGit = require('is-git');
 const gitlog = require('gitlog');
 const path = require('path');
 const async = require("async");
+const git = require('git-utils');
 
 /**
  * Go through all `repos` and look for subdirectories up to a given `depth`
@@ -51,6 +52,13 @@ function findGitRepos(repos, depth, callback) {
 function getCommitsFromRepos(repos, days, callback) {
   let cmts = [];
   async.each(repos, (repo, repoDone) => {
+    localGitUsername = ''
+    try {
+      gitUtilsRepo = git.open(repo);
+      localGitUsername = gitUtilsRepo.getConfigValue('user.name');
+    } catch (err) {
+      localGitUsername = gitUsername
+    }
     try {
       gitlog({
         repo: repo,
@@ -58,7 +66,7 @@ function getCommitsFromRepos(repos, days, callback) {
         number: 100, //max commit count
         since: `${days} days ago`,
         fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
-        author: gitUsername
+        author: localGitUsername
       }, (err, logs) => {
         // Error
         if (err) {
