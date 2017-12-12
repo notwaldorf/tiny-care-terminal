@@ -52,12 +52,12 @@ function findGitRepos(repos, depth, callback) {
 function getCommitsFromRepos(repos, days, callback) {
   let cmts = [];
   async.each(repos, (repo, repoDone) => {
-    localGitUsername = ''
+    let localGitUsername = '';
     try {
-      gitUtilsRepo = git.open(repo);
-      localGitUsername = gitUtilsRepo.getConfigValue('user.name');
+      const gitUtilsRepo = git.open(repo);
+      localGitUsername = gitUtilsRepo.getConfigValue('user.name') || gitUsername;
     } catch (err) {
-      localGitUsername = gitUsername
+      localGitUsername = gitUsername;
     }
     try {
       gitlog({
