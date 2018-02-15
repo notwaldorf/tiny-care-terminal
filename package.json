@@ -18,6 +18,7 @@
     "blessed-contrib": "^4.8.5",
     "chalk": "^2.4.1",
     "expand-home-dir": "^0.0.3",
+    "cowsay": "^1.2.1",
     "git-user-name": "^2.0.0",
     "gitlog": "^3.1.2",
     "git-utils": "^5.4.0",
