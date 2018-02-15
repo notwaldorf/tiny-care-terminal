@@ -4,6 +4,7 @@ var twitterbot = require(__dirname + '/twitterbot.js');
 var gitbot = require(__dirname + '/gitbot.js');
 var pomodoro = require(__dirname + '/pomodoro.js');
 var ansiArt = require('ansi-art').default;
+var cowsay = require("cowsay");;
 
 var path = require('path');
 var notifier = require('node-notifier');
@@ -15,6 +16,7 @@ var chalk = require('chalk');
 var bunnySay = require('sign-bunny');
 var yosay = require('yosay');
 var weather = require('weather-js');
+var path = require('path');
 
 var inPomodoroMode = false;
 
@@ -304,19 +306,33 @@ function catSay(text) {
 }
 
 function getAnsiArt(textToSay) {
-  var artFileRegex = /.ansi$/;
-
-  // If config.say is custom art file path, then return custom art
-  if (artFileRegex.test(config.say)) {
-    return ansiArt.get({ filePath: config.say, speechText: textToSay });
-  }
-
-  switch (config.say) {
-    case 'bunny' : return bunnySay(textToSay);
-    case 'llama' : return llamaSay(textToSay);
-    case 'cat'   : return catSay(textToSay);
-    case 'yeoman': return yosay(textToSay);
-    default : return ansiArt.get({ artName: config.say, speechText: textToSay });
+  if (/.ansi$/.test(config.say)) {
+    // if SAY ends with ".ansi" use the 'ansi-art' ligrary
+    if (config.say === path.basename(config.say)) {
+      return ansiArt.get({
+        artName: config.say.slice(0,-5),
+        speechText: textToSay
+      });
+    } else {
+      return ansiArt.get({
+        filePath: config.say,
+        speechText: textToSay
+      });
+    }
+  } else if (/.cow$/.test(config.say)) {
+    // if SAY ends with ".cow" use the 'cowsay' ligrary
+    return cowsay.say({
+      f: config.say.slice(0,-4),
+      text: textToSay
+    });
+  } else {
+    switch (config.say) {
+      case 'bunny' : return bunnySay(textToSay);
+      case 'llama' : return llamaSay(textToSay);
+      case 'cat'   : return catSay(textToSay);
+      case 'yeoman': return yosay(textToSay);
+      default : return ansiArt.get({ artName: config.say, speechText: textToSay });
+    }
   }
 }
 
