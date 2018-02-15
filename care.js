@@ -159,6 +159,11 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
+  // show loading message while loading commits
+  todayBox.content = '⏳ searching for commits...';
+  weekBox.content = '⏳ searching for commits...';
+  screen.render();
+
   function getCommits(data, box) {
     var content = colorizeLog(data || '');
     box.content += content;
