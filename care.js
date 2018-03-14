@@ -84,7 +84,7 @@ var grid = new contrib.grid({rows: 12, cols: 12, screen: screen});
 
 // grid.set(row, col, rowSpan, colSpan, obj, opts)
 var weatherBox = grid.set(0, 8, 2, 4, blessed.box, makeScrollBox(' 🌤 '));
-var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Today '));
+var todayBox = grid.set(0, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Last 24 hours '));
 var weekBox = grid.set(6, 0, 6, 6, blessed.box, makeScrollBox(' 📝  Week '));
 var commits = grid.set(0, 6, 6, 2, contrib.bar, makeGraphBox('Commits'));
 var parrotBox = grid.set(6, 6, 6, 6, blessed.box, makeScrollBox(''));
@@ -247,7 +247,7 @@ function makeGraphBox(label) {
 }
 
 function updateCommitsGraph(today, week) {
-  commits.setData({titles: ['today', 'week'], data: [today, week]})
+  commits.setData({titles: ['24h', 'week'], data: [today, week]})
 }
 
 function colorizeLog(text) {
