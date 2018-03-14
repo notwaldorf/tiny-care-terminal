@@ -41,6 +41,12 @@ For example,
 Note that the `export` bit is pretty key, to make sure that they are globally available. To check that the
 variables have been set correctly, you can print them in the terminal -- for example, `echo $TTC_WEATHER`.
 
+Alternative to setting the environment globally you also can create a `.env` file in the root of your project that includes the environment variables as key=value pairs like so:
+```
+TTC_REPOS_DEPTH=3
+TTC_GITBOT='gitlog'
+```
+
 #### Configure the dashboard
 
 All the settings the dashboard looks at are in the sample file `sample.env`. This file isn't used by the dashboard, it just
