@@ -20,6 +20,7 @@
     "git-standup": "^2.1.8",
     "git-user-name": "^1.2.0",
     "gitlog": "^2.4.0",
+    "git-utils": "^5.2.0",
     "is-git": "0.0.1",
     "node-notifier": "^5.1.2",
     "resolve-dir": "^1.0.0",

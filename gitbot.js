@@ -4,6 +4,7 @@ const isGit = require('is-git');
 const gitlog = require('gitlog');
 const path = require('path');
 const async = require("async");
+const git = require('git-utils');
 
 try {
   const gitUsername = require('git-user-name')();
@@ -60,6 +61,13 @@ function findGitRepos(repos, depth, callback) {
 function getCommitsFromRepos(repos, days, callback) {
   let cmts = [];
   async.each(repos, (repo, repoDone) => {
+    let localGitUsername = '';
+    try {
+      const gitUtilsRepo = git.open(repo);
+      localGitUsername = gitUtilsRepo.getConfigValue('user.name') || gitUsername;
+    } catch (err) {
+      localGitUsername = gitUsername;
+    }
     try {
       gitlog({
         repo: repo,
@@ -67,7 +75,7 @@ function getCommitsFromRepos(repos, days, callback) {
         number: 100, //max commit count
         since: `${days} days ago`,
         fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
-        author: gitUsername
+        author: localGitUsername
       }, (err, logs) => {
         // Error
         if (err) {
