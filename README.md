@@ -23,7 +23,6 @@ It looks like this, and updates every 20 minutes.
 
 ```
 npm install -g tiny-care-terminal
-npm install -g git-standup
 ```
 (Note: this currently doesn't work with `yarn` because of path shenanigans I wrote, so while I'm fixing that, pls use `npm` 🙏)
 
@@ -53,7 +52,6 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
   the directories defined with `TTC_REPOS` (by default 1). Note that the deeper
   the directory depth, the slower the results will be fetched.
-  - `TTC_GITBOT` -- how to read your git commits. If you're having problems
   seeing your commits in `tiny-terminal-care`, set this to `gitlog`
   - `TTC_WEATHER`, the location to check the weather for. A zipcode doesn't
     always work, so if you can, use a location first (so prefer `Paris` over
@@ -115,23 +113,8 @@ TTC_BREAK=...
 
 
 ## 🆘 Halp I don't see my commits
-As of version `1.2.0`, there's a new way to
-see your commits that doesn't use the old bash script. To use that approach, set your
-`TTC_GITBOT` environment variable to `gitlog`:
 
-```
-export TTC_GITBOT='gitlog'
-```
-
-This will become the default version soon,
-so let me know if there's any problems with it. <3
-
----
-
-If you really want to still be using the `git-standup` way, then here's a couple of reasons why this might be broken:
-- did you run `npm install -g git-standup` after installing `tiny-care-terminal`? If you didn't, that's the most likely culprit
 - did you forget to export your `TTC_REPOS` environment variable? Open a new tab, and type `echo $TTC_REPOS` to make sure it's not empty. Note that spaces inside the repo names are not supported right now :(
-- are you on Windows? Not super sure it works on Windows because of the `bash` scripts, but working on it
 - did you use `yarn`? I know `yarn` is cool, and I've seen it work with this, but can you double check that it still doesn't work with a basic `npm` installation instead?
 
 **Take care of yourself, ok? 💖**
