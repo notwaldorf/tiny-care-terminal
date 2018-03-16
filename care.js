@@ -8,6 +8,7 @@ var ansiArt = require('ansi-art').default;
 var path = require('path');
 var notifier = require('node-notifier');
 var spawn = require('child_process').spawn;
+var shellescape = require('shell-escape');
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
@@ -166,7 +167,7 @@ function doTheCodes() {
   }
 
   if (config.gitbot.toLowerCase() === 'gitstandup') {
-    var today = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth, config.repos], {shell:true});
+    var today = spawn('sh', [shellescape([ __dirname + '/standup-helper.sh', '-m', config.depth].concat(config.repos))], {shell:true});
     todayBox.content = '';
     today.stdout.on('data', data => {
       todayCommits = getCommits(`${data}`, todayBox);
@@ -174,7 +175,7 @@ function doTheCodes() {
       screen.render();
     });
 
-    var week = spawn('sh ' + __dirname + '/standup-helper.sh', ['-m ' + config.depth + ' -d 7', config.repos], {shell:true});
+    var week = spawn('sh', [shellescape([ __dirname + '/standup-helper.sh', '-m', config.depth, '-d', '7'].concat(config.repos))], {shell:true});
     weekBox.content = '';
     week.stdout.on('data', data => {
       weekCommits = getCommits(`${data}`, weekBox);
