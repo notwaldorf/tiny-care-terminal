@@ -35,7 +35,12 @@ var config = {
     consumer_secret:     process.env.TTC_CONSUMER_SECRET || process.env.CONSUMER_SECRET || 'none',
     access_token:        process.env.TTC_ACCESS_TOKEN || process.env.ACCESS_TOKEN || 'none',
     access_token_secret: process.env.TTC_ACCESS_TOKEN_SECRET || process.env.ACCESS_TOKEN_SECRET || 'none',
-  }
+  },
+
+  // Pomodoro Settings
+  runningDuration: process.env.TTC_POMODORO || 20,
+  breakDuration: process.env.TTC_BREAK || 5,
+
 };
 
 module.exports = config;

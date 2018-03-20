@@ -106,6 +106,13 @@ Other commands while in pomodoro mode:
 
 ```
 
+To change default pomodoro and break durations set following variables in minutes (these should be numbers):
+
+```
+TTC_POMODORO=...
+TTC_BREAK=...
+```
+
 
 ## 🆘 Halp I don't see my commits
 As of version `1.2.0`, there's a new way to
