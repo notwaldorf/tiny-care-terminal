@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+var dotenv = require('dotenv').config();
 var config = require(__dirname + '/config.js');
 var twitterbot = require(__dirname + '/twitterbot.js');
 var gitbot = require(__dirname + '/gitbot.js');
