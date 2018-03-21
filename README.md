@@ -48,7 +48,7 @@ lists the environment variables that you can copy in your `rc` files:
   in this list will be displayed in the big party parrot box.
   - `TTC_SAY_BOX` defines the ASCII-Art to show.
     e.g. `parrot` | `bunny` | `llama` | `cat` | `yeoman` | `mario` | `ironman.ansi` | `stegosaurus.cow`
-    See section below for all the crazy options.
+    See section for all the different options.
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
   the directories defined with `TTC_REPOS` (by default 1). Note that the deeper
@@ -70,9 +70,9 @@ There are almost endless variation of ASCII art images supported.
 You can select an existing image from the [cowsay library](https://github.com/piuccio/cowsay/tree/master/cows) just by defining a filename ending with ".cow". So e.g. `vader.cow` or `bunny.cow` would be two possible options.
 Also the [ansi-art](https://github.com/gauravchl/ansi-art) library is supported.
 In addition to the [existing](https://github.com/gauravchl/ansi-art/tree/master/src/arts) colorful images you can create your own image by using the [webapp](https://gauravchl.github.io/ansi-art/webapp/) and download the result.
-After downloading the ANSI-File you can just supply it's absolute path to render it within box. (eg: `TTC_SAY_BOX='/Users/om/desktop/cat.ansi'`)
+After downloading the ANSI-File you can just supply its absolute path to render it within the box. (eg: `TTC_SAY_BOX='/Users/om/desktop/cat.ansi'`)
 
-In addintion to this libraries the following types are supported: `bunny`, `llama`, `cat`, `yeoman`
+In addition to this libraries the following types are supported: `bunny`, `llama`, `cat`, `yeoman`
 
 #### Set up Twitter API keys
 
