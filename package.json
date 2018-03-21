@@ -5,8 +5,10 @@
   "main": "care.js",
   "author": "Monica Dinculescu <noms@google.com>",
   "license": "MIT",
+  "engineStrict": true,
   "engines": {
-    "node": ">=6.10.3"
+    "node": ">=6.10.3",
+    "npm": "<=5.6.0"
   },
   "bin": {
     "tiny-care-terminal": "care.js"
