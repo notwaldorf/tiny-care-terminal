@@ -311,7 +311,7 @@ function catSay(text) {
 
 function getAnsiArt(textToSay) {
   if (/.ansi$/.test(config.say)) {
-    // if SAY ends with ".ansi" use the 'ansi-art' ligrary
+    // if SAY ends with ".ansi" use the 'ansi-art' library
     if (config.say === path.basename(config.say)) {
       return ansiArt.get({
         artName: config.say.slice(0,-5),
@@ -324,7 +324,7 @@ function getAnsiArt(textToSay) {
       });
     }
   } else if (/.cow$/.test(config.say)) {
-    // if SAY ends with ".cow" use the 'cowsay' ligrary
+    // if SAY ends with ".cow" use the 'cowsay' library
     return cowsay.say({
       f: config.say.slice(0,-4),
       text: textToSay
