@@ -4,7 +4,7 @@ var twitterbot = require(__dirname + '/twitterbot.js');
 var gitbot = require(__dirname + '/gitbot.js');
 var pomodoro = require(__dirname + '/pomodoro.js');
 var ansiArt = require('ansi-art').default;
-var cowsay = require("cowsay");;
+var cowsay = require("cowsay");
 
 var path = require('path');
 var resolve = require("resolve-dir");
