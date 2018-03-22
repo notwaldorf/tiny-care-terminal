@@ -335,8 +335,27 @@ var pomodoroHandlers = {
     }
 
     var content = `In Pomodoro Mode: ${remainingTime} ${statusText}`;
-    var metaData = `Duration: ${pomodoroObject.getRunningDuration()} Minutes,  Break Time: ${pomodoroObject.getBreakDuration()} Minutes\n`;
-    metaData += 'commands: \n s - start/pause/resume \n e - stop \n u - update duration \n b - update break time';
+    var pomodoroHistory = {
+      today: pomodoroObject.getHistory('day'),
+      week: pomodoroObject.getHistory('week'),
+      month: pomodoroObject.getHistory('month'),
+    }
+
+    var metaData = `
+      Duration: ${pomodoroObject.getRunningDuration()}m, Break Time: ${pomodoroObject.getBreakDuration()}m,
+
+      Total Pomodoros Run:
+        Today      : ${pomodoroHistory.today.count} [${pomodoroHistory.today.duration}]
+        This Week  : ${pomodoroHistory.week.count} [${pomodoroHistory.week.duration}]
+        This Month : ${pomodoroHistory.month.count} [${pomodoroHistory.month.duration}]
+
+      commands:
+        s - start/pause/resume
+        e - stop
+        u - update duration
+        b - update break time
+    `;
+    metaData.replace(/(\r?\n|\r)\s+/gm, '\n');
     parrotBox.content = getAnsiArt(content) + metaData;
     screen.render();
   },

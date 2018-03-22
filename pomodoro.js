@@ -1,3 +1,6 @@
+var Storage = require('node-storage');
+var moment = require('moment');
+var store = new Storage(__dirname + '/storage/pomodoro.json');
 
 var States = {
   RUNNING: 'running',
@@ -34,6 +37,8 @@ var pomodoro = function(options) {
       _breakDurationRemaining = _breakDuration * 60;
       _currentState = States.IN_BREAK
       options.onBreakStarts && options.onBreakStarts();
+      pomodoroStorage.addNewPomodoro(moment().subtract(_runningDuration, 'minutes').toDate(), moment().toDate())
+
     } else {
       _runningDurationRemaining -= 1;
       if (options.onTick) options.onTick()
@@ -108,6 +113,10 @@ var pomodoro = function(options) {
       return ('0' + Math.floor(remainingTime/60)).slice(-2) + ':' + ('0' + remainingTime % 60).slice(-2);
     },
 
+    getHistory(type) {
+      return pomodoroStorage.getHistory(type);
+    },
+
     isRunning() {
       return _currentState === States.RUNNING;
     },
@@ -130,3 +139,26 @@ var pomodoro = function(options) {
 
 
 module.exports = pomodoro;
+
+
+var pomodoroStorage = {
+  addNewPomodoro: function(startDate, endDate) {
+    var pomodoros = store.get('pomodoros') || [];
+    pomodoros.push({ startDate, endDate })
+    store.put('pomodoros', pomodoros);
+  },
+
+  // type = day/week/month/year
+  getHistory(type) {
+    var pomodoros = store.get('pomodoros') || [];
+    if (type) {
+      pomodoros = pomodoros.filter(item => moment().isSame(item.endDate, type));
+    }
+    var duration = pomodoros.reduce((total, p) => total + moment(p.endDate).diff(p.startDate), 0);
+    duration = moment.duration(duration);
+    return {
+      count: pomodoros.length,
+      duration: `${Math.floor(duration.asHours())}h:${duration.minutes()}m`,
+    };
+  }
+}
