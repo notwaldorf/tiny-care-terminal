@@ -311,12 +311,21 @@ function getAnsiArt(textToSay) {
     return ansiArt.get({ filePath: config.say, speechText: textToSay });
   }
 
+  var ansiOptions = {
+    artName: config.say,
+    speechText: textToSay,
+    speechBubbleOptions: {
+      boxWidth: parrotBox.width < 70 ? parrotBox.width - 4 : parrotBox.width * 0.7,
+      boxType: 'classic'
+    }
+  };
+
   switch (config.say) {
     case 'bunny' : return bunnySay(textToSay);
     case 'llama' : return llamaSay(textToSay);
     case 'cat'   : return catSay(textToSay);
     case 'yeoman': return yosay(textToSay);
-    default : return ansiArt.get({ artName: config.say, speechText: textToSay });
+    default : return ansiArt.get(ansiOptions);
   }
 }
 
