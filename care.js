@@ -314,7 +314,9 @@ function getAnsiArt(textToSay) {
   var ansiOptions = {
     artName: config.say,
     speechText: textToSay,
-    speechBubbleOptions: { boxWidth: 50, boxType: 'classic' }
+    speechBubbleOptions: {
+      boxWidth: parrotBox.width < 70 ? parrotBox.width - 4 : parrotBox.width * 0.7,
+      boxType: 'classic' }
   };
 
   switch (config.say) {
