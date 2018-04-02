@@ -317,7 +317,6 @@ function getAnsiArt(textToSay) {
     speechBubbleOptions: { boxWidth: 50, boxType: 'classic' }
   };
 
-
   switch (config.say) {
     case 'bunny' : return bunnySay(textToSay);
     case 'llama' : return llamaSay(textToSay);
