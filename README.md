@@ -52,7 +52,6 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
   the directories defined with `TTC_REPOS` (by default 1). Note that the deeper
   the directory depth, the slower the results will be fetched.
-  seeing your commits in `tiny-terminal-care`, set this to `gitlog`
   - `TTC_WEATHER`, the location to check the weather for. A zipcode doesn't
     always work, so if you can, use a location first (so prefer `Paris` over
     `90210`)
