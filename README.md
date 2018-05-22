@@ -19,12 +19,13 @@ It looks like this, and updates every 20 minutes.
 
 ## Make it go
 
-### 1. Do the npm dance
+### 1. Installation
 
 ```
 npm install -g tiny-care-terminal
 ```
-(Note: this currently doesn't work with `yarn` because of path shenanigans I wrote, so while I'm fixing that, pls use `npm` 🙏)
+
+(`yarn` also works fine.)
 
 ### 2. Setting the environment variables
 
