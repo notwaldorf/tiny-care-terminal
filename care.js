@@ -159,8 +159,10 @@ function doTheCodes() {
   var todayCommits = 0;
   var weekCommits = 0;
 
-  // show loading message while loading commits
-  todayBox.content = weekBox.content = '⏳ one second please...tiny commit bot is looking for tiny commits! ⏳';
+  // show loading message while loading commits.
+  // Turns out blessed doesn't love it if there's emoji in this or if
+  // the line is super long.
+  todayBox.content = weekBox.content = 'tiny commit bot is looking for tiny commits! ';
   screen.render();
 
   function getCommits(data, box) {
