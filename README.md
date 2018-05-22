@@ -22,7 +22,7 @@ It looks like this, and updates every 20 minutes.
 ### 1. Installation
 
 ```
-npm install -g tiny-care-terminal
+npm install -g --engine-strict tiny-care-terminal
 ```
 
 (`yarn` also works fine.)
