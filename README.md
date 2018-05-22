@@ -50,6 +50,9 @@ lists the environment variables that you can copy in your `rc` files:
   - `TTC_SAY_BOX = parrot | bunny | llama | cat | yeoman | mario | ironman | minions | panda`, to party with a different parrot (or,
     more specifically: to have a different animal say a message in the big box). You can create your own custom art(.ansi file) [here](https://gauravchl.github.io/ansi-art/webapp/) and download and supply it's absolute path to render it within box. (eg: `TTC_SAY_BOX='/Users/om/desktop/cat.ansi'`)
   - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
+  If you're having trouble launching `tiny-care-terminal` and it seems to
+  crash fetching your commits, make sure the paths you're using are
+  fully qualified -- that is, use `/Users/notwaldorf/Code` rather than `~/Code`.
   - `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in
   the directories defined with `TTC_REPOS` (by default 1). Note that the deeper
   the directory depth, the slower the results will be fetched.
@@ -114,7 +117,10 @@ TTC_BREAK=...
 
 ## 🆘 Halp I don't see my commits
 
-- did you forget to export your `TTC_REPOS` environment variable? Open a new tab, and type `echo $TTC_REPOS` to make sure it's not empty. Note that spaces inside the repo names are not supported right now :(
+- did you forget to export your `TTC_REPOS` environment variable? Open a new tab, and type `echo $TTC_REPOS` to make sure it's not empty. Note that spaces inside the repo names are not supported right now 😥
+- also there seem to be problems sometimes if the paths you're using are
+  not fully qualified -- that is, use `/Users/notwaldorf/Code` rather than `~/Code`
+  and see if that helps.
 - did you use `yarn`? I know `yarn` is cool, and I've seen it work with this, but can you double check that it still doesn't work with a basic `npm` installation instead?
 
 **Take care of yourself, ok? 💖**
