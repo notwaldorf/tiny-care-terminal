@@ -232,6 +232,9 @@ function makeGraphBox(label) {
   options.barWidth= 5;
   options.xOffset= 4;
   options.maxHeight= 10;
+  options.barBgColor = 'cyan';
+  options.barFgColor = 'red';
+  options.labelColor = 'normal';
   return options;
 }
 
