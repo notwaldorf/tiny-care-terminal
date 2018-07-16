@@ -1,5 +1,4 @@
-If you _did_ run it and you're still having problems, follow the template below to ensure a more accurate response to your issue.
-
+Please include the template below to ensure a more accurate response to your issue.
 
 - **Node Version**: `node --version`
 - **tiny-core-terminal version**: `npm info tiny-care-terminal | grep version:`
