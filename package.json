@@ -17,6 +17,8 @@
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.7.5",
     "chalk": "^2.4.1",
+    "parrotsay-api": "^0.1.1",
+    "request": "^2.81.0",
     "git-user-name": "^2.0.0",
     "git-utils": "^5.4.0",
     "gitlog": "^3.1.2",

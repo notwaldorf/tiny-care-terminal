@@ -15,6 +15,7 @@ var chalk = require('chalk');
 var bunnySay = require('sign-bunny');
 var yosay = require('yosay');
 var weather = require('weather-js');
+var request = require('request');
 
 var inPomodoroMode = false;
 
@@ -102,6 +103,7 @@ function tick() {
   doTheWeather();
   doTheTweets();
   doTheCodes();
+  doTheJokes();
 }
 
 function doTheWeather() {
@@ -198,6 +200,30 @@ function doTheCodes() {
       screen.render();
     });
   });
+}
+
+function doTheJokes() {
+  
+  request.get({url: 'http://tambal.azurewebsites.net/joke/random', json: true}, function (err, res, body) {
+    
+    if(err) {
+      
+      parrotSay('Knock, Knock! Ops ERROR!').then(function(text) {
+        parrotBox.content = text;
+        screen.render();
+      });
+      
+    } else {
+      
+      parrotSay(body.joke).then(function(text) {
+        parrotBox.content = text;
+        screen.render();
+      });
+      
+    }
+    
+  });
+  
 }
 
 function makeBox(label) {
