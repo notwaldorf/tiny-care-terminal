@@ -1,7 +1,7 @@
 var config = {
   // Accounts to read the last tweet from. The first one in the list will be
   // spoken by the party parrot.
-  twitter: (process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot').toLowerCase().split(','),
+  twitter: (process.env.TTC_BOTS || 'tinycarebot,selfcare_bot,magicrealismbot').toLowerCase().split(',').map(s => s.trim()),
 
   // Use this to have a different animal say a message in the big box.
   say: (process.env.TTC_SAY_BOX || 'parrot').toLowerCase(),

@@ -1,6 +1,7 @@
 # List of accounts to read the last tweet from, comma separated
 # The first in the list is read by the party parrot.
-export TTC_BOTS='Nihilist_arbys,TinyCarebot,Selfcare_bot'
+# export TTC_BOTS='nihilist_arbys,TinyCarebot,Selfcare_bot'
+export TTC_BOTS='tinycarebot, selfcare_bot, magicrealismbot'
 
 # Use this to have a different animal say a message in the big box.
 #export TTC_SAY_BOX='panda'
