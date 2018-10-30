@@ -10,7 +10,7 @@ var T = new Twit({
   timeout_ms:          60*1000,  // optional HTTP request timeout to apply to all requests.
 });
 
-var options = {exclude_replies:true, include_rts:false, count: 1 };
+var options = {exclude_replies:true, include_rts:false, count: 1, 'tweet_mode': 'extended' };
 
 function getTweet(who) {
   who = who || 'tinycarebot';
@@ -24,7 +24,7 @@ function apiTweet(who) {
       if (err) {
         reject('This didn\'t work. Maybe you didn\'t set up the twitter API keys?');
       } else {
-        resolve({text:data[0].text, bot: data[0].user.screen_name});
+        resolve({text:data[0].full_text, bot: data[0].user.screen_name});
       }
     });
   });
@@ -41,7 +41,8 @@ function scrapeTweet(who) {
         .then(function(tweets) {
           var tweetNumber = Math.floor(Math.random() * tweets.length);
           resolve({text:tweets[tweetNumber], bot: who});
-        },function(error) {
+        })
+        .catch(function(error) {
           reject('Can\'t scrape tweets. Maybe the user is private or doesn\'t exist?');
         });
   });
