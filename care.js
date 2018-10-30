@@ -209,7 +209,6 @@ function makeBox(label) {
       type: 'line'  // or bg
     },
     style: {
-      fg: 'white',
       border: { fg: 'cyan' },
       hover: { border: { fg: 'green' }, }
     }
@@ -233,6 +232,7 @@ function makeGraphBox(label) {
   options.barWidth= 5;
   options.xOffset= 4;
   options.maxHeight= 10;
+  options.labelColor = 'normal';
   return options;
 }
 
