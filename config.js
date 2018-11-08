@@ -1,3 +1,14 @@
+var path = require('path');
+
+var repos = (process.env.TTC_REPOS || '~/Code');
+if( repos.indexOf('~') > -1 ){
+  var userPath = path.resolve('~');
+  var userNwPathAr = userPath.split('/');
+  userNwPathAr.pop();
+  var nwPath = userNwPathAr.join('/');
+  repos = repos.replace(/~/gmi, nwPath);
+}
+
 var config = {
   // Accounts to read the last tweet from. The first one in the list will be
   // spoken by the party parrot.
@@ -13,7 +24,7 @@ var config = {
   apiKeys: (process.env.TTC_APIKEYS || 'true') === 'true',
 
   // Directories in which to run git-standup on for a list of your recent commits.
-  repos: (process.env.TTC_REPOS || '~/Code').split(','),
+  repos: repos.split(','),
 
   // Directory-depth to look for git repositories.
   depth: (process.env.TTC_REPOS_DEPTH || 1),
