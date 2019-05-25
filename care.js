@@ -6,6 +6,7 @@ var pomodoro = require(__dirname + '/pomodoro.js');
 var ansiArt = require('ansi-art').default;
 
 var path = require('path');
+var resolve = require("resolve-dir");
 var notifier = require('node-notifier');
 var spawn = require('child_process').spawn;
 var shellescape = require('shell-escape');
@@ -271,6 +272,7 @@ function colorizeLog(text) {
 
 function formatRepoName(line, divider) {
   var repoPath = config.repos
+    .map(resolve)
     .sort((a, b) => a.length < b.length) // Longest repo repoPath first
     .find(repo => line.startsWith(repo));
   var repoRootPath = chalk.yellow(path.basename(repoPath) + divider);
