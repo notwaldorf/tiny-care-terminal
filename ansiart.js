@@ -1,6 +1,6 @@
 var path = require('path');
 var ansiArt = require('ansi-art').default;
-var cowsay = require("cowsay");
+var cowsay = require('cowsay');
 var bunnySay = require('sign-bunny');
 var yosay = require('yosay');
 

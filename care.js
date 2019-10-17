@@ -6,7 +6,7 @@ var pomodoro = require(__dirname + '/pomodoro.js');
 var getAnsiArt = require(__dirname + '/ansiart.js');
 
 var path = require('path');
-var resolve = require("resolve-dir");
+var resolve = require('resolve-dir');
 var notifier = require('node-notifier');
 var spawn = require('child_process').spawn;
 var shellescape = require('shell-escape');
