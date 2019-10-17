@@ -6,6 +6,7 @@ var pomodoro = require(__dirname + '/pomodoro.js');
 var getAnsiArt = require(__dirname + '/ansiart.js');
 
 var path = require('path');
+var resolve = require("resolve-dir");
 var notifier = require('node-notifier');
 var spawn = require('child_process').spawn;
 var shellescape = require('shell-escape');
@@ -208,7 +209,6 @@ function makeBox(label) {
       type: 'line'  // or bg
     },
     style: {
-      fg: 'white',
       border: { fg: 'cyan' },
       hover: { border: { fg: 'green' }, }
     }
@@ -232,6 +232,7 @@ function makeGraphBox(label) {
   options.barWidth= 5;
   options.xOffset= 4;
   options.maxHeight= 10;
+  options.labelColor = 'normal';
   return options;
 }
 
@@ -270,6 +271,7 @@ function colorizeLog(text) {
 
 function formatRepoName(line, divider) {
   var repoPath = config.repos
+    .map(resolve)
     .sort((a, b) => a.length < b.length) // Longest repo repoPath first
     .find(repo => line.startsWith(repo));
   var repoRootPath = chalk.yellow(path.basename(repoPath) + divider);
