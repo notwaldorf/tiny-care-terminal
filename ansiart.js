@@ -1,37 +1,30 @@
 var path = require('path');
 var ansiArt = require('ansi-art').default;
 var cowsay = require('cowsay');
-var bunnySay = require('sign-bunny');
-var yosay = require('yosay');
-
-var llamaSay = function(text) {
-  return `
-    ${text}
-
-    ∩∩
-　（･ω･）
-　　│ │
-　　│ └─┐○
-　  ヽ　　　丿
-　　 　∥￣∥`;
-}
-
-var catSay = function(text) {
-  return `
-      ${text}
-
-      ♪ ガンバレ! ♪
-  ミ ゛ミ ∧＿∧ ミ゛ミ
-  ミ ミ ( ・∀・ )ミ゛ミ
-   ゛゛ ＼　　　／゛゛
-   　　 　i⌒ヽ ｜
-  　　 　 (＿) ノ
-   　　　　　 ∪`
-    ;
-}
+var getCustomArt = require('./arts');
 
 function getAnsiArt(art, textToSay) {
-  if (/.ansi$/.test(art)) {
+  
+  if (art && (art.toUpperCase() === 'RANDOM')) {
+    // show a random art
+    var rand = Math.random() * 100;
+    if (rand >= 50) { // 50%
+      return cowsay.say({
+        r: true,
+        text: textToSay
+      });
+    } else if (rand >= 25) { // 25%
+      return ansiArt.get({
+        speechText: textToSay
+      });
+    } else { // 25%
+      return getCustomArt() || ansiArt.get({
+        speechText: textToSay
+      });;
+    }
+  } 
+  
+  else if (/.ansi$/.test(art)) {
     // if SAY ends with ".ansi" use the 'ansi-art' library
     if (art === path.basename(art)) {
       return ansiArt.get({
@@ -55,13 +48,7 @@ function getAnsiArt(art, textToSay) {
   }
 
   else {
-    switch (art) {
-      case 'bunny' : return bunnySay(textToSay);
-      case 'llama' : return llamaSay(textToSay);
-      case 'cat'   : return catSay(textToSay);
-      case 'yeoman': return yosay(textToSay);
-      default : return ansiArt.get({ artName: art, speechText: textToSay });
-    }
+    return getCustomArt(art);
   }
 }
 
