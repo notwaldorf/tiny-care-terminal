@@ -18,9 +18,9 @@ function getAnsiArt(art, textToSay) {
         speechText: textToSay
       });
     } else { // 25%
-      return getCustomArt() || ansiArt.get({
+      return getCustomArt(art, textToSay) || ansiArt.get({
         speechText: textToSay
-      });;
+      });
     }
   } 
   
@@ -48,7 +48,10 @@ function getAnsiArt(art, textToSay) {
   }
 
   else {
-    return getCustomArt(art);
+    return getCustomArt(art, textToSay) || ansiArt.get({
+      artName: art,
+      speechText: textToSay
+    });
   }
 }
 

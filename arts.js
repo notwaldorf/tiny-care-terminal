@@ -27,7 +27,13 @@ var catSay = function(text) {
     ;
 }
 
-function getCustomArt(art) {
+function getCustomArt(art, textToSay) {
+  if (art === 'RANDOM') {
+    const arts = ['bunny', 'llama', 'cat', 'yeoman'];
+    const random = [Math.round(Math.random*arts.length)];
+    art = arts[random];
+  }
+
 	switch (art) {
 		case 'bunny' : return bunnySay(textToSay);
 		case 'llama' : return llamaSay(textToSay);
