@@ -48,7 +48,7 @@ All the settings the dashboard looks at are in the sample file `sample.env`. Thi
 
 ##### Configure the Say-box
 
-There are almost endless variation of ASCII art images supported. You can select an existing image from the [cowsay library](https://github.com/piuccio/cowsay/tree/master/cows) just by defining a filename ending with ".cow". So e.g. `vader.cow` or `bunny.cow` would be two possible options. Also the [ansi-art](https://github.com/gauravchl/ansi-art) library is supported. In addition to the [existing](https://github.com/gauravchl/ansi-art/tree/master/src/arts) colorful images you can create your own image by using the [webapp](https://gauravchl.github.io/ansi-art/webapp/)and download the result. After downloading the ANSI-File you can just supply its absolute path to render it within the box. (eg: `TTC_SAY_BOX='/Users/om/desktop/cat.ansi'`). If you want the art to be selected by random use the magic word `RANDOM`.
+There are almost endless variation of ASCII art images supported. You can select an existing image from the [cowsay library](https://github.com/piuccio/cowsay/tree/master/cows) just by defining a filename ending with ".cow". So e.g. `vader.cow` or `bunny.cow` would be two possible options. Also the [ansi-art](https://github.com/gauravchl/ansi-art) library is supported. In addition to the [existing](https://github.com/gauravchl/ansi-art/tree/master/src/arts) colorful images you can create your own image by using the [webapp](https://gauravchl.github.io/ansi-art/webapp/) and download the result. After downloading the ANSI-File you can just supply its absolute path to render it within the box. (eg: `TTC_SAY_BOX='/Users/om/desktop/cat.ansi'`). If you want the art to be selected by random use the magic word `RANDOM`.
 
 In addition to this libraries the following types are supported: `bunny`, `llama`, `cat`, `yeoman`
 
@@ -75,7 +75,7 @@ You can exit the dashboard by pressing `esc` or `q`. You can refresh it manually
 
 ## 🍅 Pomodoro Mode
 
-You can press 'p' to switch parrot box to pomodoro mode.
+You can press `p` to switch parrot box to pomodoro mode.
 
 Other commands while in pomodoro mode:
 
