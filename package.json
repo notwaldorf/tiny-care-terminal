@@ -21,7 +21,6 @@
     "cowsay": "^1.4.0",
     "expand-home-dir": "^0.0.3",
     "git-user-name": "^2.0.0",
-    "git-utils": "^5.6.2",
     "gitlog": "^3.1.2",
     "is-git": "^1.0.0",
     "node-notifier": "^6.0.0",
