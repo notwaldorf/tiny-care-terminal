@@ -1,6 +1,7 @@
 var Twit = require('twit');
 var config = require(__dirname + '/config.js');
-var scraperjs = require('scraperjs');
+var request = require('request');
+var cheerio = require('cheerio');
 
 var T = new Twit({
   consumer_key:        config.keys.consumer_key,
@@ -32,19 +33,26 @@ function apiTweet(who) {
 
 function scrapeTweet(who) {
   return new Promise(function (resolve, reject) {
-    scraperjs.StaticScraper.create('https://twitter.com/' + who)
-        .scrape(function($) {
-            return $(".js-tweet-text.tweet-text").map(function() {
-                return $(this).text();
-            }).get();
-        })
-        .then(function(tweets) {
-          var tweetNumber = Math.floor(Math.random() * tweets.length);
-          resolve({text:tweets[tweetNumber], bot: who});
-        })
-        .catch(function(error) {
-          reject('Can\'t scrape tweets. Maybe the user is private or doesn\'t exist?');
-        });
+    request({
+      method: 'GET',
+      url: 'https://twitter.com/' + who
+    }, (err, res, body) => {
+      if (err) {
+        reject("Can't scrape tweets. Maybe the user is private or doesn't exist?\n" + err);
+      }
+      let $ = cheerio.load(body);
+      let tweets = $('.js-tweet-text.tweet-text');
+
+      randomTweetNumber = Math.round(Math.random() * tweets.length-1);
+      let tweet = tweets.filter(function (i, el) {
+        return i == randomTweetNumber
+      });
+
+      resolve({
+        text: tweet.text(),
+        bot: who
+      });
+    });
   });
 }
 
