@@ -3,15 +3,18 @@ const subdirs = require('subdirs');
 const isGit = require('is-git');
 const gitlog = require('gitlog');
 const async = require("async");
+const getGitUsername = require('git-user-name');
 
-try {
-  const gitUsername = require('git-user-name')();
-} catch(err) {
-  console.error(`ERROR reading git-config.
-    Use e.g. 'git config --global user.name "Mona Lisa"'.
-    See 'man git config' for further information.
-  `);
-  return process.exit(0);
+function getGitUser() {
+  try {
+    return getGitUsername();
+  } catch(err) {
+    console.error(`ERROR reading git-config.
+      Use e.g. 'git config --global user.name "Mona Lisa"'.
+      See 'man git config' for further information.
+    `);
+    return process.exit(1);
+  }
 }
 
 /**
@@ -58,8 +61,8 @@ function findGitRepos(repos, depth, callback) {
  */
 function getCommitsFromRepos(repos, days, callback) {
   let cmts = [];
+  let gitUser = getGitUser();
   async.each(repos, (repo, repoDone) => {
-    let localGitUsername = gitUsername;
     try {
       gitlog({
         repo: repo,
@@ -67,7 +70,7 @@ function getCommitsFromRepos(repos, days, callback) {
         number: 100, //max commit count
         since: `${days} days ago`,
         fields: ['abbrevHash', 'subject', 'authorDateRel', 'authorName'],
-        author: localGitUsername
+        author: gitUser
       }, (err, logs) => {
         // Error
         if (err) {
