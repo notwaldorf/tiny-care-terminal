@@ -3,18 +3,28 @@ const subdirs = require('subdirs');
 const isGit = require('is-git');
 const gitlog = require('gitlog');
 const async = require("async");
-const getGitUsername = require('git-user-name');
+const { exec } = require("child_process");
 
-function getGitUser() {
-  try {
-    return getGitUsername();
-  } catch(err) {
-    console.error(`ERROR reading git-config.
+function craftGetGitUserErrorMessage(error, stdout) {
+  return `ERROR reading git-config.
       Use e.g. 'git config --global user.name "Mona Lisa"'.
       See 'man git config' for further information.
-    `);
-    return process.exit(1);
-  }
+      \n${error.message}\n${stdout}\n`;
+}
+
+async function getGitUser() {
+  return new Promise((resolvePromise, rejectPromise) => {
+    exec('git config --get user.name', (error, stdout) => {
+
+      if (error || stdout.trim() === '') {
+        rejectPromise(craftGetGitUserErrorMessage(error, stdout));
+
+        return;
+      }
+
+      resolvePromise(stdout.trim());
+    });
+  });
 }
 
 /**
@@ -59,9 +69,15 @@ function findGitRepos(repos, depth, callback) {
  * returns all commits of the last given `days`.
  * Calls `callback` with line-seperated-strings of the formatted commits.
  */
-function getCommitsFromRepos(repos, days, callback) {
+async function getCommitsFromRepos(repos, days, callback) {
   let cmts = [];
-  let gitUser = getGitUser();
+  let gitUser;
+  try {
+    gitUser = await getGitUser();
+  } catch( error ) {
+    callback(error);
+    return;
+  }
   async.each(repos, (repo, repoDone) => {
     try {
       gitlog({
