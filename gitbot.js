@@ -4,6 +4,7 @@ const isGit = require('is-git');
 const gitlog = require('gitlog');
 const async = require("async");
 const { exec } = require("child_process");
+const commitFilter = require('./filter-commits');
 
 function craftGetGitUserErrorMessage(error, stdout) {
   return `ERROR reading git-config.
@@ -95,9 +96,11 @@ async function getCommitsFromRepos(repos, days, callback) {
         // Find user commits
         let commits = [];
         logs.forEach(c => {
-          // filter simple merge commits
-          if (c.status && c.status.length)
-            commits.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
+          if (commitFilter.hasNotAllowedMessage(c.subject) !== false) {
+            // filter simple merge commits
+            if (c.status && c.status.length)
+              commits.push(`${c.abbrevHash} - ${c.subject} (${c.authorDateRel}) <${c.authorName.replace('@end@\n','')}>`);
+          }
         });
 
         // Add repo name and commits
