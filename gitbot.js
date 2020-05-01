@@ -1,7 +1,7 @@
 const resolve = require('resolve-dir');
 const subdirs = require('subdirs');
 const isGit = require('is-git');
-const gitlog = require('gitlog');
+const gitlog = require('gitlog').default;
 const async = require("async");
 const { exec } = require("child_process");
 
