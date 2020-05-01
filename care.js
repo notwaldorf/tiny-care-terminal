@@ -172,26 +172,22 @@ function doTheCodes() {
     return (box && box.content) ? (box.content.match(commitRegex) || []).length : '0';
   }
 
+  function showError(err) {
+    todayBox.content = 'ERROR: ' + (err.message || err);
+    return screen.render();
+  }
+
   gitbot.findGitRepos(config.repos, config.depth-1, (err, allRepos) => {
-    if (err) {
-      return todayBox.content = err;
-      screen.render();
-    }
+    if (err) return showError(err);
     gitbot.getCommitsFromRepos(allRepos, 1, (err, data) => {
-      if (err) {
-        return todayBox.content = err;
-        screen.render();
-      }
+      if (err) return showError(err);
       todayBox.content = '';
       todayCommits = getCommits(`${data}`, todayBox);
       updateCommitsGraph(todayCommits, weekCommits);
       screen.render();
     });
     gitbot.getCommitsFromRepos(allRepos, 7, (err, data) => {
-      if (err) {
-        return weekBox.content = err;
-        screen.render();
-      }
+      if (err) return showError(err);
       weekBox.content = '';
       weekCommits = getCommits(`${data}`, weekBox);
       updateCommitsGraph(todayCommits, weekCommits);
