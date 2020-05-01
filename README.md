@@ -14,6 +14,8 @@ It looks like this, and updates every 20 minutes.
 
 ### 1\. Installation
 
+***Sadly only node.js v10.x is supported at the moment.***
+
 ```sh
 npm install -g tiny-care-terminal
 ```

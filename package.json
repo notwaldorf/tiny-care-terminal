@@ -21,7 +21,8 @@
     "cheerio": "^1.0.0-rc.3",
     "cowsay": "^1.4.0",
     "expand-home-dir": "^0.0.3",
-    "gitlog": "^3.1.2",
+    "git-utils": "^5.6.2",
+    "gitlog": "^4.0.0",
     "is-git": "^1.0.0",
     "node-notifier": "^6.0.0",
     "request": "^2.88.0",
@@ -34,6 +35,7 @@
     "yosay": "^2.0.2"
   },
   "scripts": {
-    "start": "node care.js"
+    "start": "node care.js",
+    "debug": "node --inspect --inspect-brk care.js"
   }
 }
