@@ -34,13 +34,13 @@ function getCustomArt(art, textToSay) {
     art = arts[random];
   }
 
-	switch (art) {
-		case 'bunny' : return bunnySay(textToSay);
-		case 'llama' : return llamaSay(textToSay);
-		case 'cat'   : return catSay(textToSay);
-		case 'yeoman': return yosay(textToSay);
-		default : return null;
-	}
+  switch (art) {
+    case 'bunny' : return bunnySay(textToSay);
+    case 'llama' : return llamaSay(textToSay);
+    case 'cat'   : return catSay(textToSay);
+    case 'yeoman': return yosay(textToSay);
+    default : return null;
+  }
 }
 
 module.exports = getCustomArt;

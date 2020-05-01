@@ -8,8 +8,6 @@ var getAnsiArt = require(__dirname + '/ansiart.js');
 var path = require('path');
 var resolve = require('resolve-dir');
 var notifier = require('node-notifier');
-var spawn = require('child_process').spawn;
-var shellescape = require('shell-escape');
 var blessed = require('blessed');
 var contrib = require('blessed-contrib');
 var chalk = require('chalk');
@@ -18,12 +16,12 @@ var path = require('path');
 
 var inPomodoroMode = false;
 
-var screen = blessed.screen(
-    {fullUnicode: true, // emoji or bust
-     smartCSR: true,
-     autoPadding: true,
-     title: config.terminal_title
-    });
+var screen = blessed.screen({
+  fullUnicode: true, // emoji or bust
+  smartCSR: true,
+  autoPadding: true,
+  title: config.terminal_title
+});
 
 // Quit on Escape, q, or Control-C.
 screen.key(['escape', 'q', 'C-c'], function(ch, key) {
@@ -258,7 +256,7 @@ function colorizeLog(text) {
       var matches = lines[i].match(regex);
       if (matches) {
         lines[i] = chalk.red(matches[1]) + ' ' + matches[2] + ' ' +
-            chalk.green(matches[3])
+          chalk.green(matches[3])
       }
     }
   }
