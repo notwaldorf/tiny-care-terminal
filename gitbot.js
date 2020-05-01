@@ -1,6 +1,7 @@
 const resolve = require('resolve-dir');
 const subdirs = require('subdirs');
 const isGit = require('is-git');
+const chalk = require('chalk');
 const gitlog = require('gitlog').default;
 const async = require("async");
 const { exec } = require("child_process");
@@ -68,6 +69,7 @@ function findGitRepos(repos, depth, callback) {
  */
 async function getCommitsFromRepos(repos, days, callback) {
   let cmts = [];
+  let errs = [];
   let gitUser;
   try {
     gitUser = await getGitUser();
@@ -87,8 +89,10 @@ async function getCommitsFromRepos(repos, days, callback) {
       }, (err, logs) => {
         // Error
         if (err) {
-          callback(`Oh noes 😱\nThe repo "${repo}" has failed:\n${err}`, null);
+          errs.push(`${chalk.red('Oh noes 😱 :')} Getting commits from repo "${repo}" has failed: ${err.message || err}`);
+          return repoDone();
         }
+
         // Find user commits
         let commits = [];
         logs.forEach(c => {
@@ -110,7 +114,9 @@ async function getCommitsFromRepos(repos, days, callback) {
       callback(err, null);
     }
   }, err => {
-    callback(err, cmts.length > 0 ? cmts.join('\n') : "Nothing yet. Start small!");
+    const errors = errs.length > 0 ? errs.join('\n\n') : null;
+    const commits = cmts.length > 0 ? cmts.join('\n') : "Nothing yet. Start small!";
+    callback(err, errors ? [errors, commits].join('\n') : commits);
   });
 }
 
