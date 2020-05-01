@@ -7,21 +7,18 @@ const { exec } = require("child_process");
 
 function craftGetGitUserErrorMessage(error, stdout) {
   return `ERROR reading git-config.
-      Use e.g. 'git config --global user.name "Mona Lisa"'.
-      See 'man git config' for further information.
-      \n${error.message}\n${stdout}\n`;
+    Use e.g. 'git config --global user.name "Mona Lisa"'.
+    See 'man git config' for further information.
+    \n${error.message}\n${stdout}\n`;
 }
 
 async function getGitUser() {
   return new Promise((resolvePromise, rejectPromise) => {
     exec('git config --get user.name', (error, stdout) => {
-
       if (error || stdout.trim() === '') {
         rejectPromise(craftGetGitUserErrorMessage(error, stdout));
-
         return;
       }
-
       resolvePromise(stdout.trim());
     });
   });
@@ -90,7 +87,7 @@ async function getCommitsFromRepos(repos, days, callback) {
       }, (err, logs) => {
         // Error
         if (err) {
-          callback(`Oh noes😱\nThe repo ${repo} has failed:\n${err}`, null);
+          callback(`Oh noes 😱\nThe repo "${repo}" has failed:\n${err}`, null);
         }
         // Find user commits
         let commits = [];
