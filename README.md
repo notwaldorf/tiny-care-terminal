@@ -41,7 +41,7 @@ All the settings the dashboard looks at are in the sample file `sample.env`. Thi
 - `TTC_BOTS` are the 3 twitter bots to check, comma separated. The first entry in this list will be displayed in the big party parrot box.
 - `TTC_SAY_BOX` defines the ASCII-Art to show. e.g. `parrot` | `bunny` | `llama` | `cat` | `yeoman` | `mario` | `ironman.ansi` | `stegosaurus.cow` See section below for all the different options.
 - `TTC_REPOS`, a comma separated list of repos to look at for `git` commits.
-- `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in the directories defined with `TTC_REPOS` (by default 1). Note that the deeper the directory depth, the slower the results will be fetched. seeing your commits in `tiny-terminal-care`, set this to `gitlog`
+- `TTC_REPOS_DEPTH` is the max directory-depth to look for git repositories in the directories defined with `TTC_REPOS` (by default 1). Note that the deeper the directory depth, the slower the results will be fetched. Seeing your commits in `tiny-terminal-care`, set this to `gitlog`
 - `TTC_WEATHER`, the location to check the weather for. A zipcode doesn't always work, so if you can, use a location first (so prefer `Paris` over `90210`)
 - `TTC_CELSIUS` (by default true)
 - `TTC_APIKEYS` -- set this to false if you don't want to use Twitter API keys and want to scrape the tweets instead.
