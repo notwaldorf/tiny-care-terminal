@@ -24,7 +24,7 @@
     "git-utils": "^5.6.2",
     "gitlog": "^4.0.0",
     "is-git": "^1.0.0",
-    "node-notifier": "^7.0.0",
+    "node-notifier": "^8.0.1",
     "request": "^2.88.2",
     "resolve-dir": "^1.0.1",
     "shell-escape": "^0.2.0",
