@@ -14,7 +14,7 @@
   "repository": "https://github.com/notwaldorf/tiny-care-terminal.git",
   "dependencies": {
     "ansi-art": "^1.3.0",
-    "async": "^3.2.0",
+    "async": "^3.2.4",
     "blessed": "^0.1.81",
     "blessed-contrib": "^4.8.19",
     "chalk": "^4.0.0",
