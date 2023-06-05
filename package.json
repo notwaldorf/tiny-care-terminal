@@ -16,7 +16,7 @@
     "ansi-art": "^1.3.0",
     "async": "^3.2.0",
     "blessed": "^0.1.81",
-    "blessed-contrib": "^4.8.19",
+    "blessed-contrib": "^4.11.0",
     "chalk": "^4.0.0",
     "cheerio": "^1.0.0-rc.3",
     "cowsay": "^1.4.0",
