@@ -22,7 +22,7 @@
     "cowsay": "^1.4.0",
     "expand-home-dir": "^0.0.3",
     "git-utils": "^5.6.2",
-    "gitlog": "^4.0.0",
+    "gitlog": "^4.0.8",
     "is-git": "^1.0.0",
     "node-notifier": "^7.0.0",
     "request": "^2.88.2",
