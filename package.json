@@ -32,7 +32,7 @@
     "subdirs": "^1.0.1",
     "twit": "^2.2.11",
     "weather-js": "^2.0.0",
-    "yosay": "^2.0.2"
+    "yosay": "^3.0.0"
   },
   "scripts": {
     "start": "node care.js",
