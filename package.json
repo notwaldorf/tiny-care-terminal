@@ -19,7 +19,7 @@
     "blessed-contrib": "^4.8.19",
     "chalk": "^4.0.0",
     "cheerio": "^1.0.0-rc.3",
-    "cowsay": "^1.4.0",
+    "cowsay": "^1.5.0",
     "expand-home-dir": "^0.0.3",
     "git-utils": "^5.6.2",
     "gitlog": "^4.0.0",
@@ -32,7 +32,7 @@
     "subdirs": "^1.0.1",
     "twit": "^2.2.11",
     "weather-js": "^2.0.0",
-    "yosay": "^2.0.2"
+    "yosay": "^3.0.0"
   },
   "scripts": {
     "start": "node care.js",
